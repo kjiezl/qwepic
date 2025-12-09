@@ -19,12 +19,6 @@ class PhotoType extends AbstractType
             ->add('title')
             ->add('caption')
             ->add('is_public')
-            ->add('created_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updated_at', null, [
-                'widget' => 'single_text',
-            ])
             ->add('album', EntityType::class, [
                 'class' => Album::class,
                 'choice_label' => 'id',

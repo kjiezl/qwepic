@@ -18,12 +18,6 @@ class AlbumType extends AbstractType
             ->add('description')
             ->add('cover_image_path')
             ->add('is_public')
-            ->add('created_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('updated_at', null, [
-                'widget' => 'single_text',
-            ])
             ->add('photographer', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'id',
