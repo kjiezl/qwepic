@@ -17,7 +17,7 @@
                 <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Admin Dashboard</h1>
             </div>
             <a href="{{ path('app_home') }}"
-               class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-vivid-sky-blue hover:text-vivid-sky-blue transition-all duration-200">
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
                 <i class="fas fa-arrow-left text-xs"></i>
                 <span>Back to Home</span>
             </a>
@@ -81,7 +81,7 @@
                             <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Total Users</p>
                             <p class="mt-2 text-2xl font-semibold text-space-cadet">{{ totalUsers }}</p>
                         </div>
-                        <div class="w-10 h-10 rounded-xl bg-vivid-sky-blue/10 flex items-center justify-center text-vivid-sky-blue">
+                        <div class="w-10 h-10 rounded-xl bg-vivid-sky-blue/10 flex items-center justify-center text-accent-coral">
                             <i class="fas fa-users"></i>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                             <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Total Albums</p>
                             <p class="mt-2 text-2xl font-semibold text-space-cadet">{{ totalAlbums }}</p>
                         </div>
-                        <div class="w-10 h-10 rounded-xl bg-space-cadet/10 flex items-center justify-center text-space-cadet">
+                        <div class="w-10 h-10 rounded-xl bg-space-cadet/10 flex items-center justify-center text-accent-coral">
                             <i class="fas fa-folder-open"></i>
                         </div>
                     </div>
@@ -119,7 +119,7 @@
                             <ul class="divide-y divide-gray-100">
                                 {% for log in recentLogs %}
                                     <li class="py-3 flex items-start gap-3">
-                                        <div class="mt-1 w-8 h-8 rounded-full bg-vivid-sky-blue/10 flex items-center justify-center text-vivid-sky-blue">
+                                        <div class="mt-1 w-8 h-8 rounded-full bg-vivid-sky-blue/10 flex items-center justify-center text-accent-coral">
                                             <i class="fas fa-bolt"></i>
                                         </div>
                                         <div class="flex-1 min-w-0">
@@ -149,7 +149,7 @@
                         <div class="space-y-3">
                             <a href="{{ path('app_user_new') }}" class="flex items-center justify-between px-3 py-2 rounded-xl border border-gray-200 text-sm text-space-cadet hover:border-vivid-sky-blue hover:bg-gray-50 transition-all duration-200">
                                 <span class="flex items-center gap-2">
-                                    <i class="fas fa-user-plus text-vivid-sky-blue"></i>
+                                    <i class="fas fa-user-plus text-accent-coral"></i>
                                     <span>Create new user</span>
                                 </span>
                                 <i class="fas fa-chevron-right text-xs text-slate-gray"></i>
@@ -165,7 +165,7 @@
 
                             <a href="{{ path('app_photo_new') }}" class="flex items-center justify-between px-3 py-2 rounded-xl border border-gray-200 text-sm text-space-cadet hover:border-vivid-sky-blue hover:bg-gray-50 transition-all duration-200">
                                 <span class="flex items-center gap-2">
-                                    <i class="fas fa-cloud-upload-alt text-vivid-sky-blue"></i>
+                                    <i class="fas fa-cloud-upload-alt text-accent-coral"></i>
                                     <span>Upload new photo</span>
                                 </span>
                                 <i class="fas fa-chevron-right text-xs text-slate-gray"></i>
@@ -173,7 +173,7 @@
 
                             <a href="{{ path('app_activity_log_index') }}" class="flex items-center justify-between px-3 py-2 rounded-xl border border-gray-200 text-sm text-space-cadet hover:border-vivid-sky-blue hover:bg-gray-50 transition-all duration-200">
                                 <span class="flex items-center gap-2">
-                                    <i class="fas fa-clipboard-list text-space-cadet"></i>
+                                    <i class="fas fa-clipboard-list text-accent-coral"></i>
                                     <span>View all logs</span>
                                 </span>
                                 <i class="fas fa-chevron-right text-xs text-slate-gray"></i>
