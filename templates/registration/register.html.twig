@@ -1,21 +1,112 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}QwePic - Sign Up{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+<div class="min-h-screen bg-anti-flash-white flex items-center justify-center p-8 font-sans">
+    <div class="bg-white rounded-2xl shadow-elevated w-full max-w-md overflow-hidden">
+        <!-- QwePic Logo -->
+        <div class="text-center p-8 bg-gradient-to-br from-gray-50 to-gray-100">
+            <img src="{{ asset('images/logo-plain.svg') }}" alt="QwePic Logo" class="w-32 h-auto mx-auto">
+        </div>
 
-    {{ form_errors(registrationForm) }}
+        <!-- Sign Up Form -->
+        <div class="p-8">
+            <h1 class="font-heading font-bold text-3xl text-space-cadet text-center mb-4">Sign Up</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.accountType) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+            <div class="text-center mb-8">
+                <p class="text-slate-gray text-sm leading-relaxed">Join our community and start capturing memories.</p>
+            </div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            {{ form_errors(registrationForm) }}
+
+            {% for message in app.flashes('error') %}
+                <div class="p-4 rounded-lg mb-6 bg-red-50 text-red-700 border border-red-200">
+                    {{ message }}
+                </div>
+            {% endfor %}
+
+            {{ form_start(registrationForm, {'attr': {'class': 'w-full'}}) }}
+                <div class="mb-6">
+                    {{ form_row(registrationForm.username, {
+                        'attr': {
+                            'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet placeholder-slate-gray bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue'
+                        },
+                        'label_attr': {
+                            'class': 'block text-sm font-medium text-space-cadet mb-1'
+                        }
+                    }) }}
+                </div>
+                <div class="mb-6">
+                    {{ form_row(registrationForm.email, {
+                        'attr': {
+                            'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet placeholder-slate-gray bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue'
+                        },
+                        'label_attr': {
+                            'class': 'block text-sm font-medium text-space-cadet mb-1'
+                        }
+                    }) }}
+                </div>
+                <div class="mb-6">
+                    {{ form_label(registrationForm.accountType, null, {
+                        'label_attr': {
+                            'class': 'block text-sm font-medium text-space-cadet mb-1'
+                        }
+                    }) }}
+                    <div class="space-y-2">
+                        {% for choice in registrationForm.accountType %}
+                            <label class="flex items-center text-sm text-slate-gray cursor-pointer">
+                                {{ form_widget(choice, {
+                                    'attr': {
+                                        'class': 'w-4 h-4 accent-accent-coral cursor-pointer'
+                                    }
+                                }) }}
+                                <span class="ml-2">{{ choice.vars.label }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                    {{ form_errors(registrationForm.accountType) }}
+                </div>
+                <div class="mb-6">
+                    {{ form_row(registrationForm.plainPassword, {
+                        'label': 'Password',
+                        'attr': {
+                            'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet placeholder-slate-gray bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue'
+                        },
+                        'label_attr': {
+                            'class': 'block text-sm font-medium text-space-cadet mb-1'
+                        }
+                    }) }}
+                </div>
+                <div class="mb-6">
+                    <div class="flex items-start">
+                        {{ form_widget(registrationForm.agreeTerms, {
+                            'attr': {
+                                'class': 'w-4 h-4 mt-0.5 accent-accent-coral cursor-pointer'
+                            }
+                        }) }}
+                        {{ form_label(registrationForm.agreeTerms, null, {
+                            'label_attr': {
+                                'class': 'ml-2 text-sm text-slate-gray cursor-pointer'
+                            }
+                        }) }}
+                    </div>
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+                <button type="submit"
+                        class="w-full p-4 bg-accent-coral text-anti-flash-white font-semibold text-base rounded-lg cursor-pointer transition duration-300 hover:bg-red-400 mb-6 font-sans">
+                    Sign Up
+                </button>
+            {{ form_end(registrationForm) }}
+
+            <!-- Switch to Login -->
+            <div class="text-center pt-6 border-t border-gray-200">
+                <p class="text-slate-gray text-sm">
+                    Already a member?
+                    <a href="{{ path('app_login') }}" class="text-vivid-sky-blue font-semibold transition duration-300 hover:text-blue-400">Log in</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

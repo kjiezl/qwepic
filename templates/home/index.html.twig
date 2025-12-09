@@ -1,20 +1,107 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}QwePic - Discover Amazing Photography{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-gray-50 to-gray-100 py-8 lg:py-16 text-center border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 lg:px-8">
+        <h1 class="font-poppins font-bold text-3xl sm:text-4xl lg:text-5xl text-space-cadet mb-4 tracking-tight">Discover Amazing Photography</h1>
+        <p class="font-inter text-lg lg:text-xl text-slate-gray max-w-2xl mx-auto mb-8">Explore stunning photos from talented photographers around the world</p>
+        
+        <!-- Navigation Tabs -->
+        {# <div class="flex flex-wrap gap-4 justify-center items-center mb-8">
+            <a href="{{ path('app_home') }}" 
+               class="px-6 py-3 border-2 rounded-full font-inter font-medium text-sm cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg bg-accent-coral border-accent-coral text-white">
+                All Photos
+            </a>
+            <a href="{{ path('app_photo_standalone') }}" 
+               class="px-6 py-3 border-2 rounded-full font-inter font-medium text-sm cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg border-slate-gray text-slate-gray bg-transparent hover:bg-slate-gray hover:text-white">
+                Featured Photos
+            </a>
+            <a href="{{ path('app_photo_feed') }}" 
+               class="px-6 py-3 border-2 rounded-full font-inter font-medium text-sm cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg border-slate-gray text-slate-gray bg-transparent hover:bg-slate-gray hover:text-white">
+                Photo Feed
+            </a>
+        </div> #}
+    </div>
+</section>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<!-- Photo Gallery -->
+<div class="max-w-7xl mx-auto px-4 lg:px-8 py-8 lg:py-12">
+    {% if photos %}
+        <div class="columns-1 sm:columns-2 lg:columns-3 gap-4 lg:gap-6 space-y-4 lg:space-y-6" data-controller="scroll-animation">
+            {% for photo in photos %}
+                <!-- Photo Card -->
+                <div class="break-inside-avoid mb-4 lg:mb-6 bg-white rounded-2xl shadow-card overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-scroll-animation-target="item">
+                    <!-- Photographer Header -->
+                    <div class="flex items-center p-3 lg:p-4 pb-3">
+                        {% set photographer = photo.album ? photo.album.photographer : null %}
+                        <div class="w-8 h-8 lg:w-10 lg:h-10 bg-slate-gray rounded-full flex items-center justify-center mr-3">
+                            <span class="text-white text-xs lg:text-sm font-semibold">
+                                {{ photographer and photographer.email is defined ? photographer.email|first|upper : 'U' }}
+                            </span>
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <p class="font-semibold text-space-cadet text-xs lg:text-sm block truncate">
+                                {{ photographer and photographer.email is defined ? photographer.email : 'Unknown photographer' }}
+                            </p>
+                            <p class="text-xs text-slate-gray">{{ photo.createdAt|date('M j, Y') }}</p>
+                        </div>
+                        {% if photo.album %}
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full hidden sm:inline-block">{{ photo.album.title }}</span>
+                        {% endif %}
+                    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>D:/Projects/qwepic/qwepic/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>D:/Projects/qwepic/qwepic/templates/home/index.html.twig</code></li>
-    </ul>
+                    <!-- Photo -->
+                    <div class="relative group">
+                        <a href="{{ path('app_photo_show', {'id': photo.id}) }}">
+                            {% if photo.thumbnailPath %}
+                                <img src="{{ asset('uploads/thumbnails/' ~ photo.thumbnailPath) }}" 
+                                     alt="{{ photo.title }}" 
+                                     class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]">
+                            {% else %}
+                                <img src="{{ asset('uploads/photos/' ~ photo.storagePath) }}" 
+                                     alt="{{ photo.title }}" 
+                                     class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]">
+                            {% endif %}
+                        </a>
+                    </div>
+
+                    <!-- Photo Info -->
+                    <div class="p-3 lg:p-4 pt-3">
+                        <h3 class="font-heading font-bold text-base lg:text-lg text-space-cadet mb-2">{{ photo.title }}</h3>
+                        {% if photo.caption %}
+                            <p class="text-slate-gray text-sm leading-relaxed">{{ photo.caption|length > 100 ? photo.caption|slice(0, 100) ~ '...' : photo.caption }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Load More Button -->
+        {# <div class="text-center mt-12">
+            <button class="px-8 py-3 bg-vivid-sky-blue text-white font-semibold rounded-lg hover:bg-blue-500 transition-all duration-300">
+                Load More Photos
+            </button>
+        </div> #}
+    {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-12 lg:py-16">
+            <div class="max-w-md mx-auto px-4">
+                <svg class="w-12 h-12 lg:w-16 lg:h-16 mx-auto text-slate-gray mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <h3 class="text-lg lg:text-xl font-semibold text-space-cadet mb-2">No photos yet</h3>
+                <p class="text-slate-gray mb-6">Be the first to share your amazing photography!</p>
+                {% if app.user %}
+                    <a href="{{ path('app_photo_new') }}" 
+                       class="inline-flex items-center px-4 lg:px-6 py-3 bg-vivid-sky-blue text-white font-semibold rounded-lg hover:bg-blue-500 transition-all duration-300 text-sm lg:text-base">
+                        Upload Your First Photo
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
