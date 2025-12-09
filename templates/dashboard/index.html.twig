@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="example-wrapper">
+    <h1>Welcome to the dashboard, {{ app.user.userIdentifier }}!</h1>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <p>This is the admin dashboard.</p>
+    {% elseif is_granted('ROLE_PHOTOGRAPHER') %}
+        <p>This is the photographer dashboard.</p>
+    {% else %}
+        <p>This is the client dashboard.</p>
+    {% endif %}
+</div>
+{% endblock %}
