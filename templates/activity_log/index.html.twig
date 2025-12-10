@@ -67,6 +67,60 @@
 
             <!-- Activity logs table content -->
             <section class="flex-1">
+                <!-- Filter Section -->
+                <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 mb-6">
+                    <h3 class="text-sm font-semibold text-space-cadet mb-4">Filter Logs</h3>
+                    <form method="get" action="{{ path('app_activity_log_index') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- User Filter -->
+                        <div>
+                            <label for="user_id" class="block text-xs font-medium text-slate-gray mb-1">User</label>
+                            <select name="user_id" id="user_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue">
+                                <option value="">All Users</option>
+                                {% for user in users %}
+                                    <option value="{{ user.id }}" {% if filters.user_id == user.id %}selected{% endif %}>
+                                        {{ user.username ?: user.email }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Action Filter -->
+                        <div>
+                            <label for="action" class="block text-xs font-medium text-slate-gray mb-1">Action</label>
+                            <select name="action" id="action" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue">
+                                <option value="">All Actions</option>
+                                {% for act in actions %}
+                                    <option value="{{ act }}" {% if filters.action == act %}selected{% endif %}>
+                                        {{ act }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Start Date Filter -->
+                        <div>
+                            <label for="start_date" class="block text-xs font-medium text-slate-gray mb-1">Start Date</label>
+                            <input type="date" name="start_date" id="start_date" value="{{ filters.start_date }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue">
+                        </div>
+
+                        <!-- End Date Filter -->
+                        <div>
+                            <label for="end_date" class="block text-xs font-medium text-slate-gray mb-1">End Date</label>
+                            <input type="date" name="end_date" id="end_date" value="{{ filters.end_date }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue">
+                        </div>
+
+                        <!-- Filter Buttons -->
+                        <div class="md:col-span-2 lg:col-span-4 flex gap-2">
+                            <button type="submit" class="px-4 py-2 bg-vivid-sky-blue text-space-cadet text-sm font-medium rounded-lg hover:bg-blue-600 hover:text-anti-flash-white cursor-pointer transition-colors duration-200">
+                                <i class="fas fa-filter mr-2"></i>Apply Filters
+                            </button>
+                            <a href="{{ path('app_activity_log_index') }}" class="px-4 py-2 bg-gray-200 text-space-cadet text-sm font-medium rounded-lg hover:bg-gray-300 hover:text-space-cadet cursor-pointer transition-colors duration-200">
+                                <i class="fas fa-times mr-2"></i>Clear Filters
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-base font-semibold text-space-cadet">All Activity Logs</h2>

@@ -16,28 +16,56 @@ class ActivityLogRepository extends ServiceEntityRepository
         parent::__construct($registry, ActivityLog::class);
     }
 
-    //    /**
-    //     * @return ActivityLog[] Returns an array of ActivityLog objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Find activity logs with optional filters
+     *
+     * @return ActivityLog[]
+     */
+    public function findWithFilters(
+        ?int $userId = null,
+        ?string $action = null,
+        ?\DateTimeInterface $startDate = null,
+        ?\DateTimeInterface $endDate = null
+    ): array {
+        $qb = $this->createQueryBuilder('a')
+            ->orderBy('a.created_at', 'DESC');
 
-    //    public function findOneBySomeField($value): ?ActivityLog
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($userId !== null) {
+            $qb->andWhere('a.user_id = :userId')
+               ->setParameter('userId', $userId);
+        }
+
+        if ($action !== null && $action !== '') {
+            $qb->andWhere('a.action = :action')
+               ->setParameter('action', $action);
+        }
+
+        if ($startDate !== null) {
+            $qb->andWhere('a.created_at >= :startDate')
+               ->setParameter('startDate', $startDate);
+        }
+
+        if ($endDate !== null) {
+            $qb->andWhere('a.created_at <= :endDate')
+               ->setParameter('endDate', $endDate);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Get all distinct actions from logs
+     *
+     * @return array<string>
+     */
+    public function findDistinctActions(): array
+    {
+        $result = $this->createQueryBuilder('a')
+            ->select('DISTINCT a.action')
+            ->orderBy('a.action', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return array_column($result, 'action');
+    }
 }
