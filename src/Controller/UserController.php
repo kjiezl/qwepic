@@ -5,12 +5,14 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
+use App\Service\ActivityLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/dashboard/users')]
 final class UserController extends AbstractController
@@ -81,6 +83,58 @@ final class UserController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/{id}/disable', name: 'app_user_disable', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function disable(Request $request, User $user, EntityManagerInterface $entityManager, ActivityLogger $activityLogger): Response
+    {
+        if ($this->isCsrfTokenValid('disable'.$user->getId(), $request->getPayload()->getString('_token'))) {
+            $user->setIsActive(false);
+            $entityManager->flush();
+
+            // Log the disable action
+            $actor = $this->getUser();
+            if ($actor instanceof User) {
+                $description = sprintf(
+                    'Admin %s disabled user %s (ID %d).',
+                    $actor->getUsername() ?: ($actor->getEmail() ?? 'unknown'),
+                    $user->getUsername() ?: ($user->getEmail() ?? 'unknown'),
+                    $user->getId(),
+                );
+                $activityLogger->log('DISABLE', $actor, 'USER', $user->getId(), $description);
+            }
+
+            $this->addFlash('success', 'User has been disabled successfully.');
+        }
+
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/enable', name: 'app_user_enable', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function enable(Request $request, User $user, EntityManagerInterface $entityManager, ActivityLogger $activityLogger): Response
+    {
+        if ($this->isCsrfTokenValid('enable'.$user->getId(), $request->getPayload()->getString('_token'))) {
+            $user->setIsActive(true);
+            $entityManager->flush();
+
+            // Log the enable action
+            $actor = $this->getUser();
+            if ($actor instanceof User) {
+                $description = sprintf(
+                    'Admin %s enabled user %s (ID %d).',
+                    $actor->getUsername() ?: ($actor->getEmail() ?? 'unknown'),
+                    $user->getUsername() ?: ($user->getEmail() ?? 'unknown'),
+                    $user->getId(),
+                );
+                $activityLogger->log('ENABLE', $actor, 'USER', $user->getId(), $description);
+            }
+
+            $this->addFlash('success', 'User has been enabled successfully.');
+        }
+
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
