@@ -31,17 +31,17 @@
         </div>
 
         <div>
-            {{ form_label(form.cover_image_path, 'Cover Image Path', {
+            {{ form_label(form.coverImageFile, 'Cover image', {
                 'label_attr': {
                     'class': 'block text-sm font-medium text-space-cadet mb-1'
                 }
             }) }}
-            {{ form_widget(form.cover_image_path, {
+            {{ form_widget(form.coverImageFile, {
                 'attr': {
-                    'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet placeholder-slate-gray bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue'
+                    'class': 'w-full text-sm text-space-cadet'
                 }
             }) }}
-            {{ form_errors(form.cover_image_path) }}
+            {{ form_errors(form.coverImageFile) }}
         </div>
 
         <div>

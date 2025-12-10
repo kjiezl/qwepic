@@ -31,31 +31,17 @@
         </div>
 
         <div>
-            {{ form_label(form.storage_path, 'Storage Path', {
+            {{ form_label(form.imageFile, 'Photo file', {
                 'label_attr': {
                     'class': 'block text-sm font-medium text-space-cadet mb-1'
                 }
             }) }}
-            {{ form_widget(form.storage_path, {
+            {{ form_widget(form.imageFile, {
                 'attr': {
-                    'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet placeholder-slate-gray bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue'
+                    'class': 'w-full text-sm text-space-cadet'
                 }
             }) }}
-            {{ form_errors(form.storage_path) }}
-        </div>
-
-        <div>
-            {{ form_label(form.thumbnail_path, 'Thumbnail Path', {
-                'label_attr': {
-                    'class': 'block text-sm font-medium text-space-cadet mb-1'
-                }
-            }) }}
-            {{ form_widget(form.thumbnail_path, {
-                'attr': {
-                    'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet placeholder-slate-gray bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue'
-                }
-            }) }}
-            {{ form_errors(form.thumbnail_path) }}
+            {{ form_errors(form.imageFile) }}
         </div>
 
         <div>
