@@ -33,7 +33,9 @@ class PhotoType extends AbstractType
             ->add('album', EntityType::class, (function () use ($options) {
                 $fieldOptions = [
                     'class' => Album::class,
-                    'choice_label' => 'id',
+                    'choice_label' => static function (Album $album): string {
+                        return $album->getTitle() ?: ('Album #'.$album->getId());
+                    },
                 ];
 
                 if (isset($options['allowed_albums']) && $options['allowed_albums'] !== null) {

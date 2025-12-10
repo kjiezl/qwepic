@@ -45,6 +45,20 @@
         </div>
 
         <div>
+            {{ form_label(form.photoFiles, 'Album photos', {
+                'label_attr': {
+                    'class': 'block text-sm font-medium text-space-cadet mb-1'
+                }
+            }) }}
+            {{ form_widget(form.photoFiles, {
+                'attr': {
+                    'class': 'w-full text-sm text-space-cadet',
+                }
+            }) }}
+            {{ form_errors(form.photoFiles) }}
+        </div>
+
+        <div>
             <p class="block text-sm font-medium text-space-cadet mb-1">Visibility</p>
             <label class="flex items-center text-sm text-slate-gray cursor-pointer">
                 {{ form_widget(form.is_public, {
@@ -57,19 +71,21 @@
             {{ form_errors(form.is_public) }}
         </div>
 
-        <div>
-            {{ form_label(form.photographer, 'Photographer', {
-                'label_attr': {
-                    'class': 'block text-sm font-medium text-space-cadet mb-1'
-                }
-            }) }}
-            {{ form_widget(form.photographer, {
-                'attr': {
-                    'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue cursor-pointer'
-                }
-            }) }}
-            {{ form_errors(form.photographer) }}
-        </div>
+        {% if form.photographer is defined %}
+            <div>
+                {{ form_label(form.photographer, 'Photographer', {
+                    'label_attr': {
+                        'class': 'block text-sm font-medium text-space-cadet mb-1'
+                    }
+                }) }}
+                {{ form_widget(form.photographer, {
+                    'attr': {
+                        'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue cursor-pointer'
+                    }
+                }) }}
+                {{ form_errors(form.photographer) }}
+            </div>
+        {% endif %}
     </div>
 
     <div class="hidden">

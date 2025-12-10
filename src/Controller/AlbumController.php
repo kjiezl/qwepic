@@ -6,6 +6,8 @@ use App\Entity\Album;
 use App\Form\AlbumType;
 use App\Repository\AlbumRepository;
 use App\Repository\PhotoRepository;
+use App\Repository\UserRepository;
+use App\Entity\Photo;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +23,8 @@ final class AlbumController extends AbstractController
     public function __construct(
         private SluggerInterface $slugger,
         #[Autowire('%album_cover_upload_dir%')] private string $albumCoverUploadDir,
+        #[Autowire('%photo_upload_dir%')] private string $photoUploadDir,
+        #[Autowire('%photo_thumbnail_dir%')] private string $photoThumbnailDir,
     ) {
     }
 
@@ -41,10 +45,19 @@ final class AlbumController extends AbstractController
     }
 
     #[Route('/new', name: 'app_album_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_PHOTOGRAPHER')) {
+            throw $this->createAccessDeniedException();
+        }
+
         $album = new Album();
-        $form = $this->createForm(AlbumType::class, $album);
+        $formOptions = [
+            'show_photographer_field' => $this->isGranted('ROLE_ADMIN'),
+            'photographer_choices' => $this->isGranted('ROLE_ADMIN') ? $userRepository->findPhotographers() : [],
+        ];
+
+        $form = $this->createForm(AlbumType::class, $album, $formOptions);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -68,6 +81,44 @@ final class AlbumController extends AbstractController
                 }
 
                 $album->setCoverImagePath('uploads/albums/'.$newFilename);
+            }
+
+            $photoFiles = $form->get('photoFiles')->getData();
+            if (is_iterable($photoFiles)) {
+                foreach ($photoFiles as $imageFile) {
+                    if ($imageFile === null) {
+                        continue;
+                    }
+
+                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $this->slugger->slug((string) $originalFilename)->lower();
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                    try {
+                        $imageFile->move($this->photoUploadDir, $newFilename);
+                    } catch (FileException $e) {
+                        $this->addFlash('error', 'There was a problem uploading one of the album photos.');
+                        continue;
+                    }
+
+                    $photo = new Photo();
+                    $photo->setAlbum($album);
+                    $photo->setTitle($originalFilename ?: 'Photo');
+                    $photo->setStoragePath($newFilename);
+
+                    if (!is_dir($this->photoThumbnailDir)) {
+                        @mkdir($this->photoThumbnailDir, 0777, true);
+                    }
+
+                    @copy(
+                        rtrim($this->photoUploadDir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$newFilename,
+                        rtrim($this->photoThumbnailDir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$newFilename
+                    );
+
+                    $photo->setThumbnailPath($newFilename);
+
+                    $entityManager->persist($photo);
+                }
             }
 
             $entityManager->persist($album);
@@ -96,11 +147,18 @@ final class AlbumController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_album_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Album $album, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Album $album, EntityManagerInterface $entityManager, UserRepository $userRepository, PhotoRepository $photoRepository): Response
     {
         $this->denyAccessUnlessAlbumOwnerOrAdmin($album);
 
-        $form = $this->createForm(AlbumType::class, $album);
+        $photos = $photoRepository->findBy(['album' => $album]);
+
+        $formOptions = [
+            'show_photographer_field' => $this->isGranted('ROLE_ADMIN'),
+            'photographer_choices' => $this->isGranted('ROLE_ADMIN') ? $userRepository->findPhotographers() : [],
+        ];
+
+        $form = $this->createForm(AlbumType::class, $album, $formOptions);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -126,6 +184,44 @@ final class AlbumController extends AbstractController
                 $album->setCoverImagePath('uploads/albums/'.$newFilename);
             }
 
+            $photoFiles = $form->get('photoFiles')->getData();
+            if (is_iterable($photoFiles)) {
+                foreach ($photoFiles as $imageFile) {
+                    if ($imageFile === null) {
+                        continue;
+                    }
+
+                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $this->slugger->slug((string) $originalFilename)->lower();
+                    $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                    try {
+                        $imageFile->move($this->photoUploadDir, $newFilename);
+                    } catch (FileException $e) {
+                        $this->addFlash('error', 'There was a problem uploading one of the album photos.');
+                        continue;
+                    }
+
+                    $photo = new Photo();
+                    $photo->setAlbum($album);
+                    $photo->setTitle($originalFilename ?: 'Photo');
+                    $photo->setStoragePath($newFilename);
+
+                    if (!is_dir($this->photoThumbnailDir)) {
+                        @mkdir($this->photoThumbnailDir, 0777, true);
+                    }
+
+                    @copy(
+                        rtrim($this->photoUploadDir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$newFilename,
+                        rtrim($this->photoThumbnailDir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$newFilename
+                    );
+
+                    $photo->setThumbnailPath($newFilename);
+
+                    $entityManager->persist($photo);
+                }
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_album_index', [], Response::HTTP_SEE_OTHER);
@@ -134,6 +230,7 @@ final class AlbumController extends AbstractController
         return $this->render('album/edit.html.twig', [
             'album' => $album,
             'form' => $form,
+            'photos' => $photos,
         ]);
     }
 

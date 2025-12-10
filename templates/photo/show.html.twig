@@ -132,12 +132,14 @@
 
                     <div>
                         <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Preview</p>
-                        <div class="mt-2 rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
-                            {% if photo.thumbnailPath %}
-                                <img src="{{ asset('uploads/thumbnails/' ~ photo.thumbnailPath) }}" alt="{{ photo.title }}" class="w-full h-auto object-cover">
-                            {% else %}
-                                <img src="{{ asset('uploads/photos/' ~ photo.storagePath) }}" alt="{{ photo.title }}" class="w-full h-auto object-cover">
-                            {% endif %}
+                        <div class="mt-2 max-w-3xl mx-auto rounded-xl overflow-hidden border border-gray-100 bg-gray-50">
+                            <div class="h-80 bg-gray-100">
+                                {% if photo.thumbnailPath %}
+                                    <img src="{{ asset('uploads/thumbnails/' ~ photo.thumbnailPath) }}" alt="{{ photo.title }}" class="w-full h-full object-contain md:object-cover">
+                                {% else %}
+                                    <img src="{{ asset('uploads/photos/' ~ photo.storagePath) }}" alt="{{ photo.title }}" class="w-full h-full object-contain md:object-cover">
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
 

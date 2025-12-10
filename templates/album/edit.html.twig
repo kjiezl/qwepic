@@ -104,6 +104,37 @@
             <!-- Edit album form content -->
             <section class="flex-1">
                 <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                    {% if album.coverImagePath %}
+                        <div class="mb-6">
+                            <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Current cover image</p>
+                            <div class="mt-2 h-40 max-w-md rounded-xl overflow-hidden border border-gray-100 bg-gray-100">
+                                <img src="{{ asset(album.coverImagePath) }}" alt="{{ album.title }}" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if photos is defined and photos is not empty %}
+                        <div class="mb-6">
+                            <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Photos in this album</p>
+                            <div class="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                {% for photo in photos %}
+                                    <div class="bg-anti-flash-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+                                        <div class="h-28 bg-gray-100 overflow-hidden">
+                                            {% if photo.thumbnailPath %}
+                                                <img src="{{ asset('uploads/thumbnails/' ~ photo.thumbnailPath) }}" alt="{{ photo.title }}" class="w-full h-full object-cover">
+                                            {% else %}
+                                                <img src="{{ asset('uploads/photos/' ~ photo.storagePath) }}" alt="{{ photo.title }}" class="w-full h-full object-cover">
+                                            {% endif %}
+                                        </div>
+                                        <div class="p-2">
+                                            <p class="text-xs font-semibold text-space-cadet truncate">{{ photo.title }}</p>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
                     {{ include('album/_form.html.twig') }}
 
                     <div class="mt-4 pt-4 border-t border-gray-100 flex justify-end gap-3">

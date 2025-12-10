@@ -16,6 +16,24 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * @return User[]
+     */
+    public function findPhotographers(): array
+    {
+        $allUsers = $this->findAll();
+
+        return array_values(array_filter($allUsers, static function ($user): bool {
+            if (!$user instanceof User) {
+                return false;
+            }
+
+            $roles = $user->getRoles();
+
+            return in_array('ROLE_PHOTOGRAPHER', $roles, true) && $user->isActive();
+        }));
+    }
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

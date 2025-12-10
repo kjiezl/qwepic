@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QwePic - Photographers{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-anti-flash-white px-4 py-6 lg:px-8 lg:py-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Photographers</h1>
+                <p class="mt-1 text-sm text-slate-gray">Discover active photographers and explore their work.</p>
+            </div>
+            <a href="{{ path('app_home') }}"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
+                <i class="fas fa-arrow-left text-xs"></i>
+                <span>Back to Home</span>
+            </a>
+        </div>
+
+        {% if photographers is not empty %}
+            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {% for item in photographers %}
+                    {% set photographer = item.user %}
+                    <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5 flex flex-col gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-11 h-11 rounded-full bg-slate-gray flex items-center justify-center shrink-0">
+                                <span class="text-white text-sm font-semibold">
+                                    {{ (photographer.username ?: photographer.email)|first|upper }}
+                                </span>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-sm font-semibold text-space-cadet truncate">
+                                    {{ photographer.username ?: photographer.email }}
+                                </p>
+                                <p class="text-xs text-slate-gray">Photographer</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-xs text-slate-gray">
+                            <span class="inline-flex items-center gap-1">
+                                <i class="fas fa-folder-open text-[11px]"></i>
+                                <span>{{ item.albumsCount }} {{ item.albumsCount == 1 ? 'album' : 'albums' }}</span>
+                            </span>
+                            <span class="inline-flex items-center gap-1">
+                                <i class="fas fa-image text-[11px]"></i>
+                                <span>{{ item.photosCount }} {{ item.photosCount == 1 ? 'photo' : 'photos' }}</span>
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-sm text-slate-gray">No photographers found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

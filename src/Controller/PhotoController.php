@@ -46,6 +46,16 @@ final class PhotoController extends AbstractController
     {
         $photo = new Photo();
 
+        $albumId = $request->query->getInt('album', 0);
+        if ($albumId > 0) {
+            $preselectedAlbum = $albumRepository->find($albumId);
+            if ($preselectedAlbum !== null) {
+                if ($this->isGranted('ROLE_ADMIN') || ($this->isGranted('ROLE_PHOTOGRAPHER') && $preselectedAlbum->getPhotographer() === $this->getUser())) {
+                    $photo->setAlbum($preselectedAlbum);
+                }
+            }
+        }
+
         if ($this->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(PhotoType::class, $photo);
         } elseif ($this->isGranted('ROLE_PHOTOGRAPHER')) {

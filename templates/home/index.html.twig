@@ -35,9 +35,9 @@
                 <!-- Photo Card -->
                 <div class="break-inside-avoid mb-4 lg:mb-6 bg-white rounded-2xl shadow-card overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1" data-scroll-animation-target="item">
                     <!-- Photographer Header -->
-                    <div class="flex items-center p-3 lg:p-4 pb-3">
+                    <div class="flex items-center p-3 lg:p-4 pb-3 gap-3">
                         {% set photographer = photo.album ? photo.album.photographer : null %}
-                        <div class="w-8 h-8 lg:w-10 lg:h-10 bg-slate-gray rounded-full flex items-center justify-center mr-3">
+                        <div class="w-8 h-8 lg:w-10 lg:h-10 bg-slate-gray rounded-full flex items-center justify-center shrink-0">
                             <span class="text-white text-xs lg:text-sm font-semibold">
                                 {{ photographer and photographer.email is defined ? photographer.email|first|upper : 'U' }}
                             </span>
@@ -49,7 +49,7 @@
                             <p class="text-xs text-slate-gray">{{ photo.createdAt|date('M j, Y') }}</p>
                         </div>
                         {% if photo.album %}
-                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full hidden sm:inline-block">{{ photo.album.title }}</span>
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full hidden sm:inline-block max-w-[120px] truncate whitespace-nowrap shrink-0">{{ photo.album.title }}</span>
                         {% endif %}
                     </div>
 
