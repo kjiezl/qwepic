@@ -7,142 +7,249 @@
 
 {% block body %}
 {% set currentRoute = app.request.attributes.get('_route') %}
+{% set isAdmin = is_granted('ROLE_ADMIN') %}
 <div class="min-h-screen bg-anti-flash-white px-4 py-6 lg:px-8 lg:py-8">
     <div class="max-w-7xl mx-auto">
-        <div class="flex items-center justify-between mb-8">
-            <div>
-                <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Photo Management</h1>
+        {% if isAdmin %}
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Photo Management</h1>
+                </div>
+                <a href="{{ path('app_photo_new') }}"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-vivid-sky-blue text-space-cadet text-sm font-medium shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
+                    <i class="fas fa-image text-xs"></i>
+                    <span>Add Photo</span>
+                </a>
             </div>
-            <a href="{{ path('app_photo_new') }}"
-               class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-vivid-sky-blue text-space-cadet text-sm font-medium shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
-                <i class="fas fa-image text-xs"></i>
-                <span>Add Photo</span>
-            </a>
-        </div>
 
-        <div class="flex flex-col lg:flex-row gap-8">
-            <aside class="w-full lg:w-64 bg-white shadow-md rounded-2xl p-5 border border-gray-100">
-                <h2 class="text-xs font-semibold tracking-widest text-slate-gray uppercase mb-4">Admin Panel</h2>
-                <nav class="space-y-1">
-                    {% set baseItemClasses = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer' %}
+            <div class="flex flex-col lg:flex-row gap-8">
+                <aside class="w-full lg:w-64 bg-white shadow-md rounded-2xl p-5 border border-gray-100">
+                    <h2 class="text-xs font-semibold tracking-widest text-slate-gray uppercase mb-4">Admin Panel</h2>
+                    <nav class="space-y-1">
+                        {% set baseItemClasses = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer' %}
 
-                    <a href="{{ path('app_dashboard') }}"
-                       class="{{ baseItemClasses }} {% if currentRoute == 'app_dashboard' %}bg-space-cadet text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
-                            <i class="fas fa-chart-line"></i>
-                        </span>
-                        <span>Overview</span>
-                    </a>
+                        <a href="{{ path('app_dashboard') }}"
+                           class="{{ baseItemClasses }} {% if currentRoute == 'app_dashboard' %}bg-space-cadet text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                                <i class="fas fa-chart-line"></i>
+                            </span>
+                            <span>Overview</span>
+                        </a>
 
-                    <a href="{{ path('app_user_index') }}"
-                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_user_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
-                            <i class="fas fa-users"></i>
-                        </span>
-                        <span>User Management</span>
-                    </a>
+                        <a href="{{ path('app_user_index') }}"
+                           class="{{ baseItemClasses }} {% if currentRoute starts with 'app_user_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                                <i class="fas fa-users"></i>
+                            </span>
+                            <span>User Management</span>
+                        </a>
 
-                    <a href="{{ path('app_album_index') }}"
-                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_album_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
-                            <i class="fas fa-folder-open"></i>
-                        </span>
-                        <span>Albums Management</span>
-                    </a>
+                        <a href="{{ path('app_album_index') }}"
+                           class="{{ baseItemClasses }} {% if currentRoute starts with 'app_album_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                                <i class="fas fa-folder-open"></i>
+                            </span>
+                            <span>Albums Management</span>
+                        </a>
 
-                    <a href="{{ path('app_photo_index') }}"
-                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photo_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-space-cadet">
-                            <i class="fas fa-image"></i>
-                        </span>
-                        <span>Photos Management</span>
-                    </a>
+                        <a href="{{ path('app_photo_index') }}"
+                           class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photo_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-space-cadet">
+                                <i class="fas fa-image"></i>
+                            </span>
+                            <span>Photos Management</span>
+                        </a>
 
-                    <a href="{{ path('app_activity_log_index') }}"
-                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_activity_log_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
-                            <i class="fas fa-clipboard-list"></i>
-                        </span>
-                        <span>Activity Logs</span>
-                    </a>
-                </nav>
-            </aside>
+                        <a href="{{ path('app_activity_log_index') }}"
+                           class="{{ baseItemClasses }} {% if currentRoute starts with 'app_activity_log_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
+                                <i class="fas fa-clipboard-list"></i>
+                            </span>
+                            <span>Activity Logs</span>
+                        </a>
+                    </nav>
+                </aside>
 
-            <section class="flex-1">
-                <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5">
-                    <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-base font-semibold text-space-cadet">All Photos</h2>
-                        <span class="text-xs font-medium text-slate-gray">{{ photos|length }} total</span>
-                    </div>
+                <section class="flex-1">
+                    <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-base font-semibold text-space-cadet">All Photos</h2>
+                            <span class="text-xs font-medium text-slate-gray">{{ photos|length }} total</span>
+                        </div>
 
-                    {% if photos is not empty %}
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full text-left text-sm">
-                                <thead class="border-b border-gray-200 text-slate-gray text-xs uppercase tracking-wider">
-                                    <tr>
-                                        <th scope="col" class="py-2 pr-4 font-medium">Title</th>
-                                        <th scope="col" class="py-2 pr-4 font-medium">Album</th>
-                                        <th scope="col" class="py-2 pr-4 font-medium">Visibility</th>
-                                        <th scope="col" class="py-2 pr-4 font-medium">Uploaded</th>
-                                        <th scope="col" class="py-2 pr-0 font-medium text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-100">
-                                {% for photo in photos %}
-                                    <tr class="hover:bg-gray-50 transition-colors">
-                                        <td class="py-3 pr-4 text-space-cadet font-medium truncate max-w-xs">
-                                            {{ photo.title }}
-                                        </td>
-                                        <td class="py-3 pr-4 text-slate-gray">
-                                            {% if photo.album %}
-                                                {% if photo.album.title %}
-                                                    {{ photo.album.title }}
+                        {% if photos is not empty %}
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-left text-sm">
+                                    <thead class="border-b border-gray-200 text-slate-gray text-xs uppercase tracking-wider">
+                                        <tr>
+                                            <th scope="col" class="py-2 pr-4 font-medium">Title</th>
+                                            <th scope="col" class="py-2 pr-4 font-medium">Album</th>
+                                            <th scope="col" class="py-2 pr-4 font-medium">Visibility</th>
+                                            <th scope="col" class="py-2 pr-4 font-medium">Uploaded</th>
+                                            <th scope="col" class="py-2 pr-0 font-medium text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100">
+                                    {% for photo in photos %}
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            <td class="py-3 pr-4 text-space-cadet font-medium truncate max-w-xs">
+                                                {{ photo.title }}
+                                            </td>
+                                            <td class="py-3 pr-4 text-slate-gray">
+                                                {% if photo.album %}
+                                                    {% if photo.album.title %}
+                                                        {{ photo.album.title }}
+                                                    {% else %}
+                                                        {{ 'Album #' ~ photo.album.id }}
+                                                    {% endif %}
                                                 {% else %}
-                                                    {{ 'Album #' ~ photo.album.id }}
+                                                    N/A
                                                 {% endif %}
-                                            {% else %}
-                                                N/A
+                                            </td>
+                                            <td class="py-3 pr-4">
+                                                {% if photo.isPublic %}
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-coral text-anti-flash-white">
+                                                        Public
+                                                    </span>
+                                                {% else %}
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-gray text-anti-flash-white">
+                                                        Private
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="py-3 pr-4 text-slate-gray text-xs">
+                                                {{ photo.createdAt ? photo.createdAt|date('M j, Y') : '—' }}
+                                            </td>
+                                            <td class="py-3 pr-0 text-right">
+                                                <div class="inline-flex items-center gap-2">
+                                                    <a href="{{ path('app_photo_show', {'id': photo.id}) }}"
+                                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-space-cadet hover:text-accent-coral transition-colors duration-200">
+                                                        <i class="fas fa-eye text-[11px]"></i>
+                                                        <span>View</span>
+                                                    </a>
+                                                    <a href="{{ path('app_photo_edit', {'id': photo.id}) }}"
+                                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-accent-coral text-xs font-medium text-accent-coral hover:bg-accent-coral hover:text-anti-flash-white transition-colors duration-200">
+                                                        <i class="fas fa-pen text-[11px]"></i>
+                                                        <span>Edit</span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-sm text-slate-gray">No photos found yet.</p>
+                        {% endif %}
+                    </div>
+                </section>
+            </div>
+        {% else %}
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">My Photos</h1>
+                </div>
+                <a href="{{ path('app_photo_new') }}"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-vivid-sky-blue text-space-cadet text-sm font-medium shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
+                    <i class="fas fa-image text-xs"></i>
+                    <span>Upload Photo</span>
+                </a>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <aside class="w-full lg:w-64 bg-white shadow-md rounded-2xl p-5 border border-gray-100">
+                    <h2 class="text-xs font-semibold tracking-widest text-slate-gray uppercase mb-4">Photographer Panel</h2>
+                    <nav class="space-y-1">
+                        {% set baseItemClasses = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer' %}
+
+                        <a href="{{ path('app_dashboard') }}"
+                           class="{{ baseItemClasses }} {% if currentRoute == 'app_dashboard' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                                <i class="fas fa-chart-line"></i>
+                            </span>
+                            <span>Overview</span>
+                        </a>
+
+                        <a href="{{ path('app_album_index') }}"
+                           class="{{ baseItemClasses }} {% if currentRoute starts with 'app_album_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                                <i class="fas fa-folder-open"></i>
+                            </span>
+                            <span>My Albums</span>
+                        </a>
+
+                        <a href="{{ path('app_photo_index') }}"
+                           class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photo_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-space-cadet">
+                                <i class="fas fa-image"></i>
+                            </span>
+                            <span>My Photos</span>
+                        </a>
+                    </nav>
+                </aside>
+
+                <section class="flex-1">
+                    <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 class="text-base font-semibold text-space-cadet">My Photos</h2>
+                            </div>
+                            <span class="text-xs font-medium text-slate-gray">{{ photos|length }} total</span>
+                        </div>
+
+                        {% if photos is not empty %}
+                            <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                                {% for photo in photos %}
+                                    <div class="bg-anti-flash-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 flex flex-col">
+                                        <div class="relative h-44 bg-gray-100 overflow-hidden">
+                                            <a href="{{ path('app_photo_show', {'id': photo.id}) }}">
+                                                {% if photo.thumbnailPath %}
+                                                    <img src="{{ asset('uploads/thumbnails/' ~ photo.thumbnailPath) }}" alt="{{ photo.title }}" class="w-full h-full object-cover">
+                                                {% else %}
+                                                    <img src="{{ asset('uploads/photos/' ~ photo.storagePath) }}" alt="{{ photo.title }}" class="w-full h-full object-cover">
+                                                {% endif %}
+                                            </a>
+                                        </div>
+
+                                        <div class="p-4 flex-1 flex flex-col">
+                                            <h3 class="text-sm font-semibold text-space-cadet truncate">{{ photo.title }}</h3>
+                                            {% if photo.caption %}
+                                                <p class="mt-1 text-xs text-slate-gray line-clamp-2">{{ photo.caption }}</p>
                                             {% endif %}
-                                        </td>
-                                        <td class="py-3 pr-4">
-                                            {% if photo.isPublic %}
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-coral text-anti-flash-white">
-                                                    Public
-                                                </span>
-                                            {% else %}
-                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-gray text-anti-flash-white">
-                                                    Private
-                                                </span>
-                                            {% endif %}
-                                        </td>
-                                        <td class="py-3 pr-4 text-slate-gray text-xs">
-                                            {{ photo.createdAt ? photo.createdAt|date('M j, Y') : '—' }}
-                                        </td>
-                                        <td class="py-3 pr-0 text-right">
-                                            <div class="inline-flex items-center gap-2">
+
+                                            <div class="mt-3 flex items-center justify-between text-xs text-slate-gray">
+                                                <span>{{ photo.createdAt ? photo.createdAt|date('M j, Y') : '—' }}</span>
+                                                {% if photo.isPublic %}
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-accent-coral text-anti-flash-white">Public</span>
+                                                {% else %}
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-gray text-anti-flash-white">Private</span>
+                                                {% endif %}
+                                            </div>
+
+                                            <div class="mt-3 flex items-center gap-2">
                                                 <a href="{{ path('app_photo_show', {'id': photo.id}) }}"
-                                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-medium text-space-cadet hover:text-accent-coral transition-colors duration-200">
-                                                    <i class="fas fa-eye text-[11px]"></i>
+                                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200 text-[11px] font-medium text-space-cadet hover:text-accent-coral transition-colors duration-200">
+                                                    <i class="fas fa-eye text-[10px]"></i>
                                                     <span>View</span>
                                                 </a>
                                                 <a href="{{ path('app_photo_edit', {'id': photo.id}) }}"
-                                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-accent-coral text-xs font-medium text-accent-coral hover:bg-accent-coral hover:text-anti-flash-white transition-colors duration-200">
-                                                    <i class="fas fa-pen text-[11px]"></i>
+                                                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-accent-coral text-[11px] font-medium text-accent-coral hover:bg-accent-coral hover:text-anti-flash-white transition-colors duration-200">
+                                                    <i class="fas fa-pen text-[10px]"></i>
                                                     <span>Edit</span>
                                                 </a>
                                             </div>
-                                        </td>
-                                    </tr>
+                                        </div>
+                                    </div>
                                 {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="text-sm text-slate-gray">No photos found yet.</p>
-                    {% endif %}
-                </div>
-            </section>
-        </div>
+                            </div>
+                        {% else %}
+                            <p class="text-sm text-slate-gray">You haven't uploaded any photos yet.</p>
+                        {% endif %}
+                    </div>
+                </section>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

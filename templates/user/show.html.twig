@@ -35,23 +35,23 @@
                     {% set baseItemClasses = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer' %}
 
                     <a href="{{ path('app_dashboard') }}"
-                       class="{{ baseItemClasses }} {% if currentRoute == 'app_dashboard' %}bg-space-cadet text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-space-cadet/10 text-space-cadet">
+                       class="{{ baseItemClasses }} {% if currentRoute == 'app_dashboard' %}bg-space-cadet text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
                             <i class="fas fa-chart-line"></i>
                         </span>
                         <span>Overview</span>
                     </a>
 
                     <a href="{{ path('app_user_index') }}"
-                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_user_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_user_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-space-cadet">
                             <i class="fas fa-users"></i>
                         </span>
                         <span>User Management</span>
                     </a>
 
                     <a href="{{ path('app_album_index') }}"
-                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_album_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_album_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
                         <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
                             <i class="fas fa-folder-open"></i>
                         </span>
@@ -59,7 +59,7 @@
                     </a>
 
                     <a href="{{ path('app_photo_index') }}"
-                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photo_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photo_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
                         <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
                             <i class="fas fa-image"></i>
                         </span>
@@ -67,7 +67,7 @@
                     </a>
 
                     <a href="{{ path('app_activity_log_index') }}"
-                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_activity_log_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_activity_log_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
                         <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
                             <i class="fas fa-clipboard-list"></i>
                         </span>

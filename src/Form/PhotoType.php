@@ -19,10 +19,18 @@ class PhotoType extends AbstractType
             ->add('title')
             ->add('caption')
             ->add('is_public')
-            ->add('album', EntityType::class, [
-                'class' => Album::class,
-                'choice_label' => 'id',
-            ])
+            ->add('album', EntityType::class, (function () use ($options) {
+                $fieldOptions = [
+                    'class' => Album::class,
+                    'choice_label' => 'id',
+                ];
+
+                if (isset($options['allowed_albums']) && $options['allowed_albums'] !== null) {
+                    $fieldOptions['choices'] = $options['allowed_albums'];
+                }
+
+                return $fieldOptions;
+            })())
         ;
     }
 
@@ -30,6 +38,7 @@ class PhotoType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Photo::class,
+            'allowed_albums' => null,
         ]);
     }
 }

@@ -9,9 +9,7 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_ADMIN')]
 final class DashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_dashboard')]
@@ -20,19 +18,38 @@ final class DashboardController extends AbstractController
         PhotoRepository $photoRepository,
         AlbumRepository $albumRepository,
         ActivityLogRepository $activityLogRepository,
-    ): Response
-    {
-        $totalUsers = $userRepository->count([]);
-        $totalPhotos = $photoRepository->count([]);
-        $totalAlbums = $albumRepository->count([]);
+    ): Response {
+        $user = $this->getUser();
 
-        $recentLogs = $activityLogRepository->findBy([], ['created_at' => 'DESC'], 5);
+        // Admin dashboard
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $totalUsers = $userRepository->count([]);
+            $totalPhotos = $photoRepository->count([]);
+            $totalAlbums = $albumRepository->count([]);
 
-        return $this->render('dashboard/index.html.twig', [
-            'totalUsers' => $totalUsers,
-            'totalPhotos' => $totalPhotos,
-            'totalAlbums' => $totalAlbums,
-            'recentLogs' => $recentLogs,
-        ]);
+            $recentLogs = $activityLogRepository->findBy([], ['created_at' => 'DESC'], 5);
+
+            return $this->render('dashboard/index.html.twig', [
+                'totalUsers' => $totalUsers,
+                'totalPhotos' => $totalPhotos,
+                'totalAlbums' => $totalAlbums,
+                'recentLogs' => $recentLogs,
+            ]);
+        }
+
+        // Photographer dashboard
+        if ($this->isGranted('ROLE_PHOTOGRAPHER')) {
+            // Albums and photos owned by this photographer
+            $albums = $albumRepository->findBy(['photographer' => $user]);
+            $photos = $photoRepository->findByPhotographer($user);
+
+            return $this->render('dashboard/photographer.html.twig', [
+                'albums' => $albums,
+                'photos' => $photos,
+            ]);
+        }
+
+        // Other roles are not allowed to access the dashboard
+        throw $this->createAccessDeniedException();
     }
 }

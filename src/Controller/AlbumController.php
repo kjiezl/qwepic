@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Album;
 use App\Form\AlbumType;
 use App\Repository\AlbumRepository;
+use App\Repository\PhotoRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,8 +18,16 @@ final class AlbumController extends AbstractController
     #[Route(name: 'app_album_index', methods: ['GET'])]
     public function index(AlbumRepository $albumRepository): Response
     {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $albums = $albumRepository->findAll();
+        } elseif ($this->isGranted('ROLE_PHOTOGRAPHER')) {
+            $albums = $albumRepository->findBy(['photographer' => $this->getUser()]);
+        } else {
+            throw $this->createAccessDeniedException();
+        }
+
         return $this->render('album/index.html.twig', [
-            'albums' => $albumRepository->findAll(),
+            'albums' => $albums,
         ]);
     }
 
@@ -30,6 +39,11 @@ final class AlbumController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Photographers can only create albums for themselves
+            if ($this->isGranted('ROLE_PHOTOGRAPHER') && !$this->isGranted('ROLE_ADMIN')) {
+                $album->setPhotographer($this->getUser());
+            }
+
             $entityManager->persist($album);
             $entityManager->flush();
 
@@ -43,20 +57,32 @@ final class AlbumController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_album_show', methods: ['GET'])]
-    public function show(Album $album): Response
+    public function show(Album $album, PhotoRepository $photoRepository): Response
     {
+        $this->denyAccessUnlessAlbumOwnerOrAdmin($album);
+
+        $photos = $photoRepository->findBy(['album' => $album]);
+
         return $this->render('album/show.html.twig', [
             'album' => $album,
+            'photos' => $photos,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_album_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Album $album, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessAlbumOwnerOrAdmin($album);
+
         $form = $this->createForm(AlbumType::class, $album);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Ensure photographer ownership is not changed by non-admins
+            if ($this->isGranted('ROLE_PHOTOGRAPHER') && !$this->isGranted('ROLE_ADMIN')) {
+                $album->setPhotographer($this->getUser());
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_album_index', [], Response::HTTP_SEE_OTHER);
@@ -71,11 +97,26 @@ final class AlbumController extends AbstractController
     #[Route('/{id}', name: 'app_album_delete', methods: ['POST'])]
     public function delete(Request $request, Album $album, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessAlbumOwnerOrAdmin($album);
+
         if ($this->isCsrfTokenValid('delete'.$album->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($album);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_album_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function denyAccessUnlessAlbumOwnerOrAdmin(Album $album): void
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+
+        if ($this->isGranted('ROLE_PHOTOGRAPHER') && $album->getPhotographer() === $this->getUser()) {
+            return;
+        }
+
+        throw $this->createAccessDeniedException();
     }
 }
