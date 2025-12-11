@@ -34,20 +34,14 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $username);
 
-        $passport = new Passport(
-            new UserBadge($username, function ($userIdentifier) {
-                // This callback is called after the user is loaded
-                // We'll check if user is active here
-                return $userIdentifier;
-            }),
+        return new Passport(
+            new UserBadge($username),
             new PasswordCredentials($request->getPayload()->getString('password')),
             [
                 new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
                 new RememberMeBadge(),
             ]
         );
-
-        return $passport;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
