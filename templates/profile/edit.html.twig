@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QwePic - Edit Profile{% endblock %}
+
+{% block body %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+<div class="min-h-screen bg-anti-flash-white px-4 py-6 lg:px-8 lg:py-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Edit Profile</h1>
+            </div>
+            <a href="{{ path('app_profile_show') }}"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
+                <i class="fas fa-arrow-left text-xs"></i>
+                <span>Back to Profile</span>
+            </a>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm">
+                <i class="fas fa-check-circle mr-2"></i>{{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Profile / Dashboard Navigation -->
+            <aside class="w-full lg:w-64 bg-white shadow-md rounded-2xl p-5 border border-gray-100">
+                {% set baseItemClasses = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer' %}
+
+                <h2 class="text-xs font-semibold tracking-widest text-slate-gray uppercase mb-4">Profile Menu</h2>
+
+                <nav class="space-y-1">
+                    <a href="{{ path('app_profile_show') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute == 'app_profile_edit' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-space-cadet">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <span>View Profile</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Edit Form -->
+            <section class="flex-1">
+                <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                    <h2 class="text-base font-semibold text-space-cadet mb-6">Update Your Information</h2>
+
+                    {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+                        
+                        <div>
+                            {{ form_label(form.username, null, {'label_attr': {'class': 'block text-sm font-medium text-space-cadet mb-2'}}) }}
+                            {{ form_widget(form.username, {'attr': {'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-vivid-sky-blue focus:border-transparent transition-all duration-200'}}) }}
+
+                            {% set fieldErrors = form_errors(form.username) %}
+                            {% if fieldErrors is not empty %}
+                                <div class="mt-1 text-xs text-accent-coral">
+                                    {{ fieldErrors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            {{ form_label(form.email, null, {'label_attr': {'class': 'block text-sm font-medium text-space-cadet mb-2'}}) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-vivid-sky-blue focus:border-transparent transition-all duration-200'}}) }}
+
+                            {% set fieldErrors = form_errors(form.email) %}
+                            {% if fieldErrors is not empty %}
+                                <div class="mt-1 text-xs text-accent-coral">
+                                    {{ fieldErrors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="pt-4 border-t border-gray-100">
+                            <h3 class="text-sm font-semibold text-space-cadet mb-4">Change Password (Optional)</h3>
+                            <p class="text-xs text-slate-gray mb-4">Leave blank if you don't want to change your password.</p>
+
+                            <div class="space-y-4">
+                                <div>
+                                    {{ form_label(form.plainPassword, 'New Password', {'label_attr': {'class': 'block text-sm font-medium text-space-cadet mb-2'}}) }}
+                                    {{ form_widget(form.plainPassword, {'attr': {'class': 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-vivid-sky-blue focus:border-transparent transition-all duration-200'}}) }}
+
+                                    {% set fieldErrors = form_errors(form.plainPassword) %}
+                                    {% if fieldErrors is not empty %}
+                                        <div class="mt-1 text-xs text-accent-coral">
+                                            {{ fieldErrors|striptags }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 pt-4">
+                            <button type="submit"
+                                    class="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-vivid-sky-blue cursor-pointer text-space-cadet text-sm font-medium shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
+                                <i class="fas fa-save text-xs"></i>
+                                <span>Save Changes</span>
+                            </button>
+                            <a href="{{ path('app_profile_show') }}"
+                               class="inline-flex items-center gap-2 px-6 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
+                                <i class="fas fa-times text-xs"></i>
+                                <span>Cancel</span>
+                            </a>
+                        </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

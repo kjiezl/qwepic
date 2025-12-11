@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QwePic - My Profile{% endblock %}
+
+{% block body %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+<div class="min-h-screen bg-anti-flash-white px-4 py-6 lg:px-8 lg:py-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">My Profile</h1>
+            </div>
+            <a href="{{ path('app_home') }}"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
+                <i class="fas fa-arrow-left text-xs"></i>
+                <span>Back to Home</span>
+            </a>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="mb-6 p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 text-sm">
+                <i class="fas fa-check-circle mr-2"></i>{{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Profile / Dashboard Navigation -->
+            <aside class="w-full lg:w-64 bg-white shadow-md rounded-2xl p-5 border border-gray-100">
+                {% set baseItemClasses = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer' %}
+
+                <h2 class="text-xs font-semibold tracking-widest text-slate-gray uppercase mb-4">Profile Menu</h2>
+
+                <nav class="space-y-1">
+                    <a href="{{ path('app_profile_show') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute == 'app_profile_show' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-space-cadet">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <span>View Profile</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Profile Content -->
+            <section class="flex-1">
+                <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-base font-semibold text-space-cadet">Profile Information</h2>
+                        <a href="{{ path('app_profile_edit') }}"
+                           class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-vivid-sky-blue text-space-cadet text-sm font-medium shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
+                            <i class="fas fa-edit text-xs"></i>
+                            <span>Edit Profile</span>
+                        </a>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4 pb-6 border-b border-gray-100">
+                            <div class="w-16 h-16 bg-slate-gray rounded-full flex items-center justify-center shrink-0">
+                                <span class="text-white text-2xl font-semibold">
+                                    {{ user.username ? user.username|first|upper : user.email|first|upper }}
+                                </span>
+                            </div>
+                            <div>
+                                <p class="text-lg font-semibold text-space-cadet">{{ user.username ?: user.email }}</p>
+                                <p class="text-sm text-slate-gray">
+                                    {% if 'ROLE_ADMIN' in user.roles %}
+                                        Administrator
+                                    {% elseif 'ROLE_PHOTOGRAPHER' in user.roles %}
+                                        Photographer
+                                    {% else %}
+                                        User
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div>
+                                <label class="text-xs font-medium text-slate-gray uppercase tracking-widest">Username</label>
+                                <p class="mt-1 text-sm text-space-cadet font-medium">{{ user.username ?: 'Not set' }}</p>
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-medium text-slate-gray uppercase tracking-widest">Email</label>
+                                <p class="mt-1 text-sm text-space-cadet font-medium">{{ user.email }}</p>
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-medium text-slate-gray uppercase tracking-widest">Role</label>
+                                <p class="mt-1">
+                                    {% if 'ROLE_ADMIN' in user.roles %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-accent-coral text-anti-flash-white">
+                                            <i class="fas fa-shield-alt mr-1"></i>Administrator
+                                        </span>
+                                    {% elseif 'ROLE_PHOTOGRAPHER' in user.roles %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-vivid-sky-blue text-space-cadet">
+                                            <i class="fas fa-camera mr-1"></i>Photographer
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-gray text-anti-flash-white">
+                                            <i class="fas fa-user mr-1"></i>User
+                                        </span>
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-medium text-slate-gray uppercase tracking-widest">Account Status</label>
+                                <p class="mt-1">
+                                    {% if user.isActive %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-accent-coral text-anti-flash-white">
+                                            <i class="fas fa-check-circle mr-1"></i>Active
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-gray text-anti-flash-white">
+                                            <i class="fas fa-ban mr-1"></i>Disabled
+                                        </span>
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-medium text-slate-gray uppercase tracking-widest">Member Since</label>
+                                <p class="mt-1 text-sm text-space-cadet font-medium">{{ user.createdAt ? user.createdAt|date('F j, Y') : 'N/A' }}</p>
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-medium text-slate-gray uppercase tracking-widest">Last Updated</label>
+                                <p class="mt-1 text-sm text-space-cadet font-medium">{{ user.updatedAt ? user.updatedAt|date('F j, Y') : 'N/A' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="mt-8 bg-white rounded-2xl shadow-md border border-red-200 p-6">
+                    <h2 class="text-base font-semibold text-red-600 mb-2">Danger Zone</h2>
+                    <p class="text-sm text-slate-gray mb-4">Once you delete your account, there is no going back. Please be certain.</p>
+                    
+                    <form method="post" action="{{ path('app_profile_delete') }}" onsubmit="return confirm('Are you absolutely sure you want to delete your account? This action cannot be undone and all your data will be permanently removed.');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_profile') }}">
+                        <button type="submit"
+                                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-coral text-white text-sm font-medium shadow-sm hover:bg-red-600 cursor-pointer transition-all duration-200">
+                            <i class="fas fa-trash-alt text-xs"></i>
+                            <span>Delete My Account</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

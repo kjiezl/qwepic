@@ -28,16 +28,14 @@
                 <i class="fas fa-user-friends text-xl {% if currentRoute == 'app_photographer_index' %}text-vivid-sky-blue{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110 group-hover:text-vivid-sky-blue"></i>
                 <span class="absolute left-full ml-6 top-1/2 -translate-y-1/2 bg-space-cadet text-anti-flash-white px-3 py-2 rounded-lg font-sans font-semibold text-sm whitespace-nowrap opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-2 z-50">Photographers</span>
             </a>
-
+            <div class="border-t border-gray-300 w-full my-4"></div>
             {% if app.user %}
                 {% if 'ROLE_ADMIN' in app.user.roles %}
-                    <div class="border-t border-gray-300 w-full my-4"></div>
                     <a href="{{ path('app_dashboard') }}" class="relative flex justify-center w-full group p-2 rounded-lg transition-all duration-300" data-tooltip="Admin Panel">
                         <i class="fas fa-cog text-xl {% if isDashboardContext %}text-accent-coral{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110"></i>
                         <span class="absolute left-full ml-6 top-1/2 -translate-y-1/2 bg-accent-coral text-white px-3 py-2 rounded-lg font-sans font-semibold text-sm whitespace-nowrap opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-2 z-50">Admin Panel</span>
                     </a>
                 {% elseif 'ROLE_PHOTOGRAPHER' in app.user.roles %}
-                    <div class="border-t border-gray-300 w-full my-4"></div>
                     <a href="{{ path('app_dashboard') }}" class="relative flex justify-center w-full group p-2 rounded-lg transition-all duration-300" data-tooltip="Dashboard">
                         <i class="fas fa-chart-line text-xl {% if isDashboardContext %}text-vivid-sky-blue{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110 group-hover:text-vivid-sky-blue"></i>
                         <span class="absolute left-full ml-6 top-1/2 -translate-y-1/2 bg-space-cadet text-anti-flash-white px-3 py-2 rounded-lg font-sans font-semibold text-sm whitespace-nowrap opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-2 z-50">Dashboard</span>
@@ -49,6 +47,10 @@
         {# Auth buttons at bottom #}
         <div class="mt-6 flex flex-col items-center gap-3">
             {% if app.user %}
+                <a href="{{ path('app_profile_show') }}" class="relative flex justify-center w-full group p-2 rounded-lg transition-all duration-300" data-tooltip="My Profile">
+                    <i class="fas fa-user-circle text-xl {% if currentRoute starts with 'app_profile_' %}text-vivid-sky-blue{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110 group-hover:text-vivid-sky-blue"></i>
+                    <span class="absolute left-full ml-6 top-1/2 -translate-y-1/2 bg-space-cadet text-anti-flash-white px-3 py-2 rounded-lg font-sans font-semibold text-sm whitespace-nowrap opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-2 z-50">My Profile</span>
+                </a>
                 <a href="{{ path('app_logout') }}" class="relative flex justify-center w-full group p-2 rounded-lg transition-all duration-300" data-tooltip="Logout">
                     <i class="fas fa-sign-out-alt text-xl text-space-cadet group-hover:text-vivid-sky-blue transition-colors duration-300"></i>
                     <span class="absolute left-full ml-6 top-1/2 -translate-y-1/2 bg-space-cadet text-anti-flash-white px-3 py-2 rounded-lg font-sans font-semibold text-sm whitespace-nowrap opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-2 z-50">Logout</span>
@@ -99,50 +101,45 @@
             </a>
 
             {% if app.user %}
+                <div class="border-t border-gray-300 my-4"></div>
+
                 {% if 'ROLE_ADMIN' in app.user.roles %}
-                    <div class="border-t border-gray-300 my-4"></div>
                     <a href="{{ path('app_dashboard') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if isDashboardContext %}bg-accent-coral text-white{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
                         <i class="fas fa-cog text-xl"></i>
                         <span class="font-medium">Admin Panel</span>
                     </a>
                 {% elseif 'ROLE_PHOTOGRAPHER' in app.user.roles %}
-                    <div class="border-t border-gray-300 my-4"></div>
                     <a href="{{ path('app_dashboard') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if isDashboardContext %}bg-vivid-sky-blue text-space-cadet{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
                         <i class="fas fa-chart-line text-xl"></i>
                         <span class="font-medium">Dashboard</span>
                     </a>
                 {% endif %}
-            {% endif %}
-            
-            {% if app.user and 'ROLE_PHOTOGRAPHER' in app.user.roles %}
-                <div class="border-t border-gray-300 my-4"></div>
-                
-                <!-- User Profile Section -->
-                <div class="p-3 bg-gray-50 rounded-lg">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 bg-slate-gray rounded-full flex items-center justify-center">
-                            <span class="text-white font-semibold">{{ app.user.email|first|upper }}</span>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-space-cadet truncate">{{ app.user.email }}</p>
-                            <p class="text-xs text-slate-gray">Photographer</p>
+
+                <a href="{{ path('app_profile_show') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if currentRoute starts with 'app_profile_' %}bg-vivid-sky-blue text-space-cadet{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                    <i class="fas fa-user-circle text-xl"></i>
+                    <span class="font-medium">My Profile</span>
+                </a>
+
+                {% if 'ROLE_PHOTOGRAPHER' in app.user.roles %}
+                    <div class="border-t border-gray-300 my-4"></div>
+                    <div class="p-3 bg-gray-50 rounded-lg">
+                        <h3 class="text-xs font-semibold text-slate-gray uppercase mb-2">Quick Actions</h3>
+                        <div class="space-y-2">
+                            <a href="{{ path('app_album_index') }}" class="flex items-center gap-2 text-sm text-slate-gray hover:text-space-cadet transition-colors">
+                                <i class="fas fa-images w-4"></i>
+                                <span>My Albums</span>
+                            </a>
+                            <a href="{{ path('app_photo_new') }}" class="flex items-center gap-2 text-sm text-slate-gray hover:text-space-cadet transition-colors">
+                                <i class="fas fa-plus w-4"></i>
+                                <span>Upload Photo</span>
+                            </a>
                         </div>
                     </div>
-                    
-                    <div class="space-y-2">
-                        <a href="{{ path('app_album_index') }}" class="flex items-center gap-2 text-sm text-slate-gray hover:text-space-cadet transition-colors">
-                            <i class="fas fa-images w-4"></i>
-                            <span>My Albums</span>
-                        </a>
-                        <a href="{{ path('app_photo_new') }}" class="flex items-center gap-2 text-sm text-slate-gray hover:text-space-cadet transition-colors">
-                            <i class="fas fa-plus w-4"></i>
-                            <span>Upload Photo</span>
-                        </a>
-                    </div>
-                </div>
+                {% endif %}
             {% endif %}
             
             {% if app.user %}
+                <div class="border-t border-gray-300 my-4"></div>
                 <a href="{{ path('app_logout') }}" class="flex items-center gap-3 p-3 rounded-lg text-red-600 hover:bg-red-50 transition-all duration-300">
                     <i class="fas fa-sign-out-alt text-xl"></i>
                     <span class="font-medium">Logout</span>
