@@ -1,6 +1,4 @@
 {{ form_start(form, {'attr': {'class': 'space-y-6', 'id': form.vars.id}}) }}
-    {{ form_errors(form) }}
-
     <div class="space-y-4">
         <div>
             {{ form_label(form.username, null, {
@@ -13,7 +11,12 @@
                     'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet placeholder-slate-gray bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue'
                 }
             }) }}
-            {{ form_errors(form.username) }}
+            {% set fieldErrors = form_errors(form.username) %}
+            {% if fieldErrors is not empty %}
+                <div class="mt-1 text-xs text-accent-coral">
+                    {{ fieldErrors|striptags }}
+                </div>
+            {% endif %}
         </div>
 
         <div>
@@ -27,7 +30,12 @@
                     'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet placeholder-slate-gray bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue'
                 }
             }) }}
-            {{ form_errors(form.email) }}
+            {% set fieldErrors = form_errors(form.email) %}
+            {% if fieldErrors is not empty %}
+                <div class="mt-1 text-xs text-accent-coral">
+                    {{ fieldErrors|striptags }}
+                </div>
+            {% endif %}
         </div>
 
         <div>
@@ -45,7 +53,12 @@
             {% if not form.plainPassword.vars.required %}
                 <p class="mt-1 text-xs text-slate-gray">Leave blank to keep the current password.</p>
             {% endif %}
-            {{ form_errors(form.plainPassword) }}
+            {% set fieldErrors = form_errors(form.plainPassword) %}
+            {% if fieldErrors is not empty %}
+                <div class="mt-1 text-xs text-accent-coral">
+                    {{ fieldErrors|striptags }}
+                </div>
+            {% endif %}
         </div>
 
         <div>
@@ -62,7 +75,12 @@
                     </label>
                 {% endfor %}
             </div>
-            {{ form_errors(form.primaryRole) }}
+            {% set fieldErrors = form_errors(form.primaryRole) %}
+            {% if fieldErrors is not empty %}
+                <div class="mt-1 text-xs text-accent-coral">
+                    {{ fieldErrors|striptags }}
+                </div>
+            {% endif %}
         </div>
     </div>
 {{ form_end(form) }}

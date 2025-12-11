@@ -10,14 +10,36 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PhotoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
-            ->add('caption')
+            ->add('title', null, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a title for this photo',
+                    ]),
+                    new Length([
+                        'min' => 3,
+                        'minMessage' => 'The title should be at least {{ limit }} characters long',
+                        'max' => 255,
+                        'maxMessage' => 'The title cannot be longer than {{ limit }} characters',
+                    ]),
+                ],
+            ])
+            ->add('caption', null, [
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 1000,
+                        'maxMessage' => 'The caption cannot be longer than {{ limit }} characters',
+                    ]),
+                ],
+            ])
             ->add('imageFile', FileType::class, [
                 'label' => 'Photo file',
                 'mapped' => false,

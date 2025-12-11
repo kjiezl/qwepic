@@ -1,6 +1,4 @@
 {{ form_start(form, {'attr': {'class': 'space-y-6', 'id': form.vars.id}}) }}
-    {{ form_errors(form) }}
-
     <div class="space-y-4">
         <div>
             {{ form_label(form.title, null, {
@@ -13,7 +11,12 @@
                     'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet placeholder-slate-gray bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue'
                 }
             }) }}
-            {{ form_errors(form.title) }}
+            {% set fieldErrors = form_errors(form.title) %}
+            {% if fieldErrors is not empty %}
+                <div class="mt-1 text-xs text-accent-coral">
+                    {{ fieldErrors|striptags }}
+                </div>
+            {% endif %}
         </div>
 
         <div>
@@ -27,7 +30,12 @@
                     'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet placeholder-slate-gray bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue min-h-[96px]'
                 }
             }) }}
-            {{ form_errors(form.description) }}
+            {% set fieldErrors = form_errors(form.description) %}
+            {% if fieldErrors is not empty %}
+                <div class="mt-1 text-xs text-accent-coral">
+                    {{ fieldErrors|striptags }}
+                </div>
+            {% endif %}
         </div>
 
         <div>
@@ -41,7 +49,12 @@
                     'class': 'w-full text-sm text-space-cadet'
                 }
             }) }}
-            {{ form_errors(form.coverImageFile) }}
+            {% set fieldErrors = form_errors(form.coverImageFile) %}
+            {% if fieldErrors is not empty %}
+                <div class="mt-1 text-xs text-accent-coral">
+                    {{ fieldErrors|striptags }}
+                </div>
+            {% endif %}
         </div>
 
         <div>
@@ -55,7 +68,12 @@
                     'class': 'w-full text-sm text-space-cadet',
                 }
             }) }}
-            {{ form_errors(form.photoFiles) }}
+            {% set fieldErrors = form_errors(form.photoFiles) %}
+            {% if fieldErrors is not empty %}
+                <div class="mt-1 text-xs text-accent-coral">
+                    {{ fieldErrors|striptags }}
+                </div>
+            {% endif %}
         </div>
 
         <div>
@@ -68,7 +86,12 @@
                 }) }}
                 <span class="ml-2">Public album</span>
             </label>
-            {{ form_errors(form.is_public) }}
+            {% set fieldErrors = form_errors(form.is_public) %}
+            {% if fieldErrors is not empty %}
+                <div class="mt-1 text-xs text-accent-coral">
+                    {{ fieldErrors|striptags }}
+                </div>
+            {% endif %}
         </div>
 
         {% if form.photographer is defined %}
@@ -83,7 +106,12 @@
                         'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-space-cadet bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue cursor-pointer'
                     }
                 }) }}
-                {{ form_errors(form.photographer) }}
+                {% set fieldErrors = form_errors(form.photographer) %}
+                {% if fieldErrors is not empty %}
+                    <div class="mt-1 text-xs text-accent-coral">
+                        {{ fieldErrors|striptags }}
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
     </div>

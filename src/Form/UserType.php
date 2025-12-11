@@ -8,6 +8,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserType extends AbstractType
 {
@@ -17,15 +20,51 @@ class UserType extends AbstractType
         /** @var User|null $user */
         $user = $builder->getData();
 
+        $passwordConstraints = [
+            new Length([
+                'min' => 6,
+                'minMessage' => 'Password should be at least {{ limit }} characters',
+                'max' => 4096,
+            ]),
+        ];
+
+        if (!$isEdit) {
+            array_unshift($passwordConstraints, new NotBlank([
+                'message' => 'Please enter a password',
+            ]));
+        }
+
         $builder
-            ->add('username')
-            ->add('email')
+            ->add('username', null, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a username',
+                    ]),
+                    new Length([
+                        'min' => 3,
+                        'minMessage' => 'Username should be at least {{ limit }} characters long',
+                        'max' => 50,
+                        'maxMessage' => 'Username cannot be longer than {{ limit }} characters',
+                    ]),
+                ],
+            ])
+            ->add('email', null, [
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter an email address',
+                    ]),
+                    new Email([
+                        'message' => 'Please enter a valid email address',
+                    ]),
+                ],
+            ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
                 'required' => !$isEdit,
                 'attr' => [
                     'autocomplete' => 'new-password',
                 ],
+                'constraints' => $passwordConstraints,
             ])
             ->add('primaryRole', ChoiceType::class, [
                 'choices' => [

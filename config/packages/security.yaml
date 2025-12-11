@@ -41,8 +41,6 @@ security:
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
 
-    # Note: Only the *first* matching rule is applied
-    # Dashboard access control
     access_control:
         - { path: ^/dashboard/users,         roles: ROLE_ADMIN }
         - { path: ^/dashboard/activity-logs, roles: ROLE_ADMIN }
