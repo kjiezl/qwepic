@@ -8,13 +8,7 @@
         <div class="flex items-center justify-between mb-8">
             <div>
                 <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Photographers</h1>
-                <p class="mt-1 text-sm text-slate-gray">Discover active photographers and explore their work.</p>
             </div>
-            <a href="{{ path('app_home') }}"
-               class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
-                <i class="fas fa-arrow-left text-xs"></i>
-                <span>Back to Home</span>
-            </a>
         </div>
 
         {% if photographers is not empty %}

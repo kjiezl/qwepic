@@ -7,6 +7,7 @@ use App\Entity\Photo;
 use App\Entity\User;
 use App\Service\ActivityLogger;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -77,7 +78,24 @@ class EntityActivitySubscriber
         }
 
         if ($entity instanceof User) {
-            // Admin edits a user
+            $objectManager = $args->getObjectManager();
+            if ($objectManager instanceof EntityManagerInterface) {
+                $uow = $objectManager->getUnitOfWork();
+                $changeSet = $uow->getEntityChangeSet($entity);
+
+                if (!empty($changeSet)) {
+                    $changedFields = array_keys($changeSet);
+
+                    $allowedFields = ['is_active', 'updated_at'];
+                    $onlyActiveToggled = in_array('is_active', $changedFields, true)
+                        && array_diff($changedFields, $allowedFields) === [];
+
+                    if ($onlyActiveToggled) {
+                        return;
+                    }
+                }
+            }
+
             if ($this->security->isGranted('ROLE_ADMIN')) {
                 $description = sprintf(
                     'Admin %s updated user %s (ID %d).',

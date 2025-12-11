@@ -7,8 +7,51 @@
 <section class="bg-gradient-to-br from-gray-50 to-gray-100 py-8 lg:py-16 text-center border-b border-gray-200">
     <div class="max-w-4xl mx-auto px-4 lg:px-8">
         <h1 class="font-poppins font-bold text-3xl sm:text-4xl lg:text-5xl text-space-cadet mb-4 tracking-tight">Discover Amazing Photography</h1>
+
+        {# Role-aware CTA block #}
+        {% set currentUser = app.user %}
+        {% set roles = currentUser and currentUser.roles is iterable ? currentUser.roles : [] %}
+
+        <div class="mt-4 lg:mt-12 flex flex-wrap justify-center gap-3">
+            {% if currentUser %}
+                {# Logged-in users #}
+                {% if 'ROLE_PHOTOGRAPHER' in roles or 'ROLE_ADMIN' in roles %}
+                    {# Photographers/Admins: drive them to create content #}
+                    <a href="{{ path('app_photo_new') }}"
+                       class="px-6 py-3 rounded-full bg-vivid-sky-blue text-space-cadet text-sm lg:text-base font-semibold shadow-sm hover:bg-blue-600 hover:text-anti-flash-white hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer inline-flex items-center gap-2">
+                        <i class="fas fa-camera"></i>
+                        <span>Upload New Photo</span>
+                    </a>
+                    <a href="{{ path('app_album_new') }}"
+                       class="px-6 py-3 rounded-full border border-gray-300 bg-white text-sm lg:text-base font-semibold text-space-cadet shadow-sm hover:border-accent-coral hover:text-accent-coral hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer inline-flex items-center gap-2">
+                        <i class="fas fa-folder-plus"></i>
+                        <span>Create New Album</span>
+                    </a>
+                {% else %}
+                    {# Logged-in regular users/clients: push to hire photographers #}
+                    <a href="{{ path('app_photographer_index') }}"
+                       class="px-8 py-3 rounded-full bg-vivid-sky-blue text-space-cadet text-sm lg:text-base font-semibold shadow-sm hover:bg-blue-600 hover:text-anti-flash-white hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer inline-flex items-center gap-2">
+                        <i class="fas fa-user-check"></i>
+                        <span>Hire a Photographer</span>
+                    </a>
+                {% endif %}
+            {% else %}
+                {# Guests: dual CTA for both audiences #}
+                <a href="{{ path('app_register') }}"
+                   class="px-8 py-3 rounded-full bg-vivid-sky-blue text-space-cadet text-sm lg:text-base font-semibold shadow-sm hover:bg-blue-600 hover:text-anti-flash-white hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer inline-flex items-center gap-2">
+                    <i class="fas fa-user-check"></i>
+                    <span>Hire a Photographer</span>
+                </a>
+                <a href="{{ path('app_register') }}"
+                   class="px-6 py-3 rounded-full border border-gray-300 bg-white text-sm lg:text-base font-semibold text-space-cadet shadow-sm hover:border-accent-coral hover:text-accent-coral hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 cursor-pointer inline-flex items-center gap-2">
+                    <i class="fas fa-camera-retro"></i>
+                    <span>Join as Photographer</span>
+                </a>
+            {% endif %}
+        </div>
+
         {# <p class="font-inter text-lg lg:text-xl text-slate-gray max-w-2xl mx-auto mb-8">Explore stunning photos from talented photographers around the world</p> #}
-        
+
         <!-- Navigation Tabs -->
         {# <div class="flex flex-wrap gap-4 justify-center items-center mb-8">
             <a href="{{ path('app_home') }}" 
@@ -55,7 +98,7 @@
 
                     <!-- Photo -->
                     <div class="relative group">
-                        <a href="{{ path('app_photo_show', {'id': photo.id}) }}">
+                        {# <a href="{{ path('app_photo_show', {'id': photo.id}) }}"> #}
                             {% if photo.thumbnailPath %}
                                 <img src="{{ asset('uploads/thumbnails/' ~ photo.thumbnailPath) }}" 
                                      alt="{{ photo.title }}" 
@@ -65,7 +108,7 @@
                                      alt="{{ photo.title }}" 
                                      class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]">
                             {% endif %}
-                        </a>
+                        {# </a> #}
                     </div>
 
                     <!-- Photo Info -->
