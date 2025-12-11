@@ -95,13 +95,20 @@
                     </div>
 
                     <div>
-                        <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Roles</p>
+                        <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Role</p>
+                        {% set roles = user.roles is iterable ? user.roles : [] %}
+                        {% if 'ROLE_ADMIN' in roles %}
+                            {% set primaryRole = 'Admin' %}
+                        {% elseif 'ROLE_PHOTOGRAPHER' in roles %}
+                            {% set primaryRole = 'Photographer' %}
+                        {% else %}
+                            {% set primaryRole = 'User' %}
+                        {% endif %}
+
                         <div class="mt-1 flex flex-wrap gap-1">
-                            {% for role in user.roles %}
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet/5 text-space-cadet">
-                                    {{ role|replace({'ROLE_':''})|lower|title }}
-                                </span>
-                            {% endfor %}
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet/5 text-space-cadet">
+                                {{ primaryRole }}
+                            </span>
                         </div>
                     </div>
 

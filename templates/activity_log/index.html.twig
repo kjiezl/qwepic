@@ -151,13 +151,18 @@
                                         </td>
                                         <td class="py-3 pr-4">
                                             {% if activity_log.role is iterable and activity_log.role|length > 0 %}
-                                                <div class="flex flex-wrap items-center gap-1.5">
-                                                    {% for role in activity_log.role %}
-                                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet/5 text-space-cadet">
-                                                            {{ role|replace({'ROLE_':''})|lower|title }}
-                                                        </span>
-                                                    {% endfor %}
-                                                </div>
+                                                {% set roles = activity_log.role %}
+                                                {% if 'ROLE_ADMIN' in roles %}
+                                                    {% set primaryRole = 'Admin' %}
+                                                {% elseif 'ROLE_PHOTOGRAPHER' in roles %}
+                                                    {% set primaryRole = 'Photographer' %}
+                                                {% else %}
+                                                    {% set primaryRole = 'User' %}
+                                                {% endif %}
+
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet/5 text-space-cadet">
+                                                    {{ primaryRole }}
+                                                </span>
                                             {% else %}
                                                 <span class="text-xs text-slate-gray">—</span>
                                             {% endif %}

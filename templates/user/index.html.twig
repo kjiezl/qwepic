@@ -84,27 +84,29 @@
                                     <tr>
                                         <th scope="col" class="py-2 pr-4 font-medium">Username</th>
                                         <th scope="col" class="py-2 pr-4 font-medium">Email</th>
-                                        <th scope="col" class="py-2 pr-4 font-medium">Roles</th>
+                                        <th scope="col" class="py-2 pr-4 font-medium">Role</th>
                                         <th scope="col" class="py-2 pr-4 font-medium">Status</th>
                                         <th scope="col" class="py-2 pr-0 font-medium text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-100">
                                 {% for user in users %}
+                                    {% set roles = user.roles is iterable ? user.roles : [] %}
+                                    {% if 'ROLE_ADMIN' in roles %}
+                                        {% set primaryRole = 'Admin' %}
+                                    {% elseif 'ROLE_PHOTOGRAPHER' in roles %}
+                                        {% set primaryRole = 'Photographer' %}
+                                    {% else %}
+                                        {% set primaryRole = 'User' %}
+                                    {% endif %}
+
                                     <tr class="hover:bg-gray-50 transition-colors">
                                         <td class="py-3 pr-4 text-space-cadet font-medium">{{ user.username }}</td>
                                         <td class="py-3 pr-4 text-slate-gray">{{ user.email }}</td>
                                         <td class="py-3 pr-4">
-                                            <div class="flex flex-wrap items-center gap-1.5">
-                                                {% for role in user.roles %}
-                                                    {% if not loop.first %}
-                                                        <span class="text-slate-gray/50 text-xs mx-0.5">•</span>
-                                                    {% endif %}
-                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet/5 text-space-cadet">
-                                                        {{ role|replace({'ROLE_':''})|lower|title }}
-                                                    </span>
-                                                {% endfor %}
-                                            </div>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet/5 text-space-cadet">
+                                                {{ primaryRole }}
+                                            </span>
                                         </td>
                                         <td class="py-3 pr-4">
                                             {% if user.isActive %}
