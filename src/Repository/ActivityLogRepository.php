@@ -25,7 +25,9 @@ class ActivityLogRepository extends ServiceEntityRepository
         ?int $userId = null,
         ?string $action = null,
         ?\DateTimeInterface $startDate = null,
-        ?\DateTimeInterface $endDate = null
+        ?\DateTimeInterface $endDate = null,
+        ?int $limit = null,
+        ?int $offset = null,
     ): array {
         $qb = $this->createQueryBuilder('a')
             ->orderBy('a.created_at', 'DESC');
@@ -50,7 +52,50 @@ class ActivityLogRepository extends ServiceEntityRepository
                ->setParameter('endDate', $endDate);
         }
 
+        if ($limit !== null) {
+            $qb->setMaxResults($limit);
+        }
+
+        if ($offset !== null) {
+            $qb->setFirstResult($offset);
+        }
+
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Count activity logs matching the optional filters
+     */
+    public function countWithFilters(
+        ?int $userId = null,
+        ?string $action = null,
+        ?\DateTimeInterface $startDate = null,
+        ?\DateTimeInterface $endDate = null,
+    ): int {
+        $qb = $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)');
+
+        if ($userId !== null) {
+            $qb->andWhere('a.user_id = :userId')
+               ->setParameter('userId', $userId);
+        }
+
+        if ($action !== null && $action !== '') {
+            $qb->andWhere('a.action = :action')
+               ->setParameter('action', $action);
+        }
+
+        if ($startDate !== null) {
+            $qb->andWhere('a.created_at >= :startDate')
+               ->setParameter('startDate', $startDate);
+        }
+
+        if ($endDate !== null) {
+            $qb->andWhere('a.created_at <= :endDate')
+               ->setParameter('endDate', $endDate);
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**

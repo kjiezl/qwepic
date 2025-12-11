@@ -122,9 +122,42 @@
                 </div>
 
                 <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-5">
-                    <div class="flex items-center justify-between mb-4">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
                         <h2 class="text-base font-semibold text-space-cadet">All Activity Logs</h2>
-                        <span class="text-xs font-medium text-slate-gray">{{ activity_logs|length }} total</span>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs text-slate-gray">
+                            <div class="flex items-center gap-2">
+                                <span>{{ pagination.total }} total</span>
+                                {% if pagination.total_pages > 1 %}
+                                    {% set startIndex = (pagination.page - 1) * pagination.per_page + 1 %}
+                                    {% set computedEnd = pagination.page * pagination.per_page %}
+                                    {% set endIndex = computedEnd > pagination.total ? pagination.total : computedEnd %}
+                                    <span class="hidden sm:inline">Showing {{ startIndex }}–{{ endIndex }}</span>
+                                {% endif %}
+                            </div>
+
+                            <form method="get" action="{{ path('app_activity_log_index') }}" class="flex items-center gap-1">
+                                <label for="per_page" class="text-xs font-medium text-slate-gray">Rows per page</label>
+                                <select name="per_page" id="per_page" class="px-2 py-1 border border-gray-300 rounded-lg text-xs text-space-cadet bg-anti-flash-white focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue focus:border-vivid-sky-blue" onchange="this.form.submit()">
+                                    {% for option in pagination.allowed_per_page %}
+                                        <option value="{{ option }}" {% if option == pagination.per_page %}selected{% endif %}>{{ option }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                {# Preserve current filters, but reset page to 1 when page size changes #}
+                                {% if filters.user_id %}
+                                    <input type="hidden" name="user_id" value="{{ filters.user_id }}">
+                                {% endif %}
+                                {% if filters.action %}
+                                    <input type="hidden" name="action" value="{{ filters.action }}">
+                                {% endif %}
+                                {% if filters.start_date %}
+                                    <input type="hidden" name="start_date" value="{{ filters.start_date }}">
+                                {% endif %}
+                                {% if filters.end_date %}
+                                    <input type="hidden" name="end_date" value="{{ filters.end_date }}">
+                                {% endif %}
+                            </form>
+                        </div>
                     </div>
 
                     {% if activity_logs is not empty %}
@@ -191,6 +224,70 @@
                                 </tbody>
                             </table>
                         </div>
+
+                        {% if pagination.total_pages > 1 %}
+                            <div class="mt-4 flex items-center justify-between text-xs text-slate-gray">
+                                {% set currentFilters = filters|merge({'per_page': pagination.per_page}) %}
+
+                                <div>
+                                    {% set startIndex = (pagination.page - 1) * pagination.per_page + 1 %}
+                                    {% set computedEnd = pagination.page * pagination.per_page %}
+                                    {% set endIndex = computedEnd > pagination.total ? pagination.total : computedEnd %}
+                                    <span>Showing {{ startIndex }}–{{ endIndex }} of {{ pagination.total }} logs</span>
+                                </div>
+
+                                <div class="flex items-center gap-1">
+                                    {# Previous page #}
+                                    {% if pagination.page > 1 %}
+                                        <a href="{{ path('app_activity_log_index', currentFilters|merge({'page': pagination.page - 1})) }}"
+                                           class="px-3 py-1 rounded-lg border border-gray-200 bg-white text-space-cadet hover:bg-gray-100 cursor-pointer">
+                                            Prev
+                                        </a>
+                                    {% else %}
+                                        <span class="px-3 py-1 rounded-lg border border-gray-100 text-slate-gray/50 bg-gray-50">Prev</span>
+                                    {% endif %}
+
+                                    {# Page numbers (simple window) #}
+                                    {% set startPage = pagination.page - 2 > 1 ? pagination.page - 2 : 1 %}
+                                    {% set endPage = pagination.page + 2 < pagination.total_pages ? pagination.page + 2 : pagination.total_pages %}
+
+                                    {% if startPage > 1 %}
+                                        <a href="{{ path('app_activity_log_index', currentFilters|merge({'page': 1})) }}"
+                                           class="px-3 py-1 rounded-lg border border-gray-200 bg-white text-space-cadet hover:bg-gray-100 cursor-pointer">1</a>
+                                        {% if startPage > 2 %}
+                                            <span class="px-2">…</span>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% for p in startPage..endPage %}
+                                        {% if p == pagination.page %}
+                                            <span class="px-3 py-1 rounded-lg bg-space-cadet text-anti-flash-white border border-space-cadet">{{ p }}</span>
+                                        {% else %}
+                                            <a href="{{ path('app_activity_log_index', currentFilters|merge({'page': p})) }}"
+                                               class="px-3 py-1 rounded-lg border border-gray-200 bg-white text-space-cadet hover:bg-gray-100 cursor-pointer">{{ p }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if endPage < pagination.total_pages %}
+                                        {% if endPage < pagination.total_pages - 1 %}
+                                            <span class="px-2">…</span>
+                                        {% endif %}
+                                        <a href="{{ path('app_activity_log_index', currentFilters|merge({'page': pagination.total_pages})) }}"
+                                           class="px-3 py-1 rounded-lg border border-gray-200 bg-white text-space-cadet hover:bg-gray-100 cursor-pointer">{{ pagination.total_pages }}</a>
+                                    {% endif %}
+
+                                    {# Next page #}
+                                    {% if pagination.page < pagination.total_pages %}
+                                        <a href="{{ path('app_activity_log_index', currentFilters|merge({'page': pagination.page + 1})) }}"
+                                           class="px-3 py-1 rounded-lg border border-gray-200 bg-white text-space-cadet hover:bg-gray-100 cursor-pointer">
+                                            Next
+                                        </a>
+                                    {% else %}
+                                        <span class="px-3 py-1 rounded-lg border border-gray-100 text-slate-gray/50 bg-gray-50">Next</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
                     {% else %}
                         <p class="text-sm text-slate-gray">No activity logs recorded yet.</p>
                     {% endif %}

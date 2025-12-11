@@ -27,16 +27,45 @@ final class ActivityLogController extends AbstractController
         $startDate = $request->query->get('start_date');
         $endDate = $request->query->get('end_date');
 
+        // Pagination parameters
+        $page = max(1, (int) $request->query->get('page', 1));
+        $perPage = (int) $request->query->get('per_page', 10);
+        $allowedPerPage = [10, 25, 50, 100];
+
+        if (!in_array($perPage, $allowedPerPage, true)) {
+            $perPage = 10;
+        }
+
         // Convert dates to DateTime objects if provided
         $startDateTime = $startDate ? new \DateTime($startDate . ' 00:00:00') : null;
         $endDateTime = $endDate ? new \DateTime($endDate . ' 23:59:59') : null;
 
-        // Fetch filtered logs
-        $activityLogs = $activityLogRepository->findWithFilters(
-            $userId ? (int) $userId : null,
-            $action ?: null,
+        $userIdInt = $userId ? (int) $userId : null;
+        $actionValue = $action ?: null;
+
+        // Total count for pagination
+        $totalLogs = $activityLogRepository->countWithFilters(
+            $userIdInt,
+            $actionValue,
             $startDateTime,
-            $endDateTime
+            $endDateTime,
+        );
+
+        $totalPages = max(1, (int) ceil($totalLogs / $perPage));
+        if ($page > $totalPages) {
+            $page = $totalPages;
+        }
+
+        $offset = ($page - 1) * $perPage;
+
+        // Fetch filtered logs for current page
+        $activityLogs = $activityLogRepository->findWithFilters(
+            $userIdInt,
+            $actionValue,
+            $startDateTime,
+            $endDateTime,
+            $perPage,
+            $offset,
         );
 
         // Get all users for filter dropdown
@@ -54,6 +83,13 @@ final class ActivityLogController extends AbstractController
                 'action' => $action,
                 'start_date' => $startDate,
                 'end_date' => $endDate,
+            ],
+            'pagination' => [
+                'page' => $page,
+                'per_page' => $perPage,
+                'allowed_per_page' => $allowedPerPage,
+                'total' => $totalLogs,
+                'total_pages' => $totalPages,
             ],
         ]);
     }
