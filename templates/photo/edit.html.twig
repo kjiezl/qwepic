@@ -2,9 +2,6 @@
 
 {% block title %}QwePic - Edit Photo{% endblock %}
 
-{% block sidebar %}{% endblock %}
-{% block main_classes %}min-h-screen{% endblock %}
-
 {% block body %}
 {% set currentRoute = app.request.attributes.get('_route') %}
 {% set isAdmin = is_granted('ROLE_ADMIN') %}

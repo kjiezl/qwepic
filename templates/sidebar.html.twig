@@ -1,5 +1,14 @@
 <!-- Sidebar Navigation Template -->
 <!-- Desktop Sidebar -->
+{% set currentRoute = app.request.attributes.get('_route') %}
+{% set isDashboardContext =
+    currentRoute starts with 'app_dashboard' or
+    currentRoute starts with 'app_user_' or
+    currentRoute starts with 'app_album_' or
+    currentRoute starts with 'app_photo_' or
+    currentRoute starts with 'app_activity_log_'
+%}
+
 <aside class="hidden lg:fixed lg:block top-0 left-0 w-20 h-screen bg-anti-flash-white border-r border-gray-300 z-50">
     <div class="p-6 h-full flex flex-col justify-between">
         <nav class="flex flex-col items-center gap-6">
@@ -16,7 +25,7 @@
             </a>
 
             <a href="{{ path('app_photographer_index') }}" class="relative flex justify-center w-full group p-2 rounded-lg transition-all duration-300" data-tooltip="Photographers">
-                <i class="fas fa-user-friends text-xl {% if app.request.attributes.get('_route') == 'app_photographer_index' %}text-vivid-sky-blue{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110 group-hover:text-vivid-sky-blue"></i>
+                <i class="fas fa-user-friends text-xl {% if currentRoute == 'app_photographer_index' %}text-vivid-sky-blue{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110 group-hover:text-vivid-sky-blue"></i>
                 <span class="absolute left-full ml-6 top-1/2 -translate-y-1/2 bg-space-cadet text-anti-flash-white px-3 py-2 rounded-lg font-sans font-semibold text-sm whitespace-nowrap opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-2 z-50">Photographers</span>
             </a>
 
@@ -24,13 +33,13 @@
                 {% if 'ROLE_ADMIN' in app.user.roles %}
                     <div class="border-t border-gray-300 w-full my-4"></div>
                     <a href="{{ path('app_dashboard') }}" class="relative flex justify-center w-full group p-2 rounded-lg transition-all duration-300" data-tooltip="Admin Panel">
-                        <i class="fas fa-cog text-xl {% if app.request.attributes.get('_route') == 'app_dashboard' %}text-accent-coral{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110"></i>
+                        <i class="fas fa-cog text-xl {% if isDashboardContext %}text-accent-coral{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110"></i>
                         <span class="absolute left-full ml-6 top-1/2 -translate-y-1/2 bg-accent-coral text-white px-3 py-2 rounded-lg font-sans font-semibold text-sm whitespace-nowrap opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-2 z-50">Admin Panel</span>
                     </a>
                 {% elseif 'ROLE_PHOTOGRAPHER' in app.user.roles %}
                     <div class="border-t border-gray-300 w-full my-4"></div>
                     <a href="{{ path('app_dashboard') }}" class="relative flex justify-center w-full group p-2 rounded-lg transition-all duration-300" data-tooltip="Dashboard">
-                        <i class="fas fa-chart-line text-xl {% if app.request.attributes.get('_route') == 'app_dashboard' %}text-vivid-sky-blue{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110 group-hover:text-vivid-sky-blue"></i>
+                        <i class="fas fa-chart-line text-xl {% if isDashboardContext %}text-vivid-sky-blue{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110 group-hover:text-vivid-sky-blue"></i>
                         <span class="absolute left-full ml-6 top-1/2 -translate-y-1/2 bg-space-cadet text-anti-flash-white px-3 py-2 rounded-lg font-sans font-semibold text-sm whitespace-nowrap opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-2 z-50">Dashboard</span>
                     </a>
                 {% endif %}
@@ -75,7 +84,7 @@
         
         <!-- Mobile Navigation -->
         <nav class="flex flex-col gap-4">
-            <a href="{{ path('app_home') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if app.request.attributes.get('_route') == 'app_home' %}bg-vivid-sky-blue text-space-cadet{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+            <a href="{{ path('app_home') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if currentRoute == 'app_home' %}bg-vivid-sky-blue text-space-cadet{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
                 <img
                     src="{{ asset('images/logo-plain.svg') }}"
                     alt="QwePic Home"
@@ -84,7 +93,7 @@
                 <span class="font-medium">All Photos</span>
             </a>
 
-            <a href="{{ path('app_photographer_index') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if app.request.attributes.get('_route') == 'app_photographer_index' %}bg-vivid-sky-blue text-space-cadet{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+            <a href="{{ path('app_photographer_index') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if currentRoute == 'app_photographer_index' %}bg-vivid-sky-blue text-space-cadet{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
                 <i class="fas fa-user-friends text-xl"></i>
                 <span class="font-medium">Photographers</span>
             </a>
@@ -92,13 +101,13 @@
             {% if app.user %}
                 {% if 'ROLE_ADMIN' in app.user.roles %}
                     <div class="border-t border-gray-300 my-4"></div>
-                    <a href="{{ path('app_dashboard') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if app.request.attributes.get('_route') == 'app_dashboard' %}bg-accent-coral text-white{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                    <a href="{{ path('app_dashboard') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if isDashboardContext %}bg-accent-coral text-white{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
                         <i class="fas fa-cog text-xl"></i>
                         <span class="font-medium">Admin Panel</span>
                     </a>
                 {% elseif 'ROLE_PHOTOGRAPHER' in app.user.roles %}
                     <div class="border-t border-gray-300 my-4"></div>
-                    <a href="{{ path('app_dashboard') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if app.request.attributes.get('_route') == 'app_dashboard' %}bg-vivid-sky-blue text-space-cadet{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                    <a href="{{ path('app_dashboard') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if isDashboardContext %}bg-vivid-sky-blue text-space-cadet{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
                         <i class="fas fa-chart-line text-xl"></i>
                         <span class="font-medium">Dashboard</span>
                     </a>
