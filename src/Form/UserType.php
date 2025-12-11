@@ -14,6 +14,8 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $isEdit = $options['is_edit'] ?? false;
+        /** @var User|null $user */
+        $user = $builder->getData();
 
         $builder
             ->add('username')
@@ -25,16 +27,39 @@ class UserType extends AbstractType
                     'autocomplete' => 'new-password',
                 ],
             ])
-            ->add('roles', ChoiceType::class, [
+            ->add('primaryRole', ChoiceType::class, [
                 'choices' => [
-                    'Admin' => 'ROLE_ADMIN',
+                    'User' => 'ROLE_USER',
                     'Photographer' => 'ROLE_PHOTOGRAPHER',
+                    'Admin' => 'ROLE_ADMIN',
                 ],
-                'multiple' => true,
+                // Single-select: one primary role at a time
+                'multiple' => false,
                 'expanded' => true,
-                'required' => false,
+                'required' => true,
+                'mapped' => false,
+                'data' => $this->getPrimaryRoleFromUser($user),
             ])
         ;
+    }
+
+    private function getPrimaryRoleFromUser(?User $user): ?string
+    {
+        if (!$user instanceof User) {
+            return 'ROLE_USER';
+        }
+
+        $roles = $user->getRoles();
+
+        if (in_array('ROLE_ADMIN', $roles, true)) {
+            return 'ROLE_ADMIN';
+        }
+
+        if (in_array('ROLE_PHOTOGRAPHER', $roles, true)) {
+            return 'ROLE_PHOTOGRAPHER';
+        }
+
+        return 'ROLE_USER';
     }
 
     public function configureOptions(OptionsResolver $resolver): void
