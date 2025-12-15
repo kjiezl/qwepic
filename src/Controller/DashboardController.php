@@ -68,7 +68,6 @@ final class DashboardController extends AbstractController
 
         // Photographer dashboard
         if ($this->isGranted('ROLE_PHOTOGRAPHER')) {
-            // Albums and photos owned by this photographer
             $albums = $albumRepository->findBy(['photographer' => $user]);
             $photos = $photoRepository->findByPhotographer($user);
 
@@ -78,7 +77,6 @@ final class DashboardController extends AbstractController
             ]);
         }
 
-        // Other roles are not allowed to access the dashboard
         throw $this->createAccessDeniedException();
     }
 }

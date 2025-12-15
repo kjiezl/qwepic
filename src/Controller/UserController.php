@@ -99,7 +99,6 @@ final class UserController extends AbstractController
             $user->setIsActive(false);
             $entityManager->flush();
 
-            // Log the disable action
             $actor = $this->getUser();
             if ($actor instanceof User) {
                 $description = sprintf(
@@ -125,7 +124,6 @@ final class UserController extends AbstractController
             $user->setIsActive(true);
             $entityManager->flush();
 
-            // Log the enable action
             $actor = $this->getUser();
             if ($actor instanceof User) {
                 $description = sprintf(

@@ -61,7 +61,6 @@ final class AlbumController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Photographers can only create albums for themselves
             if ($this->isGranted('ROLE_PHOTOGRAPHER') && !$this->isGranted('ROLE_ADMIN')) {
                 $album->setPhotographer($this->getUser());
             }
@@ -162,7 +161,6 @@ final class AlbumController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Ensure photographer ownership is not changed by non-admins
             if ($this->isGranted('ROLE_PHOTOGRAPHER') && !$this->isGranted('ROLE_ADMIN')) {
                 $album->setPhotographer($this->getUser());
             }

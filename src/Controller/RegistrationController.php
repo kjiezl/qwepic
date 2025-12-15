@@ -23,7 +23,6 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
             $accountType = $form->get('accountType')->getData();
@@ -33,13 +32,10 @@ class RegistrationController extends AbstractController
             }
             $user->setRoles($roles);
 
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $entityManager->persist($user);
             $entityManager->flush();
-
-            // do anything else you need here, like send an email
 
             return $security->login($user, LoginAuthenticator::class, 'main');
         }

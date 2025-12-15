@@ -69,7 +69,6 @@ final class PhotoController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Ensure photographers can only assign photos to their own albums
             if ($this->isGranted('ROLE_PHOTOGRAPHER') && !$this->isGranted('ROLE_ADMIN')) {
                 $album = $photo->getAlbum();
                 if (!$album || $album->getPhotographer() !== $this->getUser()) {
@@ -137,7 +136,6 @@ final class PhotoController extends AbstractController
                 'is_edit' => true,
             ]);
         } else {
-            // Photographer: limit selectable albums to their own
             $albums = $albumRepository->findBy(['photographer' => $this->getUser()]);
             $form = $this->createForm(PhotoType::class, $photo, [
                 'allowed_albums' => $albums,
