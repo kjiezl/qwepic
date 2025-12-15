@@ -49,6 +49,14 @@
                         </span>
                         <span>My Photos</span>
                     </a>
+
+                    <a href="{{ path('app_photographer_booking_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photographer_booking_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-calendar-check"></i>
+                        </span>
+                        <span>Bookings</span>
+                    </a>
                 </nav>
             </aside>
 

@@ -1,0 +1,197 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QwePic - Booking Details{% endblock %}
+
+{% block body %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+
+<div class="min-h-screen bg-anti-flash-white px-4 py-6 lg:px-8 lg:py-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Booking #{{ booking.id }}</h1>
+                <div class="mt-2 flex items-center gap-2">
+                    <span class="text-sm text-slate-gray">Status:</span>
+                    {% if booking.status == 'completed' %}
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-vivid-sky-blue text-space-cadet">Completed</span>
+                    {% elseif booking.status == 'accepted' %}
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-coral text-anti-flash-white">Accepted</span>
+                    {% elseif booking.status == 'rejected' %}
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet text-anti-flash-white">Rejected</span>
+                    {% elseif booking.status == 'requested' %}
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-gray text-anti-flash-white">Requested</span>
+                    {% else %}
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet/5 text-space-cadet">{{ booking.status }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <a href="{{ path('app_photographer_booking_index') }}"
+               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 text-[11px] font-medium text-space-cadet hover:text-accent-coral transition-colors duration-200">
+                <i class="fas fa-arrow-left text-[10px]"></i>
+                <span>Back</span>
+            </a>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <aside class="w-full lg:w-64 bg-white shadow-md rounded-2xl p-5 border border-gray-100">
+                <h2 class="text-xs font-semibold tracking-widest text-slate-gray uppercase mb-4">Photographer Panel</h2>
+                <nav class="space-y-1">
+                    {% set baseItemClasses = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer' %}
+
+                    <a href="{{ path('app_dashboard') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute == 'app_dashboard' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-chart-line"></i>
+                        </span>
+                        <span>Overview</span>
+                    </a>
+
+                    <a href="{{ path('app_album_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_album_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-folder-open"></i>
+                        </span>
+                        <span>My Albums</span>
+                    </a>
+
+                    <a href="{{ path('app_photo_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photo_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-image"></i>
+                        </span>
+                        <span>My Photos</span>
+                    </a>
+
+                    <a href="{{ path('app_photographer_booking_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photographer_booking_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-space-cadet">
+                            <i class="fas fa-calendar-check"></i>
+                        </span>
+                        <span>Bookings</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <section class="flex-1">
+                <div class="grid gap-6 lg:grid-cols-3">
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6 space-y-4">
+                            <div>
+                                <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Client</p>
+                                <p class="mt-1 text-sm text-space-cadet">{{ booking.client.username ?: booking.client.email }}</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Start</p>
+                                    <p class="mt-1 text-sm text-space-cadet">{{ booking.startAt ? booking.startAt|date('M j, Y H:i') : '—' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">End</p>
+                                    <p class="mt-1 text-sm text-space-cadet">{{ booking.endAt ? booking.endAt|date('M j, Y H:i') : '—' }}</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Location</p>
+                                <p class="mt-1 text-sm text-space-cadet">{{ booking.location ?: '—' }}</p>
+                            </div>
+
+                            <div>
+                                <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Notes / Terms</p>
+                                <p class="mt-1 text-sm text-space-cadet whitespace-pre-line">{{ booking.notes ?: '—' }}</p>
+                            </div>
+
+                            {% if booking.status == 'rejected' %}
+                                <div class="pt-4 border-t border-gray-100">
+                                    <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Rejection reason</p>
+                                    <p class="mt-1 text-sm text-accent-coral whitespace-pre-line">{{ booking.rejectionReason ?: '—' }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-base font-semibold text-space-cadet">Deliverables</h2>
+                            </div>
+
+                            {% if attachments is not empty %}
+                                {% set albumAttachments = attachments|filter(a => a.album is not null) %}
+                                {% set photoAttachments = attachments|filter(a => a.photo is not null) %}
+
+                                {% if albumAttachments is not empty %}
+                                    <div class="mb-6">
+                                        <p class="text-xs font-medium text-slate-gray uppercase tracking-widest mb-3">Album</p>
+                                        {% for att in albumAttachments %}
+                                            {% set album = att.album %}
+                                            <div class="bg-anti-flash-white rounded-xl border border-gray-100 overflow-hidden shadow-sm">
+                                                <div class="flex items-center gap-4 p-4">
+                                                    <div class="w-14 h-14 rounded-xl bg-gray-100 overflow-hidden flex items-center justify-center shrink-0">
+                                                        {% if album.coverImagePath %}
+                                                            <img src="{{ asset(album.coverImagePath) }}" alt="{{ album.title }}" class="w-full h-full object-cover">
+                                                        {% else %}
+                                                            <i class="fas fa-folder-open text-slate-gray"></i>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="min-w-0">
+                                                        <p class="text-sm font-semibold text-space-cadet truncate">{{ album.title }}</p>
+                                                        <p class="text-xs text-slate-gray truncate">{{ album.description ?: '—' }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if photoAttachments is not empty %}
+                                    <div>
+                                        <p class="text-xs font-medium text-slate-gray uppercase tracking-widest mb-3">Photos</p>
+                                        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                                            {% for att in photoAttachments %}
+                                                {% set photo = att.photo %}
+                                                <div class="bg-anti-flash-white rounded-xl border border-gray-100 overflow-hidden shadow-sm flex flex-col">
+                                                    <div class="h-40 bg-gray-100 overflow-hidden">
+                                                        {% if photo.thumbnailPath %}
+                                                            <img src="{{ asset('uploads/thumbnails/' ~ photo.thumbnailPath) }}" alt="{{ photo.title }}" class="w-full h-full object-cover">
+                                                        {% else %}
+                                                            <img src="{{ asset('uploads/photos/' ~ photo.storagePath) }}" alt="{{ photo.title }}" class="w-full h-full object-cover">
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="p-4">
+                                                        <p class="text-sm font-semibold text-space-cadet truncate">{{ photo.title }}</p>
+                                                        {% if photo.caption %}
+                                                            <p class="mt-1 text-xs text-slate-gray line-clamp-2">{{ photo.caption }}</p>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <p class="text-sm text-slate-gray">No deliverables attached yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                            <h2 class="text-base font-semibold text-space-cadet mb-4">Participants</h2>
+                            <div class="space-y-3 text-sm">
+                                <div>
+                                    <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Client</p>
+                                    <p class="mt-1 text-space-cadet">{{ booking.client.username ?: booking.client.email }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-slate-gray uppercase tracking-widest">Photographer</p>
+                                    <p class="mt-1 text-space-cadet">{{ booking.photographer.username ?: booking.photographer.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QwePic - Reject Booking{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-anti-flash-white px-4 py-6 lg:px-8 lg:py-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Reject Booking</h1>
+                <p class="mt-1 text-sm text-slate-gray">Booking #{{ booking.id }}</p>
+            </div>
+            <a href="{{ path('app_photographer_booking_index') }}"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
+                <i class="fas fa-arrow-left text-xs"></i>
+                <span>Back</span>
+            </a>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+            {{ form_start(form) }}
+
+            <div>
+                {{ form_label(form.rejectionReason, null, {'label_attr': {'class': 'block text-sm font-medium text-space-cadet'}}) }}
+                <div class="mt-1">
+                    {{ form_widget(form.rejectionReason, {'attr': {'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 bg-anti-flash-white text-sm text-space-cadet focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue', 'rows': 5}}) }}
+                </div>
+                <div class="mt-1 text-xs text-accent-coral">{{ form_errors(form.rejectionReason) }}</div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-end gap-2">
+                <a href="{{ path('app_photographer_booking_index') }}"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
+                    <span>Cancel</span>
+                </a>
+                <button type="submit"
+                        class="inline-flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full bg-accent-coral text-sm font-medium text-white shadow-sm hover:bg-red-600 transition-all duration-200">
+                    <i class="fas fa-ban text-xs"></i>
+                    <span>Reject booking</span>
+                </button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

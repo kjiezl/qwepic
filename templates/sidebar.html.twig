@@ -6,7 +6,9 @@
     currentRoute starts with 'app_user_' or
     currentRoute starts with 'app_album_' or
     currentRoute starts with 'app_photo_' or
-    currentRoute starts with 'app_activity_log_'
+    currentRoute starts with 'app_activity_log_' or
+    currentRoute starts with 'app_admin_booking_' or
+    currentRoute starts with 'app_photographer_booking_'
 %}
 
 <aside class="hidden lg:fixed lg:block top-0 left-0 w-20 h-screen bg-anti-flash-white border-r border-gray-300 z-50">
@@ -39,6 +41,11 @@
                     <a href="{{ path('app_dashboard') }}" class="relative flex justify-center w-full group p-2 rounded-lg transition-all duration-300" data-tooltip="Dashboard">
                         <i class="fas fa-chart-line text-xl {% if isDashboardContext %}text-vivid-sky-blue{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110 group-hover:text-vivid-sky-blue"></i>
                         <span class="absolute left-full ml-6 top-1/2 -translate-y-1/2 bg-space-cadet text-anti-flash-white px-3 py-2 rounded-lg font-sans font-semibold text-sm whitespace-nowrap opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-2 z-50">Dashboard</span>
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_booking_index') }}" class="relative flex justify-center w-full group p-2 rounded-lg transition-all duration-300" data-tooltip="My Bookings">
+                        <i class="fas fa-calendar-check text-xl {% if currentRoute starts with 'app_booking_' %}text-vivid-sky-blue{% else %}text-space-cadet{% endif %} transition-all duration-300 group-hover:scale-110 group-hover:text-vivid-sky-blue"></i>
+                        <span class="absolute left-full ml-6 top-1/2 -translate-y-1/2 bg-space-cadet text-anti-flash-white px-3 py-2 rounded-lg font-sans font-semibold text-sm whitespace-nowrap opacity-0 invisible transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-x-2 z-50">My Bookings</span>
                     </a>
                 {% endif %}
             {% endif %}
@@ -112,6 +119,11 @@
                     <a href="{{ path('app_dashboard') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if isDashboardContext %}bg-vivid-sky-blue text-space-cadet{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
                         <i class="fas fa-chart-line text-xl"></i>
                         <span class="font-medium">Dashboard</span>
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_booking_index') }}" class="flex items-center gap-3 p-3 rounded-lg transition-all duration-300 {% if currentRoute starts with 'app_booking_' %}bg-vivid-sky-blue text-space-cadet{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <i class="fas fa-calendar-check text-xl"></i>
+                        <span class="font-medium">My Bookings</span>
                     </a>
                 {% endif %}
 

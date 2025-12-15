@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QwePic - Complete Booking{% endblock %}
+
+{% block body %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+
+<div class="min-h-screen bg-anti-flash-white px-4 py-6 lg:px-8 lg:py-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Complete Booking</h1>
+                <p class="mt-1 text-sm text-slate-gray">Booking #{{ booking.id }}</p>
+            </div>
+            <a href="{{ path('app_photographer_booking_index') }}"
+               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 text-[11px] font-medium text-space-cadet hover:text-accent-coral transition-colors duration-200">
+                <i class="fas fa-arrow-left text-[10px]"></i>
+                <span>Back</span>
+            </a>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <aside class="w-full lg:w-64 bg-white shadow-md rounded-2xl p-5 border border-gray-100">
+                <h2 class="text-xs font-semibold tracking-widest text-slate-gray uppercase mb-4">Photographer Panel</h2>
+                <nav class="space-y-1">
+                    {% set baseItemClasses = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer' %}
+
+                    <a href="{{ path('app_dashboard') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute == 'app_dashboard' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-chart-line"></i>
+                        </span>
+                        <span>Overview</span>
+                    </a>
+
+                    <a href="{{ path('app_album_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_album_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-folder-open"></i>
+                        </span>
+                        <span>My Albums</span>
+                    </a>
+
+                    <a href="{{ path('app_photo_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photo_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-image"></i>
+                        </span>
+                        <span>My Photos</span>
+                    </a>
+
+                    <a href="{{ path('app_photographer_booking_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photographer_booking_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-calendar-check"></i>
+                        </span>
+                        <span>Bookings</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <section class="flex-1">
+                <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+            {{ form_start(form) }}
+
+            <div class="space-y-6">
+                <div>
+                    {{ form_label(form.album, null, {'label_attr': {'class': 'block text-sm font-medium text-space-cadet'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.album, {'attr': {'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 bg-anti-flash-white text-sm text-space-cadet focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue'}}) }}
+                    </div>
+                    <div class="mt-1 text-xs text-accent-coral">{{ form_errors(form.album) }}</div>
+                </div>
+
+                <div>
+                    {{ form_label(form.photos, null, {'label_attr': {'class': 'block text-sm font-medium text-space-cadet'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.photos, {'attr': {'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 bg-anti-flash-white text-sm text-space-cadet focus:outline-none focus:ring-2 focus:ring-vivid-sky-blue'}}) }}
+                    </div>
+                    <div class="mt-1 text-xs text-accent-coral">{{ form_errors(form.photos) }}</div>
+                    <p class="mt-2 text-xs text-slate-gray">Hold Ctrl/Command to select multiple photos.</p>
+                </div>
+
+                <div class="pt-2 flex items-center justify-end gap-2">
+                    <a href="{{ path('app_photographer_booking_index') }}"
+                       class="inline-flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
+                        <span>Cancel</span>
+                    </a>
+                    <button type="submit"
+                            class="inline-flex items-center gap-2 px-4 py-2 cursor-pointer rounded-full bg-vivid-sky-blue text-sm font-medium text-space-cadet shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
+                        <i class="fas fa-check text-xs"></i>
+                        <span>Mark as complete</span>
+                    </button>
+                </div>
+            </div>
+
+            {{ form_end(form) }}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

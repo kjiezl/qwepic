@@ -63,6 +63,14 @@
                         <span>Photos Management</span>
                     </a>
 
+                    <a href="{{ path('app_admin_booking_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_admin_booking_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-calendar-check"></i>
+                        </span>
+                        <span>Bookings</span>
+                    </a>
+
                     <a href="{{ path('app_activity_log_index') }}"
                        class="{{ baseItemClasses }} {% if currentRoute starts with 'app_activity_log_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
                         <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">

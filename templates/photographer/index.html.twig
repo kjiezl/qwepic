@@ -40,6 +40,16 @@
                                 <span>{{ item.photosCount }} {{ item.photosCount == 1 ? 'photo' : 'photos' }}</span>
                             </span>
                         </div>
+
+                        {% if app.user and ('ROLE_ADMIN' not in app.user.roles) and ('ROLE_PHOTOGRAPHER' not in app.user.roles) %}
+                            <div class="pt-2">
+                                <a href="{{ path('app_booking_new', {'id': photographer.id}) }}"
+                                   class="inline-flex items-center justify-center gap-2 w-full px-4 py-2 rounded-full bg-vivid-sky-blue text-sm font-medium text-space-cadet shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
+                                    <i class="fas fa-calendar-check text-xs"></i>
+                                    <span>Book</span>
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>

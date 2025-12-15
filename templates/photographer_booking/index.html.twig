@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QwePic - My Bookings{% endblock %}
+
+{% block body %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+
+<div class="min-h-screen bg-anti-flash-white px-4 py-6 lg:px-8 lg:py-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Bookings</h1>
+            </div>
+            <a href="{{ path('app_home') }}"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
+                <i class="fas fa-arrow-left text-xs"></i>
+                <span>Back to Home</span>
+            </a>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <aside class="w-full lg:w-64 bg-white shadow-md rounded-2xl p-5 border border-gray-100">
+                <h2 class="text-xs font-semibold tracking-widest text-slate-gray uppercase mb-4">Photographer Panel</h2>
+                <nav class="space-y-1">
+                    {% set baseItemClasses = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer' %}
+
+                    <a href="{{ path('app_dashboard') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute == 'app_dashboard' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-chart-line"></i>
+                        </span>
+                        <span>Overview</span>
+                    </a>
+
+                    <a href="{{ path('app_album_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_album_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-folder-open"></i>
+                        </span>
+                        <span>My Albums</span>
+                    </a>
+
+                    <a href="{{ path('app_photo_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photo_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                            <i class="fas fa-image"></i>
+                        </span>
+                        <span>My Photos</span>
+                    </a>
+
+                    <a href="{{ path('app_photographer_booking_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photographer_booking_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-space-cadet">
+                            <i class="fas fa-calendar-check"></i>
+                        </span>
+                        <span>Bookings</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <section class="flex-1">
+                <div class="grid gap-6 lg:grid-cols-3">
+                    <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                        <h2 class="text-base font-semibold text-space-cadet mb-4">Requested</h2>
+
+                        {% if requestedBookings is not empty %}
+                            <ul class="divide-y divide-gray-100">
+                                {% for booking in requestedBookings %}
+                                    <li class="py-4">
+                                        <div class="flex items-start justify-between gap-3">
+                                            <div class="min-w-0">
+                                                <p class="text-sm font-semibold text-space-cadet truncate">Booking #{{ booking.id }}</p>
+                                                <p class="mt-1 text-xs text-slate-gray truncate">Client: {{ booking.client.username ?: booking.client.email }}</p>
+                                                <p class="mt-1 text-xs text-slate-gray">{{ booking.startAt ? booking.startAt|date('M j, Y H:i') : '—' }}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-3 flex items-center gap-2">
+                                            <form method="post" action="{{ path('app_photographer_booking_accept', {'id': booking.id}) }}">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('accept_booking_' ~ booking.id) }}">
+                                                <button type="submit" class="inline-flex items-center gap-2 px-3 py-1.5 cursor-pointer rounded-full bg-vivid-sky-blue text-[11px] font-medium text-space-cadet shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
+                                                    <i class="fas fa-check text-[10px]"></i>
+                                                    <span>Accept</span>
+                                                </button>
+                                            </form>
+
+                                            <a href="{{ path('app_photographer_booking_reject', {'id': booking.id}) }}"
+                                               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-coral text-[11px] font-medium text-white shadow-sm hover:bg-red-600 transition-all duration-200">
+                                                <i class="fas fa-ban text-[10px]"></i>
+                                                <span>Reject</span>
+                                            </a>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-sm text-slate-gray">No booking requests right now.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                        <h2 class="text-base font-semibold text-space-cadet mb-4">Accepted</h2>
+
+                        {% if acceptedBookings is not empty %}
+                            <ul class="divide-y divide-gray-100">
+                                {% for booking in acceptedBookings %}
+                                    <li class="py-4">
+                                        <p class="text-sm font-semibold text-space-cadet">Booking #{{ booking.id }}</p>
+                                        <p class="mt-1 text-xs text-slate-gray">Client: {{ booking.client.username ?: booking.client.email }}</p>
+                                        <p class="mt-1 text-xs text-slate-gray">{{ booking.startAt ? booking.startAt|date('M j, Y H:i') : '—' }}</p>
+
+                                        <div class="mt-3">
+                                            <a href="{{ path('app_photographer_booking_complete', {'id': booking.id}) }}"
+                                               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-vivid-sky-blue text-[11px] font-medium text-space-cadet shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
+                                                <i class="fas fa-link text-[10px]"></i>
+                                                <span>Complete & Attach</span>
+                                            </a>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-sm text-slate-gray">No accepted bookings.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                        <h2 class="text-base font-semibold text-space-cadet mb-4">Completed</h2>
+
+                        {% if completedBookings is not empty %}
+                            <ul class="divide-y divide-gray-100">
+                                {% for booking in completedBookings %}
+                                    <li class="py-4">
+                                        <p class="text-sm font-semibold text-space-cadet">Booking #{{ booking.id }}</p>
+                                        <p class="mt-1 text-xs text-slate-gray">Client: {{ booking.client.username ?: booking.client.email }}</p>
+                                        <p class="mt-1 text-xs text-slate-gray">{{ booking.startAt ? booking.startAt|date('M j, Y H:i') : '—' }}</p>
+                                        <div class="mt-3">
+                                            <a href="{{ path('app_photographer_booking_show', {'id': booking.id}) }}"
+                                               class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 text-[11px] font-medium text-space-cadet hover:text-accent-coral transition-colors duration-200">
+                                                <i class="fas fa-eye text-[10px]"></i>
+                                                <span>View</span>
+                                            </a>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-sm text-slate-gray">No completed bookings.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

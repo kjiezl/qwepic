@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QwePic - Bookings{% endblock %}
+
+{% block body %}
+{% set currentRoute = app.request.attributes.get('_route') %}
+<div class="min-h-screen bg-anti-flash-white px-4 py-6 lg:px-8 lg:py-8">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">Bookings</h1>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <aside class="w-full lg:w-64 bg-white shadow-md rounded-2xl p-5 border border-gray-100">
+                <h2 class="text-xs font-semibold tracking-widest text-slate-gray uppercase mb-4">Admin Panel</h2>
+                <nav class="space-y-1">
+                    {% set baseItemClasses = 'flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer' %}
+
+                    <a href="{{ path('app_dashboard') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute == 'app_dashboard' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
+                            <i class="fas fa-chart-line"></i>
+                        </span>
+                        <span>Overview</span>
+                    </a>
+
+                    <a href="{{ path('app_user_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_user_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
+                            <i class="fas fa-users"></i>
+                        </span>
+                        <span>User Management</span>
+                    </a>
+
+                    <a href="{{ path('app_album_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_album_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
+                            <i class="fas fa-folder-open"></i>
+                        </span>
+                        <span>Albums Management</span>
+                    </a>
+
+                    <a href="{{ path('app_photo_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photo_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
+                            <i class="fas fa-image"></i>
+                        </span>
+                        <span>Photos Management</span>
+                    </a>
+
+                    <a href="{{ path('app_admin_booking_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_admin_booking_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-space-cadet">
+                            <i class="fas fa-calendar-check"></i>
+                        </span>
+                        <span>Bookings</span>
+                    </a>
+
+                    <a href="{{ path('app_activity_log_index') }}"
+                       class="{{ baseItemClasses }} {% if currentRoute starts with 'app_activity_log_' %}bg-vivid-sky-blue text-anti-flash-white shadow-md{% else %}text-space-cadet hover:bg-gray-200{% endif %}">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-vivid-sky-blue/10 text-vivid-sky-blue">
+                            <i class="fas fa-clipboard-list"></i>
+                        </span>
+                        <span>Activity Logs</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <section class="flex-1">
+                <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+                    {% if bookings is not empty %}
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="text-left text-xs font-semibold tracking-widest text-slate-gray uppercase border-b border-gray-100">
+                                        <th class="py-3 pr-4">Booking</th>
+                                        <th class="py-3 pr-4">Client</th>
+                                        <th class="py-3 pr-4">Photographer</th>
+                                        <th class="py-3 pr-4">Start</th>
+                                        <th class="py-3 pr-4">Status</th>
+                                        <th class="py-3 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    {% for booking in bookings %}
+                                        <tr>
+                                            <td class="py-4 pr-4 text-space-cadet font-medium">#{{ booking.id }}</td>
+                                            <td class="py-4 pr-4 text-space-cadet">{{ booking.client.username ?: booking.client.email }}</td>
+                                            <td class="py-4 pr-4 text-space-cadet">{{ booking.photographer.username ?: booking.photographer.email }}</td>
+                                            <td class="py-4 pr-4 text-slate-gray">{{ booking.startAt ? booking.startAt|date('M j, Y H:i') : '—' }}</td>
+                                            <td class="py-3 pr-4">
+                                            {% if booking.status == 'completed' %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-vivid-sky-blue text-space-cadet">Completed</span>
+                                            {% elseif booking.status == 'accepted' %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-coral text-anti-flash-white">Accepted</span>
+                                            {% elseif booking.status == 'rejected' %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet text-anti-flash-white">Rejected</span>
+                                            {% elseif booking.status == 'requested' %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-gray text-anti-flash-white">Requested</span>
+                                            {% else %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet/5 text-space-cadet">{{ booking.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                            <td class="py-4 text-right">
+                                                <a href="{{ path('app_admin_booking_show', {'id': booking.id}) }}"
+                                                   class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-vivid-sky-blue text-[11px] font-medium text-space-cadet shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
+                                                    <i class="fas fa-eye text-[10px]"></i>
+                                                    <span>View</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-sm text-slate-gray">No bookings yet.</p>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}QwePic - My Bookings{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-anti-flash-white px-4 py-6 lg:px-8 lg:py-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="font-poppins font-semibold text-2xl lg:text-3xl text-space-cadet">My Bookings</h1>
+            </div>
+            <a href="{{ path('app_photographer_index') }}"
+               class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-space-cadet shadow-sm hover:bg-anti-flash-white hover:border-accent-coral hover:text-accent-coral transition-all duration-200">
+                <i class="fas fa-user-friends text-xs"></i>
+                <span>Find photographers</span>
+            </a>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
+            {% if bookings is not empty %}
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-left text-xs font-semibold tracking-widest text-slate-gray uppercase border-b border-gray-100">
+                                <th class="py-3 pr-4">Booking</th>
+                                <th class="py-3 pr-4">Photographer</th>
+                                <th class="py-3 pr-4">Schedule</th>
+                                <th class="py-3 pr-4">Status</th>
+                                <th class="py-3 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            {% for booking in bookings %}
+                                <tr>
+                                    <td class="py-4 pr-4 text-space-cadet font-medium">#{{ booking.id }}</td>
+                                    <td class="py-4 pr-4 text-space-cadet">
+                                        {{ booking.photographer.username ?: booking.photographer.email }}
+                                    </td>
+                                    <td class="py-4 pr-4 text-slate-gray">
+                                        {{ booking.startAt ? booking.startAt|date('M j, Y H:i') : '—' }}
+                                    </td>
+                                    <td class="py-3 pr-4">
+                                        {% if booking.status == 'completed' %}
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-vivid-sky-blue text-space-cadet">Completed</span>
+                                        {% elseif booking.status == 'accepted' %}
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-accent-coral text-anti-flash-white">Accepted</span>
+                                        {% elseif booking.status == 'rejected' %}
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet text-anti-flash-white">Rejected</span>
+                                        {% elseif booking.status == 'requested' %}
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-gray text-anti-flash-white">Requested</span>
+                                        {% else %}
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-space-cadet/5 text-space-cadet">{{ booking.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-4 text-right">
+                                        <a href="{{ path('app_booking_show', {'id': booking.id}) }}"
+                                           class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-vivid-sky-blue text-[11px] font-medium text-space-cadet shadow-sm hover:bg-blue-600 hover:text-anti-flash-white transition-all duration-200">
+                                            <i class="fas fa-eye text-[10px]"></i>
+                                            <span>View</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-sm text-slate-gray">You have no bookings yet. Browse photographers and book a session.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
