@@ -177,32 +177,28 @@ final class PhotographerBookingController extends AbstractController
             }
             $hasPhotos = count($selectedPhotosArray) > 0;
 
-            if (!$hasAlbum && !$hasPhotos) {
-                $this->addFlash('error', 'Please attach at least one album or photo before completing the booking.');
-            } else {
-                foreach ($bookingAttachmentRepository->findBy(['booking' => $booking]) as $existing) {
-                    $entityManager->remove($existing);
-                }
+            foreach ($bookingAttachmentRepository->findBy(['booking' => $booking]) as $existing) {
+                $entityManager->remove($existing);
+            }
 
-                if ($selectedAlbum !== null) {
+            if ($selectedAlbum !== null) {
+                $attachment = new BookingAttachment();
+                $attachment->setBooking($booking);
+                $attachment->setAlbum($selectedAlbum);
+                $entityManager->persist($attachment);
+            }
+
+            foreach ($selectedPhotosArray as $photo) {
                     $attachment = new BookingAttachment();
                     $attachment->setBooking($booking);
-                    $attachment->setAlbum($selectedAlbum);
+                    $attachment->setPhoto($photo);
                     $entityManager->persist($attachment);
-                }
-
-                foreach ($selectedPhotosArray as $photo) {
-                        $attachment = new BookingAttachment();
-                        $attachment->setBooking($booking);
-                        $attachment->setPhoto($photo);
-                        $entityManager->persist($attachment);
-                }
-
-                $booking->setStatus('completed');
-                $entityManager->flush();
-
-                return $this->redirectToRoute('app_photographer_booking_index', [], Response::HTTP_SEE_OTHER);
             }
+
+            $booking->setStatus('completed');
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_photographer_booking_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('photographer_booking/complete.html.twig', [

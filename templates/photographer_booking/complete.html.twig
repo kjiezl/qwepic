@@ -51,7 +51,7 @@
 
                     <a href="{{ path('app_photographer_booking_index') }}"
                        class="{{ baseItemClasses }} {% if currentRoute starts with 'app_photographer_booking_' %}bg-vivid-sky-blue text-space-cadet shadow-md{% else %}text-space-cadet hover:bg-gray-100{% endif %}">
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-vivid-sky-blue">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl text-space-cadet">
                             <i class="fas fa-calendar-check"></i>
                         </span>
                         <span>Bookings</span>
@@ -62,6 +62,8 @@
             <section class="flex-1">
                 <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-6">
             {{ form_start(form) }}
+
+            <div class="text-xs text-accent-coral">{{ form_errors(form) }}</div>
 
             <div class="space-y-6">
                 <div>
