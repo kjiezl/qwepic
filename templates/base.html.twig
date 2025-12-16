@@ -33,10 +33,37 @@
             <script>
                 function toggleMobileMenu() {
                     const sidebar = document.getElementById('mobile-sidebar');
-                    if (!sidebar) return;
-                    sidebar.classList.toggle('-translate-x-full');
-                    sidebar.classList.toggle('translate-x-0');
+                    const overlay = document.getElementById('mobile-overlay');
+                    if (!sidebar || !overlay) return;
+                    
+                    const isOpen = !sidebar.classList.contains('-translate-x-full');
+                    
+                    if (isOpen) {
+                        sidebar.classList.add('-translate-x-full');
+                        sidebar.classList.remove('translate-x-0');
+                        overlay.classList.add('opacity-0', 'invisible');
+                        overlay.classList.remove('opacity-100', 'visible');
+                        document.body.style.overflow = '';
+                    } else {
+                        sidebar.classList.remove('-translate-x-full');
+                        sidebar.classList.add('translate-x-0');
+                        overlay.classList.remove('opacity-0', 'invisible');
+                        overlay.classList.add('opacity-100', 'visible');
+                        document.body.style.overflow = 'hidden';
+                    }
                 }
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    const mobileSidebar = document.getElementById('mobile-sidebar');
+                    if (mobileSidebar) {
+                        const links = mobileSidebar.querySelectorAll('a');
+                        links.forEach(link => {
+                            link.addEventListener('click', function() {
+                                toggleMobileMenu();
+                            });
+                        });
+                    }
+                });
             </script>
         {% endblock %}
     </body>

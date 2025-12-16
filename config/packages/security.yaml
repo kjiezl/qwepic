@@ -43,8 +43,6 @@ security:
             # switch_user: true
 
     access_control:
-        # - { path: ^/photographers/\d+/book,   roles: IS_AUTHENTICATED_FULLY }
-        # - { path: ^/bookings,                roles: IS_AUTHENTICATED_FULLY }
 
         - { path: ^/dashboard/photographer/bookings, roles: ROLE_PHOTOGRAPHER }
         - { path: ^/dashboard/bookings,             roles: ROLE_ADMIN }
