@@ -1,0 +1,10 @@
+lexik_jwt_authentication:
+    secret_key: '%env(resolve:JWT_SECRET_KEY)%'
+    public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
+    pass_phrase: '%env(JWT_PASSPHRASE)%'
+    token_ttl: 3600
+    
+    # For development without RSA keys, you can use:
+    # algorithm: HS256
+    # secret_key: '%env(APP_SECRET)%'
+    # And remove public_key and pass_phrase

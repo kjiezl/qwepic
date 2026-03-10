@@ -13,11 +13,17 @@ security:
         dev:
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
-        api_platform:
+        api:
             pattern: ^/api
             stateless: true
             provider: app_user_provider
-            http_basic: ~
+            jwt: ~
+            json_login:
+                check_path: /api/auth/login
+                username_path: username
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
         main:
             lazy: true
             provider: app_user_provider
@@ -33,7 +39,9 @@ security:
                 path: /
 
     access_control:
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/auth/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/auth/me, roles: ROLE_USER }
+        - { path: ^/api/docs, roles: PUBLIC_ACCESS }
 
         - { path: ^/api, roles: PUBLIC_ACCESS, methods: [GET, OPTIONS] }
         - { path: ^/api, roles: ROLE_USER }
