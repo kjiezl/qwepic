@@ -24,9 +24,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
         new Get(security: "is_granted('ROLE_ADMIN') or object == user"),
-        new Post(security: "is_granted('ROLE_ADMIN')"),
-        new Put(security: "is_granted('ROLE_ADMIN')"),
-        new Patch(security: "is_granted('ROLE_ADMIN') or object == user"),
+        new Post(security: "is_granted('ROLE_ADMIN')", processor: \App\State\UserPasswordHasher::class),
+        new Put(security: "is_granted('ROLE_ADMIN')", processor: \App\State\UserPasswordHasher::class),
+        new Patch(security: "is_granted('ROLE_ADMIN') or object == user", processor: \App\State\UserPasswordHasher::class),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => ['user:read']],
@@ -58,6 +58,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
+
+    #[Groups(['user:write'])]
+    private ?string $plainPassword = null;
 
     #[ORM\Column(type: 'json')]
     #[Groups(['user:read', 'user:write'])]
@@ -131,8 +134,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return array_values(array_unique($this->roles));
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
     public function eraseCredentials(): void
     {
+        $this->plainPassword = null;
     }
     public function setRoles(array $roles): static
     {
