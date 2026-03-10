@@ -1,0 +1,22 @@
+api_platform:
+    title: Qwepic API
+    description: 'API for Qwepic Photography Booking Platform'
+    version: 1.0.0
+    formats:
+        jsonld: ['application/ld+json']
+        json: ['application/json']
+        html: ['text/html']
+    defaults:
+        stateless: true
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']
+        pagination_enabled: true
+        pagination_items_per_page: 20
+        pagination_client_items_per_page: true
+        pagination_maximum_items_per_page: 100
+    collection:
+        pagination:
+            items_per_page_parameter_name: itemsPerPage
+    exception_to_status:
+        Symfony\Component\Security\Core\Exception\AccessDeniedException: 403
+        Doctrine\ORM\OptimisticLockException: 409

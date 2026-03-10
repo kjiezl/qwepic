@@ -7,7 +7,36 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    operations: [
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Get(security: "is_granted('ROLE_ADMIN') or object.getClient() == user or object.getPhotographer() == user"),
+        new Post(security: "is_granted('ROLE_USER')"),
+        new Put(security: "is_granted('ROLE_ADMIN') or object.getPhotographer() == user"),
+        new Patch(security: "is_granted('ROLE_ADMIN') or object.getPhotographer() == user or object.getClient() == user"),
+        new Delete(security: "is_granted('ROLE_ADMIN')"),
+    ],
+    normalizationContext: ['groups' => ['booking:read']],
+    denormalizationContext: ['groups' => ['booking:write']],
+    paginationEnabled: true,
+    paginationItemsPerPage: 20
+)]
+#[ApiFilter(SearchFilter::class, properties: ['status' => 'exact', 'location' => 'partial', 'client.username' => 'partial', 'photographer.username' => 'partial'])]
+#[ApiFilter(DateFilter::class, properties: ['startAt', 'endAt', 'createdAt'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'startAt', 'endAt', 'createdAt', 'status'])]
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[Assert\Callback('validate')]
@@ -16,46 +45,57 @@ class Booking
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['booking:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['booking:read', 'booking:write'])]
     private ?User $client = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['booking:read', 'booking:write'])]
     private ?User $photographer = null;
 
     #[ORM\Column(length: 30)]
     #[Assert\NotBlank]
     #[Assert\Choice(choices: ['requested', 'accepted', 'rejected', 'completed', 'cancelled'])]
     #[Assert\Length(max: 30)]
+    #[Groups(['booking:read', 'booking:write'])]
     private ?string $status = null;
 
     #[ORM\Column]
     #[Assert\NotNull]
+    #[Groups(['booking:read', 'booking:write'])]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
     #[Assert\NotNull]
+    #[Groups(['booking:read', 'booking:write'])]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
+    #[Groups(['booking:read', 'booking:write'])]
     private ?string $location = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(max: 5000)]
+    #[Groups(['booking:read', 'booking:write'])]
     private ?string $notes = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(max: 1000)]
+    #[Groups(['booking:read', 'booking:write'])]
     private ?string $rejectionReason = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['booking:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['booking:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
