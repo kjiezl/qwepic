@@ -34,6 +34,28 @@ class LoginController extends AbstractController
     }
 
     /**
+     * Get current authenticated user profile.
+     * Requires valid JWT token in Authorization header.
+     */
+    #[Route('/api/auth/profile', name: 'api_auth_profile', methods: ['GET'])]
+    public function profile(#[CurrentUser] ?User $user): JsonResponse
+    {
+        if (null === $user) {
+            return $this->json([
+                'message' => 'Not authenticated',
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        return $this->json([
+            'id' => $user->getId(),
+            'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
+            'is_active' => $user->isActive(),
+            'created_at' => $user->getCreatedAt()?->format(\DateTimeInterface::ATOM),
+        ]);
+    }
+
+    /**
      * Refresh JWT token.
      * Send current valid token to get a new one with extended expiration.
      */

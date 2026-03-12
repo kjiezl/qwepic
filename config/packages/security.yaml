@@ -42,6 +42,7 @@ security:
         - { path: ^/api/auth/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/auth/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/auth/me, roles: ROLE_USER }
+        - { path: ^/api/auth/profile, roles: ROLE_USER }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
 
         - { path: ^/api, roles: PUBLIC_ACCESS, methods: [GET, OPTIONS] }
