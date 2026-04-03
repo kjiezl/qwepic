@@ -61,6 +61,9 @@ security:
 
         - { path: ^/dashboard,               roles: [ROLE_ADMIN, ROLE_PHOTOGRAPHER] }
 
+        - { path: ^/api/auth/verify, roles: PUBLIC_ACCESS }
+        - { path: ^/verify/email,    roles: PUBLIC_ACCESS }
+
 when@test:
     security:
         password_hashers:

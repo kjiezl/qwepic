@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
+use App\Service\VerificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,7 +20,8 @@ class RegistrationController extends AbstractController
         Request $request,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $entityManager,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
+        VerificationService $verificationService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
@@ -77,14 +79,38 @@ class RegistrationController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
+        $token = $verificationService->generateToken($user);
+
         return $this->json([
             'message' => 'User registered successfully',
             'user' => [
                 'id' => $user->getId(),
+                'verification_token' => $token,
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),
                 'roles' => $user->getRoles(),
             ],
         ], Response::HTTP_CREATED);
+    }
+
+    #[Route('/api/auth/verify/{token}', name: 'api_verify_email', methods: ['GET'])]
+    public function verifyEmail(string $token, VerificationService $verificationService): JsonResponse
+    {
+        $user = $verificationService->verifyByToken($token);
+
+        if (!$user) {
+            return $this->json([
+                'message' => 'Invalid or expired verification token.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        return $this->json([
+            'message' => 'Email verified successfully.',
+            'user' => [
+                'id'          => $user->getId(),
+                'username'    => $user->getUsername(),
+                'is_verified' => $user->isVerified(),
+            ],
+        ]);
     }
 }

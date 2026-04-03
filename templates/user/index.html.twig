@@ -91,6 +91,7 @@
                                         <th scope="col" class="py-2 pr-4 font-medium">Email</th>
                                         <th scope="col" class="py-2 pr-4 font-medium">Role</th>
                                         <th scope="col" class="py-2 pr-4 font-medium">Status</th>
+                                        <th scope="col" class="py-2 pr-4 font-medium">Verified</th>
                                         <th scope="col" class="py-2 pr-0 font-medium text-right">Actions</th>
                                     </tr>
                                 </thead>
@@ -124,9 +125,19 @@
                                                 </span>
                                             {% endif %}
                                         </td>
+                                        <td class="py-3 pr-4">
+                                            {% if user.isVerified %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-accent-coral">
+                                                    Verified
+                                                </span>
+                                            {% else %}
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-slate-gray">
+                                                    Unverified
+                                                </span>
+                                            {% endif %}
+                                        </td>
                                         <td class="py-3 pr-0 text-right">
                                             <div class="inline-flex items-center gap-2">
-                                                {# Enable/Disable controls on the left, only for non-admin users #}
                                                 {% if primaryRole != 'Admin' %}
                                                     {% if user.isActive %}
                                                         <form method="post" action="{{ path('app_user_disable', {'id': user.id}) }}" class="inline">
