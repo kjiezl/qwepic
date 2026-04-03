@@ -78,6 +78,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read'])]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\Column(length: 255, nullable: true, unique: true)]
+    #[Groups(['user:read'])]
+    private ?string $googleId = null;
+
+    #[ORM\Column]
+    private ?bool $is_verified = null;
+
+    public function getGoogleId(): ?string
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(?string $googleId): static
+    {
+        $this->googleId = $googleId;
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -209,5 +227,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAtOnPreUpdate(): void
     {
         $this->updated_at = new \DateTimeImmutable();
+    }
+
+    public function isVerified(): ?bool
+    {
+        return $this->is_verified;
+    }
+
+    public function setIsVerified(bool $is_verified): static
+    {
+        $this->is_verified = $is_verified;
+
+        return $this;
     }
 }
