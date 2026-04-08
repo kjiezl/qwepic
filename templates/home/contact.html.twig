@@ -1,0 +1,626 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact Us - QwePic{% endblock %}
+
+{% block sidebar %}{% endblock %}
+
+{% block main_classes %}min-h-screen{% endblock %}
+
+{% block body %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --qp-red: #42deff;
+    --qp-red-hover: #60a5fa;
+    --qp-coral: #FF6B6B;
+    --qp-coral-soft: #fff0f0;
+    --qp-space-cadet: #1d1e35;
+    --qp-dark: #1d1e35;
+    --qp-slate-gray: #6c757d;
+    --qp-gray: #767676;
+    --qp-light-bg: #f5f5f0;
+    --qp-white: #ffffff;
+    --qp-border: #efefef;
+    --qp-font-main: 'Poppins', sans-serif;
+    --qp-font-secondary: 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  body { font-family: var(--qp-font-main); color: var(--qp-dark); margin: 0; }
+
+  /* ── Nav (identical to landing) ── */
+  .qp-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--qp-border);
+    padding: 0 1.5rem;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .qp-nav-logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+  .qp-nav-logo-img { height: 28px; width: auto; display: block; }
+  .qp-nav-links { display: flex; align-items: center; gap: 1.5rem; }
+  .qp-nav-link {
+    color: #555; text-decoration: none;
+    font-family: var(--qp-font-secondary); font-size: 0.95rem; font-weight: 600;
+  }
+  .qp-nav-link:hover { color: var(--qp-dark); }
+  .qp-nav-link.active { color: var(--qp-dark); }
+  .qp-btn-outline {
+    padding: 0.55rem 1.1rem; border: 2px solid var(--qp-dark); border-radius: 24px;
+    color: var(--qp-dark); font-weight: 700; font-size: 0.9rem;
+    font-family: var(--qp-font-secondary); text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .qp-btn-outline:hover { background: var(--qp-dark); color: white; }
+  .qp-btn-red {
+    padding: 0.55rem 1.2rem; border: 2px solid var(--qp-red); background: var(--qp-red);
+    border-radius: 24px; color: var(--qp-space-cadet); font-weight: 700; font-size: 0.9rem;
+    font-family: var(--qp-font-secondary); text-decoration: none; transition: background 0.15s;
+  }
+  .qp-btn-red:hover { background: var(--qp-red-hover); border-color: var(--qp-red-hover); }
+
+  /* ── Page hero ── */
+  .qp-contact-hero {
+    padding-top: 60px;
+    background: var(--qp-light-bg);
+    text-align: center;
+    padding-bottom: 5rem;
+  }
+  .qp-contact-hero-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 5rem 2rem 0;
+  }
+  .qp-hero-eyebrow {
+    font-family: var(--qp-font-secondary); font-size: 0.9rem; font-weight: 700;
+    color: var(--qp-coral); letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .qp-contact-heading {
+    font-family: var(--qp-font-main); font-weight: 800;
+    font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1.1;
+    color: var(--qp-dark); margin: 0 0 1rem;
+  }
+  .qp-contact-heading span { color: var(--qp-coral); }
+  .qp-contact-sub {
+    font-family: var(--qp-font-secondary); color: var(--qp-gray);
+    font-size: 1rem; line-height: 1.7; margin: 0;
+  }
+
+  /* ── Contact body ── */
+  .qp-contact-body {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2rem 6rem;
+  }
+  @media (max-width: 860px) {
+    .qp-contact-body { grid-template-columns: 1fr; gap: 3rem; }
+  }
+
+  /* ── Info column ── */
+  .qp-info-heading {
+    font-family: var(--qp-font-main); font-weight: 800; font-size: 1.5rem;
+    color: var(--qp-dark); margin: 0 0 0.5rem;
+  }
+  .qp-info-sub {
+    font-family: var(--qp-font-secondary); color: var(--qp-gray);
+    font-size: 0.95rem; line-height: 1.7; margin: 0 0 2.5rem;
+  }
+  .qp-info-cards { display: flex; flex-direction: column; gap: 1.25rem; }
+  .qp-info-card {
+    display: flex; align-items: flex-start; gap: 1rem;
+    background: var(--qp-light-bg); border-radius: 16px; padding: 1.2rem 1.4rem;
+  }
+  .qp-info-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1.1rem;
+  }
+  .qp-info-icon.cyan { background: #e6fbff; color: var(--qp-red); }
+  .qp-info-icon.coral { background: var(--qp-coral-soft); color: var(--qp-coral); }
+  .qp-info-icon.purple { background: #f3eeff; color: #7c3aed; }
+  .qp-info-icon.green { background: #edfdf5; color: #16a34a; }
+  .qp-info-label {
+    font-family: var(--qp-font-secondary); font-weight: 700;
+    font-size: 0.85rem; color: var(--qp-dark); margin-bottom: 0.2rem;
+  }
+  .qp-info-value {
+    font-family: var(--qp-font-secondary); color: var(--qp-gray);
+    font-size: 0.9rem; line-height: 1.5; text-decoration: none;
+  }
+  a.qp-info-value:hover { color: var(--qp-dark); }
+
+  /* Social row */
+  .qp-social-row { display: flex; gap: 0.75rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--qp-border); }
+  .qp-social-btn {
+    width: 42px; height: 42px; border-radius: 12px; background: var(--qp-light-bg);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--qp-gray); text-decoration: none; font-size: 1rem;
+    transition: background 0.15s, color 0.15s;
+  }
+  .qp-social-btn:hover { background: var(--qp-dark); color: white; }
+
+  /* ── Form card ── */
+  .qp-form-card {
+    background: var(--qp-white);
+    border: 1px solid var(--qp-border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+  }
+  .qp-form-title {
+    font-family: var(--qp-font-main); font-weight: 800; font-size: 1.3rem;
+    color: var(--qp-dark); margin: 0 0 0.4rem;
+  }
+  .qp-form-desc {
+    font-family: var(--qp-font-secondary); color: var(--qp-gray);
+    font-size: 0.9rem; margin: 0 0 2rem;
+  }
+
+  /* Form fields */
+  .qp-field { margin-bottom: 1.25rem; }
+  .qp-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+  @media (max-width: 560px) { .qp-field-row { grid-template-columns: 1fr; } }
+  .qp-label {
+    display: block; font-family: var(--qp-font-secondary); font-size: 0.82rem;
+    font-weight: 600; color: var(--qp-dark); margin-bottom: 0.4rem;
+  }
+  .qp-input, .qp-select, .qp-textarea {
+    width: 100%; padding: 0.75rem 1rem;
+    border: 1.5px solid var(--qp-border); border-radius: 12px;
+    font-family: var(--qp-font-secondary); font-size: 0.9rem; color: var(--qp-dark);
+    background: var(--qp-light-bg); outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    appearance: none; -webkit-appearance: none;
+  }
+  .qp-input:focus, .qp-select:focus, .qp-textarea:focus {
+    border-color: var(--qp-red); box-shadow: 0 0 0 3px rgba(66,222,255,0.18);
+    background: white;
+  }
+  .qp-input::placeholder, .qp-textarea::placeholder { color: #bbb; }
+  .qp-textarea { resize: none; }
+
+  /* Select arrow */
+  .qp-select-wrap { position: relative; }
+  .qp-select-wrap::after {
+    content: '▾'; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+    pointer-events: none; color: var(--qp-gray); font-size: 0.85rem;
+  }
+
+  /* Checkbox */
+  .qp-checkbox-row { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 1.5rem; }
+  .qp-checkbox { width: 16px; height: 16px; margin-top: 2px; accent-color: var(--qp-red); flex-shrink: 0; }
+  .qp-checkbox-label {
+    font-family: var(--qp-font-secondary); font-size: 0.82rem; color: var(--qp-gray); line-height: 1.5;
+  }
+  .qp-checkbox-label a { color: var(--qp-dark); font-weight: 600; text-decoration: none; border-bottom: 1px solid currentColor; }
+
+  /* Submit button */
+  .qp-submit-btn {
+    width: 100%; padding: 0.95rem 1.5rem;
+    background: var(--qp-dark); color: white;
+    font-family: var(--qp-font-secondary); font-weight: 700; font-size: 0.95rem;
+    border: none; border-radius: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .qp-submit-btn:hover { background: #2d2f52; transform: translateY(-1px); }
+  .qp-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  /* Feedback states */
+  .qp-feedback { display: none; text-align: center; padding: 3rem 1rem; }
+  .qp-feedback.visible { display: block; }
+  .qp-feedback-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem; font-size: 1.8rem;
+  }
+  .qp-feedback-icon.success { background: #edfdf5; color: #16a34a; }
+  .qp-feedback-icon.error { background: #fef2f2; color: #dc2626; }
+  .qp-feedback h3 {
+    font-family: var(--qp-font-main); font-weight: 800; font-size: 1.4rem;
+    color: var(--qp-dark); margin: 0 0 0.5rem;
+  }
+  .qp-feedback p {
+    font-family: var(--qp-font-secondary); color: var(--qp-gray); margin: 0 0 1.5rem;
+  }
+  .qp-feedback-btn {
+    padding: 0.7rem 1.6rem; background: var(--qp-red); color: var(--qp-dark);
+    border: none; border-radius: 24px; font-family: var(--qp-font-secondary);
+    font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background 0.15s;
+  }
+  .qp-feedback-btn:hover { background: var(--qp-red-hover); }
+
+  /* ── FAQ ── */
+  .qp-faq-section {
+    background: var(--qp-light-bg);
+    padding: 5rem 2rem;
+  }
+  .qp-faq-inner { max-width: 720px; margin: 0 auto; }
+  .qp-section-eyebrow {
+    font-family: var(--qp-font-secondary); font-size: 0.82rem; font-weight: 700;
+    color: var(--qp-coral); text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 0.6rem;
+  }
+  .qp-section-heading {
+    font-family: var(--qp-font-main); font-weight: 800;
+    font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--qp-dark); margin: 0 0 0.6rem;
+  }
+  .qp-section-heading span { color: var(--qp-coral); }
+  .qp-section-sub {
+    font-family: var(--qp-font-secondary); color: var(--qp-gray);
+    font-size: 1rem; margin: 0 0 3rem;
+  }
+  .qp-faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .qp-faq-item {
+    background: white; border-radius: 16px;
+    border: 1px solid var(--qp-border); overflow: hidden;
+  }
+  .qp-faq-toggle {
+    width: 100%; padding: 1.2rem 1.4rem; background: none; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    font-family: var(--qp-font-secondary); font-weight: 700; font-size: 0.95rem;
+    color: var(--qp-dark); text-align: left;
+  }
+  .qp-faq-chevron {
+    font-size: 0.75rem; color: var(--qp-gray); transition: transform 0.2s; flex-shrink: 0;
+  }
+  .qp-faq-item.open .qp-faq-chevron { transform: rotate(180deg); }
+  .qp-faq-body {
+    display: none; padding: 0 1.4rem 1.2rem;
+    font-family: var(--qp-font-secondary); color: var(--qp-gray);
+    font-size: 0.9rem; line-height: 1.7;
+  }
+  .qp-faq-item.open .qp-faq-body { display: block; }
+
+  /* ── Footer (identical to landing) ── */
+  .qp-footer { background: var(--qp-dark); padding: 4rem 6vw 2rem; }
+  .qp-footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 2.5rem; margin-bottom: 3rem;
+  }
+  @media (max-width: 768px) { .qp-footer-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .qp-footer-grid { grid-template-columns: 1fr; } }
+  .qp-footer-logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; margin-bottom: 1rem; }
+  .qp-footer-logo-img { height: 26px; }
+  .qp-footer-desc {
+    font-family: var(--qp-font-secondary); color: #aaa; font-size: 0.88rem; line-height: 1.7;
+  }
+  .qp-footer-col-title {
+    font-family: var(--qp-font-secondary); font-weight: 700; font-size: 0.85rem;
+    color: white; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .qp-footer-links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+  .qp-footer-links a {
+    font-family: var(--qp-font-secondary); color: #aaa; text-decoration: none; font-size: 0.9rem;
+    transition: color 0.15s;
+  }
+  .qp-footer-links a:hover { color: var(--qp-red); }
+  .qp-footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.5rem;
+    text-align: center; font-family: var(--qp-font-secondary); color: #666; font-size: 0.85rem;
+  }
+</style>
+
+<!-- ════════════════════ NAV ════════════════════ -->
+<nav class="qp-nav">
+  <a href="{{ path('app_home') }}" class="qp-nav-logo">
+    <img src="{{ asset('images/logo-plain.svg') }}" alt="QwePic" class="qp-nav-logo-img">
+  </a>
+  <div class="qp-nav-links qp-sans">
+    <a href="{{ path('app_photographer_index') }}" class="qp-nav-link">Photographers</a>
+    <a href="{{ path('app_about') }}" class="qp-nav-link">About</a>
+    <a href="{{ path('app_contact') }}" class="qp-nav-link active">Contact</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.6rem;">
+    <a href="{{ path('app_login') }}" class="qp-btn-outline">Log in</a>
+    <a href="{{ path('app_register') }}" class="qp-btn-red">Sign up</a>
+  </div>
+</nav>
+
+<!-- ════════════════════ HERO ════════════════════ -->
+<section class="qp-contact-hero">
+  <div class="qp-contact-hero-inner">
+    <h1 class="qp-contact-heading">We'd love to <span>hear from you</span></h1>
+    <p class="qp-contact-sub">Have a question, feedback, or just want to say hello? Our team usually responds within 24 hours.</p>
+  </div>
+</section>
+
+<!-- ════════════════════ CONTACT BODY ════════════════════ -->
+<section style="background: var(--qp-white);">
+  <div class="qp-contact-body">
+
+    <!-- Left: contact info -->
+    <div>
+      <h2 class="qp-info-heading">Let's start a conversation</h2>
+      <p class="qp-info-sub">Whether you're a photographer looking to join our platform or a client with questions, we're here.</p>
+
+      <div class="qp-info-cards">
+        <div class="qp-info-card">
+          <div class="qp-info-icon cyan"><i class="fas fa-envelope"></i></div>
+          <div>
+            <div class="qp-info-label">Email us</div>
+            <a href="mailto:hello@qwepic.com" class="qp-info-value">hello@qwepic.com</a>
+          </div>
+        </div>
+        <div class="qp-info-card">
+          <div class="qp-info-icon coral"><i class="fas fa-phone"></i></div>
+          <div>
+            <div class="qp-info-label">Call us</div>
+            <a href="tel:+1234567890" class="qp-info-value">+1 (234) 567-890</a>
+          </div>
+        </div>
+        <div class="qp-info-card">
+          <div class="qp-info-icon purple"><i class="fas fa-map-marker-alt"></i></div>
+          <div>
+            <div class="qp-info-label">Visit us</div>
+            <span class="qp-info-value">123 Photography Lane<br>Creative District, CA 90210</span>
+          </div>
+        </div>
+        <div class="qp-info-card">
+          <div class="qp-info-icon green"><i class="fas fa-clock"></i></div>
+          <div>
+            <div class="qp-info-label">Business hours</div>
+            <span class="qp-info-value">Mon – Fri: 9 AM – 6 PM<br>Sat – Sun: 10 AM – 4 PM</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="qp-social-row">
+        <a href="#" class="qp-social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="qp-social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="qp-social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="qp-social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+
+    <!-- Right: form card -->
+    <div class="qp-form-card">
+      <div class="qp-form-title">Send us a message</div>
+      <p class="qp-form-desc">Fill out the form and we'll get back to you within 24 hours.</p>
+
+      <!-- ── Brevo (Sendinblue) form ──────────────────────────────────
+           Replace YOUR_BREVO_FORM_ID with the ID from your Brevo dashboard.
+           See implementation guide at the bottom of this file.
+      ──────────────────────────────────────────────────────────────── -->
+      <form id="contact-form" novalidate>
+
+        <div class="qp-field-row">
+          <div>
+            <label class="qp-label" for="cf-firstname">First name <span style="color:var(--qp-coral)">*</span></label>
+            <input class="qp-input" type="text" id="cf-firstname" name="FIRSTNAME" required placeholder="Jane">
+          </div>
+          <div>
+            <label class="qp-label" for="cf-lastname">Last name <span style="color:var(--qp-coral)">*</span></label>
+            <input class="qp-input" type="text" id="cf-lastname" name="LASTNAME" required placeholder="Doe">
+          </div>
+        </div>
+
+        <div class="qp-field">
+          <label class="qp-label" for="cf-email">Email address <span style="color:var(--qp-coral)">*</span></label>
+          <input class="qp-input" type="email" id="cf-email" name="EMAIL" required placeholder="jane@example.com">
+        </div>
+
+        <div class="qp-field">
+          <label class="qp-label" for="cf-phone">Phone number <span style="color:var(--qp-gray);font-weight:400;">(optional)</span></label>
+          <input class="qp-input" type="tel" id="cf-phone" name="SMS" placeholder="+1 (234) 567-890">
+        </div>
+
+        <div class="qp-field">
+          <label class="qp-label" for="cf-subject">Inquiry type <span style="color:var(--qp-coral)">*</span></label>
+          <div class="qp-select-wrap">
+            <select class="qp-select" id="cf-subject" name="SUBJECT" required>
+              <option value="">Select an option</option>
+              <option value="General Inquiry">General inquiry</option>
+              <option value="Booking Question">Booking question</option>
+              <option value="Join as Photographer">Join as photographer</option>
+              <option value="Technical Support">Technical support</option>
+              <option value="Partnership">Partnership opportunity</option>
+              <option value="Feedback">Feedback</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="qp-field">
+          <label class="qp-label" for="cf-message">Message <span style="color:var(--qp-coral)">*</span></label>
+          <textarea class="qp-textarea" id="cf-message" name="MESSAGE" rows="5" required placeholder="Tell us how we can help you…"></textarea>
+        </div>
+
+        <div class="qp-checkbox-row">
+          <input class="qp-checkbox" type="checkbox" id="cf-privacy" required>
+          <label class="qp-checkbox-label" for="cf-privacy">
+            I agree to the <a href="#">Privacy Policy</a> and consent to being contacted regarding my inquiry.
+          </label>
+        </div>
+
+        <button class="qp-submit-btn" type="submit" id="submit-btn">
+          <span>Send message</span>
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+
+      <!-- Success state -->
+      <div class="qp-feedback" id="state-success">
+        <div class="qp-feedback-icon success"><i class="fas fa-check"></i></div>
+        <h3>Message sent!</h3>
+        <p>Thanks for reaching out — we'll get back to you within 24 hours.</p>
+        <button class="qp-feedback-btn" onclick="resetContactForm()">Send another message</button>
+      </div>
+
+      <!-- Error state -->
+      <div class="qp-feedback" id="state-error">
+        <div class="qp-feedback-icon error"><i class="fas fa-exclamation-triangle"></i></div>
+        <h3>Something went wrong</h3>
+        <p>Please try again or email us directly at <a href="mailto:hello@qwepic.com" style="color:var(--qp-dark);font-weight:600;">hello@qwepic.com</a></p>
+        <button class="qp-feedback-btn" onclick="resetContactForm()">Try again</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════ FAQ ════════════════════ -->
+<section class="qp-faq-section">
+  <div class="qp-faq-inner">
+    <div class="qp-section-eyebrow">FAQ</div>
+    <h2 class="qp-section-heading">Frequently asked <span>questions</span></h2>
+    <p class="qp-section-sub">Quick answers to the most common things people ask us.</p>
+
+    <div class="qp-faq-list">
+      <div class="qp-faq-item">
+        <button class="qp-faq-toggle" onclick="toggleFaq(this)">
+          How do I book a photographer?
+          <span class="qp-faq-chevron">▾</span>
+        </button>
+        <div class="qp-faq-body">Browse our photographers, view their portfolios, and click "Book Now" on their profile. Select your preferred date, provide event details, and complete the booking. You'll receive confirmation within 24 hours.</div>
+      </div>
+      <div class="qp-faq-item">
+        <button class="qp-faq-toggle" onclick="toggleFaq(this)">
+          How do I become a photographer on QwePic?
+          <span class="qp-faq-chevron">▾</span>
+        </button>
+        <div class="qp-faq-body">Click "Get Started" and sign up as a photographer. Submit your portfolio for review, and our team will verify your credentials within 3–5 business days. Once approved, you can start accepting bookings immediately.</div>
+      </div>
+      <div class="qp-faq-item">
+        <button class="qp-faq-toggle" onclick="toggleFaq(this)">
+          What is your cancellation policy?
+          <span class="qp-faq-chevron">▾</span>
+        </button>
+        <div class="qp-faq-body">Cancellations made 48+ hours before the session receive a full refund. Cancellations within 24–48 hours receive a 50% refund. Cancellations less than 24 hours before are non-refundable.</div>
+      </div>
+      <div class="qp-faq-item">
+        <button class="qp-faq-toggle" onclick="toggleFaq(this)">
+          How long until I receive my photos?
+          <span class="qp-faq-chevron">▾</span>
+        </button>
+        <div class="qp-faq-body">Typically, portrait sessions are delivered within 1–2 weeks, while weddings and large events may take 4–6 weeks. Each photographer lists their expected delivery time on their profile.</div>
+      </div>
+      <div class="qp-faq-item">
+        <button class="qp-faq-toggle" onclick="toggleFaq(this)">
+          Is my payment secure?
+          <span class="qp-faq-chevron">▾</span>
+        </button>
+        <div class="qp-faq-body">Yes. We use SSL encryption and partner with trusted payment processors. Your payment information is never stored on our servers. Funds are held securely until your session is completed.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer class="qp-footer">
+  <div class="qp-footer-grid">
+    <div>
+      <a href="{{ path('app_home') }}" class="qp-footer-logo">
+        <img src="{{ asset('images/logo-plain.svg') }}" alt="QwePic" class="qp-footer-logo-img">
+      </a>
+      <p class="qp-footer-desc">Connecting talented photographers with clients who appreciate great imagery.</p>
+    </div>
+    <div>
+      <div class="qp-footer-col-title">Get the app</div>
+      <ul class="qp-footer-links">
+        <li><a href="#">iOS</a></li>
+        <li><a href="#">Android</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="qp-footer-col-title">Quick links</div>
+      <ul class="qp-footer-links">
+        <li><a href="{{ path('app_photographer_index') }}">Browse photographers</a></li>
+        <li><a href="{{ path('app_about') }}">About</a></li>
+        <li><a href="{{ path('app_contact') }}">Contact</a></li>
+        <li><a href="{{ path('app_register') }}">Join as Photographer</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="qp-footer-col-title">Policies</div>
+      <ul class="qp-footer-links">
+        <li><a href="#">Terms of service</a></li>
+        <li><a href="#">Privacy policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="qp-footer-bottom">
+    &copy; {{ 'now'|date('Y') }} QwePic
+  </div>
+</footer>
+
+<!-- ════════════════════ SCRIPTS ════════════════════ -->
+<script>
+  /* ── FAQ accordion ── */
+  function toggleFaq(btn) {
+    const item = btn.closest('.qp-faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.qp-faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  /* ── Form reset ── */
+  function resetContactForm() {
+    document.getElementById('contact-form').reset();
+    document.getElementById('contact-form').style.display = '';
+    document.getElementById('state-success').classList.remove('visible');
+    document.getElementById('state-error').classList.remove('visible');
+  }
+
+  /* ── Brevo (Sendinblue) form submission via API ── */
+  document.getElementById('contact-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const btn  = document.getElementById('submit-btn');
+
+    // Basic client-side validation
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    // Loading state
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+
+    const data = {
+      FIRSTNAME: form.FIRSTNAME.value.trim(),
+      LASTNAME:  form.LASTNAME.value.trim(),
+      EMAIL:     form.EMAIL.value.trim(),
+      SMS:       form.SMS.value.trim(),
+      SUBJECT:   form.SUBJECT.value,
+      MESSAGE:   form.MESSAGE.value.trim(),
+    };
+
+    try {
+      const res = await fetch('{{ path('app_contact_submit') }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json().catch(() => ({}));
+      if (!res.ok || !result.ok) throw new Error('Submit failed');
+
+      // ── Success ──────────────────────────────────────────────────────
+      form.style.display = 'none';
+      document.getElementById('state-success').classList.add('visible');
+
+    } catch (err) {
+      console.error(err);
+      form.style.display = 'none';
+      document.getElementById('state-error').classList.add('visible');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<span>Send message</span><i class="fas fa-paper-plane"></i>';
+    }
+  });
+</script>
+
+{% endblock %}
