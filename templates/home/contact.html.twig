@@ -47,18 +47,18 @@
     color: #555; text-decoration: none;
     font-family: var(--qp-font-secondary); font-size: 0.95rem; font-weight: 600;
   }
-  .qp-nav-link:hover { color: var(--qp-dark); }
-  .qp-nav-link.active { color: var(--qp-dark); }
+  .qp-nav-link:hover { color: var(--qp-coral); }
+  .qp-nav-link.active { color: var(--qp-coral); }
   .qp-btn-outline {
-    padding: 0.55rem 1.1rem; border: 2px solid var(--qp-dark); border-radius: 24px;
-    color: var(--qp-dark); font-weight: 700; font-size: 0.9rem;
+    padding: 0.55rem 1.1rem; border: 2px solid var(--qp-coral); border-radius: 10px;
+    color: var(--qp-coral); font-weight: 700; font-size: 0.9rem;
     font-family: var(--qp-font-secondary); text-decoration: none;
     transition: background 0.15s, color 0.15s;
   }
-  .qp-btn-outline:hover { background: var(--qp-dark); color: white; }
+  .qp-btn-outline:hover { background: var(--qp-coral); color: white; }
   .qp-btn-red {
     padding: 0.55rem 1.2rem; border: 2px solid var(--qp-red); background: var(--qp-red);
-    border-radius: 24px; color: var(--qp-space-cadet); font-weight: 700; font-size: 0.9rem;
+    border-radius: 10px; color: var(--qp-space-cadet); font-weight: 700; font-size: 0.9rem;
     font-family: var(--qp-font-secondary); text-decoration: none; transition: background 0.15s;
   }
   .qp-btn-red:hover { background: var(--qp-red-hover); border-color: var(--qp-red-hover); }
@@ -116,10 +116,10 @@
   .qp-info-cards { display: flex; flex-direction: column; gap: 1.25rem; }
   .qp-info-card {
     display: flex; align-items: flex-start; gap: 1rem;
-    background: var(--qp-light-bg); border-radius: 16px; padding: 1.2rem 1.4rem;
+    background: var(--qp-light-bg); border-radius: 10px; padding: 1.2rem 1.4rem;
   }
   .qp-info-icon {
-    width: 44px; height: 44px; border-radius: 12px;
+    width: 44px; height: 44px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0; font-size: 1.1rem;
   }
@@ -140,7 +140,7 @@
   /* Social row */
   .qp-social-row { display: flex; gap: 0.75rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--qp-border); }
   .qp-social-btn {
-    width: 42px; height: 42px; border-radius: 12px; background: var(--qp-light-bg);
+    width: 42px; height: 42px; border-radius: 10px; background: var(--qp-light-bg);
     display: flex; align-items: center; justify-content: center;
     color: var(--qp-gray); text-decoration: none; font-size: 1rem;
     transition: background 0.15s, color 0.15s;
@@ -151,7 +151,7 @@
   .qp-form-card {
     background: var(--qp-white);
     border: 1px solid var(--qp-border);
-    border-radius: 24px;
+    border-radius: 10px;
     padding: 2.5rem;
     box-shadow: 0 4px 32px rgba(0,0,0,0.06);
   }
@@ -174,7 +174,7 @@
   }
   .qp-input, .qp-select, .qp-textarea {
     width: 100%; padding: 0.75rem 1rem;
-    border: 1.5px solid var(--qp-border); border-radius: 12px;
+    border: 1.5px solid var(--qp-border); border-radius: 10px;
     font-family: var(--qp-font-secondary); font-size: 0.9rem; color: var(--qp-dark);
     background: var(--qp-light-bg); outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
@@ -205,13 +205,13 @@
   /* Submit button */
   .qp-submit-btn {
     width: 100%; padding: 0.95rem 1.5rem;
-    background: var(--qp-dark); color: white;
+    background: var(--qp-red); color: var(--qp-space-cadet);
     font-family: var(--qp-font-secondary); font-weight: 700; font-size: 0.95rem;
-    border: none; border-radius: 14px; cursor: pointer;
+    border: none; border-radius: 10px; cursor: pointer;
     display: flex; align-items: center; justify-content: center; gap: 0.6rem;
     transition: background 0.15s, transform 0.1s;
   }
-  .qp-submit-btn:hover { background: #2d2f52; transform: translateY(-1px); }
+  .qp-submit-btn:hover { background: var(--qp-red-hover); }
   .qp-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
   /* Feedback states */
@@ -233,7 +233,7 @@
   }
   .qp-feedback-btn {
     padding: 0.7rem 1.6rem; background: var(--qp-red); color: var(--qp-dark);
-    border: none; border-radius: 24px; font-family: var(--qp-font-secondary);
+    border: none; border-radius: 10px; font-family: var(--qp-font-secondary);
     font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background 0.15s;
   }
   .qp-feedback-btn:hover { background: var(--qp-red-hover); }
@@ -260,7 +260,7 @@
   }
   .qp-faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
   .qp-faq-item {
-    background: white; border-radius: 16px;
+    background: white; border-radius: 10px;
     border: 1px solid var(--qp-border); overflow: hidden;
   }
   .qp-faq-toggle {
@@ -270,7 +270,7 @@
     color: var(--qp-dark); text-align: left;
   }
   .qp-faq-chevron {
-    font-size: 0.75rem; color: var(--qp-gray); transition: transform 0.2s; flex-shrink: 0;
+    font-size: 1rem; color: var(--qp-gray); transition: transform 0.2s; flex-shrink: 0;
   }
   .qp-faq-item.open .qp-faq-chevron { transform: rotate(180deg); }
   .qp-faq-body {
@@ -315,7 +315,8 @@
     <img src="{{ asset('images/logo-plain.svg') }}" alt="QwePic" class="qp-nav-logo-img">
   </a>
   <div class="qp-nav-links qp-sans">
-    <a href="{{ path('app_photographer_index') }}" class="qp-nav-link">Photographers</a>
+    {# <a href="{{ path('app_photographer_index') }}" class="qp-nav-link">Photographers</a> #}
+    <a href="{{ path('app_home') }}" class="qp-nav-link">Home</a>
     <a href="{{ path('app_about') }}" class="qp-nav-link">About</a>
     <a href="{{ path('app_contact') }}" class="qp-nav-link active">Contact</a>
   </div>
@@ -344,7 +345,7 @@
 
       <div class="qp-info-cards">
         <div class="qp-info-card">
-          <div class="qp-info-icon cyan"><i class="fas fa-envelope"></i></div>
+          <div class="qp-info-icon coral"><i class="fas fa-envelope"></i></div>
           <div>
             <div class="qp-info-label">Email us</div>
             <a href="mailto:hello@qwepic.com" class="qp-info-value">hello@qwepic.com</a>
@@ -354,18 +355,18 @@
           <div class="qp-info-icon coral"><i class="fas fa-phone"></i></div>
           <div>
             <div class="qp-info-label">Call us</div>
-            <a href="tel:+1234567890" class="qp-info-value">+1 (234) 567-890</a>
+            <a href="tel:+1234567890" class="qp-info-value">+63 939 262 2330</a>
           </div>
         </div>
         <div class="qp-info-card">
-          <div class="qp-info-icon purple"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="qp-info-icon coral"><i class="fas fa-map-marker-alt"></i></div>
           <div>
             <div class="qp-info-label">Visit us</div>
-            <span class="qp-info-value">123 Photography Lane<br>Creative District, CA 90210</span>
+            <span class="qp-info-value">Kagawasan Avenue<br>Dumaguete City, 6200</span>
           </div>
         </div>
         <div class="qp-info-card">
-          <div class="qp-info-icon green"><i class="fas fa-clock"></i></div>
+          <div class="qp-info-icon coral"><i class="fas fa-clock"></i></div>
           <div>
             <div class="qp-info-label">Business hours</div>
             <span class="qp-info-value">Mon – Fri: 9 AM – 6 PM<br>Sat – Sun: 10 AM – 4 PM</span>
@@ -410,7 +411,7 @@
 
         <div class="qp-field">
           <label class="qp-label" for="cf-phone">Phone number <span style="color:var(--qp-gray);font-weight:400;">(optional)</span></label>
-          <input class="qp-input" type="tel" id="cf-phone" name="SMS" placeholder="+1 (234) 567-890">
+          <input class="qp-input" type="tel" id="cf-phone" name="SMS" placeholder="+63 939 262 2330">
         </div>
 
         <div class="qp-field">
@@ -469,7 +470,6 @@
 <!-- ════════════════════ FAQ ════════════════════ -->
 <section class="qp-faq-section">
   <div class="qp-faq-inner">
-    <div class="qp-section-eyebrow">FAQ</div>
     <h2 class="qp-section-heading">Frequently asked <span>questions</span></h2>
     <p class="qp-section-sub">Quick answers to the most common things people ask us.</p>
 

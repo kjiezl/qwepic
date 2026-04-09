@@ -47,16 +47,17 @@
   .qp-nav-logo-img { height: 28px; width: auto; display: block; }
   .qp-nav-links { display: flex; align-items: center; gap: 1.5rem; }
   .qp-nav-link { color: #555; text-decoration: none; font-family: var(--qp-font-secondary); font-size: 0.95rem; font-weight: 600; }
-  .qp-nav-link:hover { color: var(--qp-dark); }
+  .qp-nav-link:hover { color: var(--qp-coral); }
+  .qp-nav-link.active { color: var(--qp-coral); }
   .qp-btn-outline {
-    padding: 0.55rem 1.1rem; border: 2px solid var(--qp-dark); border-radius: 24px;
-    color: var(--qp-dark); font-weight: 700; font-size: 0.9rem;
+    padding: 0.55rem 1.1rem; border: 2px solid var(--qp-coral); border-radius: 10px;
+    color: var(--qp-coral); font-weight: 700; font-size: 0.9rem;
     font-family: var(--qp-font-secondary); text-decoration: none;
     transition: background 0.15s, color 0.15s;
   }
-  .qp-btn-outline:hover { background: var(--qp-dark); color: white; }
+  .qp-btn-outline:hover { background: var(--qp-coral); color: white; }
   .qp-btn-red {
-    padding: 0.55rem 1.2rem; border: 2px solid var(--qp-red); background: var(--qp-red); border-radius: 24px;
+    padding: 0.55rem 1.2rem; border: 2px solid var(--qp-red); background: var(--qp-red); border-radius: 10px;
     color: var(--qp-space-cadet); font-weight: 700; font-size: 0.9rem;
     font-family: var(--qp-font-secondary); text-decoration: none;
     transition: background 0.15s;
@@ -91,7 +92,7 @@
   }
   .qp-hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
   .qp-btn-red-lg {
-    padding: 0.85rem 1.8rem; background: var(--qp-red); border-radius: 32px;
+    padding: 0.85rem 1.8rem; background: var(--qp-red); border-radius: 10px;
     color: var(--qp-space-cadet); font-weight: 700; font-size: 1rem;
     font-family: var(--qp-font-secondary); text-decoration: none;
     transition: background 0.15s; white-space: nowrap;
@@ -106,18 +107,18 @@
   /* Hero masonry */
   .qp-hero-visual {
     display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 10px; padding: 80px 2rem 80px 1rem;
+    gap: 10px; padding: 80px 6rem 80px 1rem;
     align-items: start;
   }
   .qp-hero-col { display: flex; flex-direction: column; gap: 10px; }
   .qp-hero-col:nth-child(2) { margin-top: 40px; }
   .qp-hero-col:nth-child(3) { margin-top: 20px; }
   .qp-hero-img {
-    width: 100%; border-radius: 16px; object-fit: cover;
+    width: 100%; border-radius: 10px; object-fit: cover;
     box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   }
   .qp-hero-badge {
-    background: white; border-radius: 12px; padding: 0.6rem 0.9rem;
+    background: white; border-radius: 10px; padding: 0.6rem 0.9rem;
     display: inline-flex; align-items: center; gap: 0.5rem;
     box-shadow: 0 2px 12px rgba(0,0,0,0.1);
     font-family: var(--qp-font-secondary); font-size: 0.8rem; font-weight: 700;
@@ -151,7 +152,7 @@
   .qp-feature.qp-feature-alt .qp-feature-visual { order: -1; }
   .qp-feature-visual {
     background: var(--qp-light-bg);
-    border-radius: 24px;
+    border-radius: 10px;
     overflow: hidden; aspect-ratio: 4/3;
     display: flex; align-items: center; justify-content: center;
     position: relative; box-shadow: 0 2px 24px rgba(0,0,0,0.06);
@@ -169,7 +170,7 @@
   }
   .qp-feature-mock-bar i { color: var(--qp-coral); }
   .qp-mock-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; flex: 1; }
-  .qp-mock-grid img { width: 100%; border-radius: 8px; object-fit: cover; aspect-ratio: 1; }
+  .qp-mock-grid img { width: 100%; border-radius: 10px; object-fit: cover; aspect-ratio: 1; }
   .qp-feature-text {}
   .qp-feature-label {
     font-family: var(--qp-font-secondary); font-weight: 700; font-size: 0.8rem;
@@ -186,7 +187,7 @@
   }
   .qp-btn-red-sm {
     display: inline-block; padding: 0.65rem 1.4rem; background: var(--qp-red);
-    border-radius: 24px; color: var(--qp-space-cadet); font-weight: 700; font-size: 0.9rem;
+    border-radius: 10px; color: var(--qp-space-cadet); font-weight: 700; font-size: 0.9rem;
     font-family: var(--qp-font-secondary); text-decoration: none;
     transition: background 0.15s;
   }
@@ -195,7 +196,7 @@
   /* Board card mock */
   .qp-board-card {
     position: absolute; bottom: 1rem; right: 1rem; left: 1rem;
-    background: white; border-radius: 14px; padding: 0.8rem 1rem;
+    background: white; border-radius: 10px; padding: 0.8rem 1rem;
     box-shadow: 0 4px 16px rgba(0,0,0,0.12);
     font-family: var(--qp-font-secondary);
   }
@@ -221,68 +222,48 @@
   }
   .qp-signup-bg-col { display: flex; flex-direction: column; gap: 6px; }
   .qp-signup-bg-col:nth-child(even) { margin-top: -30px; }
-  .qp-signup-bg img { width: 100%; object-fit: cover; border-radius: 8px; }
+  .qp-signup-bg img { width: 100%; object-fit: cover; border-radius: 10px; }
   .qp-signup-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); }
-  .qp-signup-inner {
-    position: relative; z-index: 2; display: flex;
-    align-items: center; justify-content: space-between;
-    width: 100%; max-width: 1100px; margin: 0 auto; padding: 4rem 6vw;
-    gap: 3rem;
-  }
-  .qp-signup-headline {
-    font-family: var(--qp-font-main); font-weight: 800;
-    font-size: clamp(2rem, 4vw, 3.2rem); color: white; line-height: 1.15;
-    max-width: 340px;
-  }
-  .qp-signup-card {
-    background: white; border-radius: 24px; padding: 2rem;
-    width: 100%; max-width: 360px; min-width: 280px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.2);
-  }
-  .qp-signup-card-title {
-    font-family: var(--qp-font-main); font-weight: 800;
-    font-size: 1.25rem; color: var(--qp-dark); text-align: center; margin-bottom: 0.25rem;
-  }
-  .qp-signup-card-sub {
-    font-family: var(--qp-font-secondary); color: var(--qp-gray);
-    font-size: 0.85rem; text-align: center; margin-bottom: 1.2rem;
-  }
-  .qp-input {
-    width: 100%; padding: 0.7rem 0.9rem; border: 1.5px solid #ddd;
-    border-radius: 10px; font-size: 0.9rem; font-family: var(--qp-font-secondary);
-    color: var(--qp-dark); margin-bottom: 0.6rem; outline: none;
-    transition: border-color 0.15s;
-  }
-  .qp-input:focus { border-color: var(--qp-red); }
-  .qp-input::placeholder { color: #aaa; }
-  .qp-signup-btn {
-    width: 100%; padding: 0.8rem; background: var(--qp-red); border: none;
-    border-radius: 12px; color: var(--qp-space-cadet); font-weight: 700; font-size: 0.95rem;
-    font-family: var(--qp-font-secondary); cursor: pointer;
-    transition: background 0.15s; margin-top: 0.3rem;
-  }
-  .qp-signup-btn:hover { background: var(--qp-red-hover); }
-  .qp-signup-divider {
-    text-align: center; font-family: var(--qp-font-secondary);
-    color: var(--qp-gray); font-size: 0.85rem; margin: 0.8rem 0;
-  }
-  .qp-signup-legal {
-    font-family: var(--qp-font-secondary); font-size: 0.72rem;
-    color: var(--qp-gray); text-align: center; line-height: 1.5; margin-top: 0.6rem;
-  }
-  .qp-signup-legal a { color: var(--qp-dark); text-decoration: underline; }
-  .qp-signup-existing {
-    display: block; text-align: center; margin-top: 1rem;
-    font-family: var(--qp-font-secondary); font-size: 0.85rem;
-    color: var(--qp-slate-gray); text-decoration: none;
-  }
-  .qp-signup-existing:hover { text-decoration: underline; color: var(--qp-coral); }
-  .qp-divider-line {
-    display: flex; align-items: center; gap: 0.5rem; margin: 0.8rem 0;
-  }
-  .qp-divider-line::before, .qp-divider-line::after {
-    content: ''; flex: 1; height: 1px; background: var(--qp-slate-gray);
-  }
+  /* CTA inner layout */
+.qp-signup-inner,
+.qp-cta-inner {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 760px; margin: 0 auto;
+  padding: 6rem 6vw;
+  text-align: center;
+}
+.qp-cta-eyebrow {
+  font-family: var(--qp-font-secondary); font-weight: 700; font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--qp-red); margin-bottom: 1rem;
+}
+.qp-cta-headline {
+  font-family: var(--qp-font-main); font-weight: 800;
+  font-size: clamp(2rem, 4.5vw, 3.4rem); color: white;
+  line-height: 1.15; margin-bottom: 1.2rem;
+}
+.qp-cta-sub {
+  font-family: var(--qp-font-secondary); color: rgba(255,255,255,0.75);
+  font-size: 1.05rem; line-height: 1.65;
+  max-width: 520px; margin: 0 auto 2.2rem;
+}
+.qp-cta-actions {
+  display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+}
+.qp-cta-btn-primary {
+  padding: 0.9rem 2rem; background: var(--qp-red); border-radius: 10px;
+  color: var(--qp-space-cadet); font-weight: 700; font-size: 1rem;
+  font-family: var(--qp-font-secondary); text-decoration: none;
+  transition: background 0.15s;
+}
+.qp-cta-btn-primary:hover { background: var(--qp-red-hover); }
+.qp-cta-btn-ghost {
+  padding: 0.9rem 2rem; border: 2px solid rgba(255,255,255,0.5); border-radius: 10px;
+  color: white; font-weight: 700; font-size: 1rem;
+  font-family: var(--qp-font-secondary); text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.qp-cta-btn-ghost:hover { border-color: white; background: rgba(255,255,255,0.08); }
 
   /* Footer */
   .qp-footer { background: var(--qp-dark); color: white; padding: 3rem 6vw 2rem; }
@@ -315,7 +296,6 @@
     .qp-feature.qp-feature-alt .qp-feature-visual { order: unset; }
     .qp-footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
     .qp-signup-inner { flex-direction: column; align-items: center; text-align: center; }
-    .qp-signup-headline { max-width: 100%; }
     .qp-nav-links { display: none; }
     .qp-stats { gap: 2rem; }
   }
@@ -338,7 +318,6 @@
 
     .qp-signup-section { min-height: auto; }
     .qp-signup-inner { padding: 3rem 1rem; }
-    .qp-signup-card { max-width: 100%; min-width: 0; padding: 1.5rem; }
     .qp-signup-bg { grid-template-columns: repeat(2, 1fr); opacity: 0.35; }
 
     .qp-footer { padding: 2.5rem 1rem 1.75rem; }
@@ -352,7 +331,8 @@
     <img src="{{ asset('images/logo-plain.svg') }}" alt="QwePic" class="qp-nav-logo-img">
   </a>
   <div class="qp-nav-links qp-sans">
-    <a href="{{ path('app_photographer_index') }}" class="qp-nav-link">Photographers</a>
+    {# <a href="{{ path('app_photographer_index') }}" class="qp-nav-link">Photographers</a> #}
+    <a href="{{ path('app_home') }}" class="qp-nav-link active">Home</a>
     <a href="{{ path('app_about') }}" class="qp-nav-link">About</a>
     <a href="{{ path('app_contact') }}" class="qp-nav-link">Contact</a>
   </div>
@@ -367,7 +347,7 @@
   <div class="qp-hero-text">
     {# <p class="qp-hero-eyebrow qp-sans">Find ideas for</p> #}
     <h1 class="qp-hero-heading">
-      <span>find ideas for your</span><br>
+      <span>Find ideas for your</span><br>
       <span class="qp-hero-heading-accent">perfect photo shoot</span>
     </h1>
     <p class="qp-hero-sub">Connect with talented photographers who turn your special moments into timeless memories.</p>
@@ -389,7 +369,7 @@
     </div>
     <!-- Col 2 -->
     <div class="qp-hero-col">
-      <div class="qp-hero-badge qp-sans" style="background:#e6fbff;border-radius:12px;padding:0.5rem 0.9rem;">
+      <div class="qp-hero-badge qp-sans" style="background:#e6fbff;border-radius:10px;padding:0.5rem 0.9rem;">
       </div>
       <img class="qp-hero-img" style="height:220px"
         src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" alt="Camera">
@@ -400,9 +380,8 @@
     <div class="qp-hero-col">
       <img class="qp-hero-img" style="height:175px"
         src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80" alt="Event">
-      <div class="qp-hero-badge qp-sans">
       <img class="qp-hero-img" style="height:195px"
-        src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80" alt="Product">
+        src="https://images.unsplash.com/photo-1775616788028-ce670411dff7?q=80&w=400&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Product">
     </div>
   </div>
 </section>
@@ -443,17 +422,17 @@
         <span style="margin-left:auto;font-weight:700;color:#42deff;">Filter</span>
       </div>
       <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.5rem;">
-        <span style="background:#42deff;color:#1d1e35;padding:0.25rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:600;font-family:var(--qp-font-secondary);">Wedding</span>
-        <span style="background:white;color:#555;padding:0.25rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:600;font-family:var(--qp-font-secondary);border:1px solid #6c757d;">Portrait</span>
-        <span style="background:white;color:#555;padding:0.25rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:600;font-family:var(--qp-font-secondary);border:1px solid #6c757d;">Event</span>
-        <span style="background:white;color:#555;padding:0.25rem 0.8rem;border-radius:20px;font-size:0.75rem;font-weight:600;font-family:var(--qp-font-secondary);border:1px solid #6c757d;">Product</span>
+        <span style="background:var(--qp-coral);color:white;padding:0.25rem 0.8rem;border-radius:10px;font-size:0.75rem;font-weight:600;font-family:var(--qp-font-secondary);">Wedding</span>
+        <span style="background:white;color:#555;padding:0.25rem 0.8rem;border-radius:10px;font-size:0.75rem;font-weight:600;font-family:var(--qp-font-secondary);border:1px solid #6c757d;">Portrait</span>
+        <span style="background:white;color:#555;padding:0.25rem 0.8rem;border-radius:10px;font-size:0.75rem;font-weight:600;font-family:var(--qp-font-secondary);border:1px solid #6c757d;">Event</span>
+        <span style="background:white;color:#555;padding:0.25rem 0.8rem;border-radius:10px;font-size:0.75rem;font-weight:600;font-family:var(--qp-font-secondary);border:1px solid #6c757d;">Product</span>
       </div>
       <div class="qp-mock-grid" style="flex:1;">
         <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=200&q=80" alt="">
-        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&q=80" alt="">
+        <img src="https://images.unsplash.com/photo-1775664352285-321b99a86ab8?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
         <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=200&q=80" alt="">
-        <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=200&q=80" alt="">
-        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=200&q=80" alt="">
+      <img src="https://plus.unsplash.com/premium_photo-1671244010956-c2c7cd3ed2ee?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="height:200px;" alt="">
+        <img src="https://images.unsplash.com/photo-1775498590769-7cdd402a7737?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
         <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=200&q=80" alt="">
       </div>
     </div>
@@ -461,7 +440,7 @@
   <div class="qp-feature-text">
     <h2 class="qp-feature-heading">Search by <span style="color:var(--qp-coral);">photography style</span></h2>
     <p class="qp-feature-desc">Filter by specialty, shooting style, and budget to find photographers whose work truly represents you.</p>
-    <a href="{{ path('app_photographer_index') }}" class="qp-btn-red-sm">Browse photographers</a>
+    <a href="{{ path('app_register') }}" class="qp-btn-red-sm">Browse photographers</a>
   </div>
 </section>
 
@@ -473,7 +452,7 @@
     <a href="{{ path('app_register') }}" class="qp-btn-red-sm">See an example</a>
   </div>
   <div class="qp-feature-visual" style="background:#f0f4f0; position:relative; overflow:visible;">
-    <img src="https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=600&q=80" alt="Collaboration" style="width:100%;height:100%;object-fit:cover;border-radius:24px;">
+    <img src="https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=600&q=80" alt="Collaboration" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">
     <div class="qp-board-card">
       <div style="display:flex;align-items:center;justify-content:space-between;">
         <div>
@@ -493,8 +472,8 @@
 <section class="qp-feature">
   <div class="qp-feature-visual" style="background:#f0eff5;position:relative;">
     <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=600&q=80" alt="Visual search" style="width:100%;height:100%;object-fit:cover;">
-    <div style="position:absolute;top:1rem;right:1rem;background:white;border-radius:12px;padding:0.5rem 0.8rem;box-shadow:0 2px 12px rgba(0,0,0,0.15);font-family:var(--qp-font-secondary);font-size:0.78rem;font-weight:700;display:flex;flex-direction:column;gap:0.35rem;">
-      <span style="display:flex;align-items:center;gap:0.4rem;"><span style="width:8px;height:8px;background:#42deff;border-radius:50%;"></span> Wedding gown</span>
+    <div style="position:absolute;top:1rem;right:1rem;background:white;border-radius:10px;padding:0.5rem 0.8rem;box-shadow:0 2px 12px rgba(0,0,0,0.15);font-family:var(--qp-font-secondary);font-size:0.78rem;font-weight:700;display:flex;flex-direction:column;gap:0.35rem;">
+      <span style="display:flex;align-items:center;gap:0.4rem;"><span style="width:8px;height:8px;background:#42deff;border-radius:50%;"></span> Photography</span>
       <span style="display:flex;align-items:center;gap:0.4rem;"><span style="width:8px;height:8px;background:#0ea5e9;border-radius:50%;"></span> Outdoor venue</span>
       <span style="display:flex;align-items:center;gap:0.4rem;"><span style="width:8px;height:8px;background:#f59e0b;border-radius:50%;"></span> Natural light</span>
     </div>
@@ -510,11 +489,11 @@
 <section style="padding:5rem 6vw;background:var(--qp-light-bg);">
   <div style="text-align:center;max-width:560px;margin:0 auto 3.5rem;">
     <h2 style="font-family:var(--qp-font-main);font-weight:800;font-size:clamp(1.8rem,3vw,2.5rem);color:var(--qp-dark);margin-bottom:0.6rem;">Book in <span style="color:var(--qp-coral);">three simple steps</span></h2>
-    <p style="font-family:var(--qp-font-secondary);color:var(--qp-gray);font-size:1rem;">No endless searching, no hidden fees. Just beautiful photos.</p>
+    {# <p style="font-family:var(--qp-font-secondary);color:var(--qp-gray);font-size:1rem;">No endless searching, no hidden fees. Just beautiful photos.</p> #}
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto;">
     <!-- Step 1 -->
-    <div style="background:white;border-radius:20px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+    <div style="background:white;border-radius:10px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
       {# <div style="width:52px;height:52px;background:#e6fbff;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
         <i class="fas fa-search" style="color:var(--qp-red);font-size:1.2rem;"></i>
       </div> #}
@@ -523,7 +502,7 @@
       <p style="font-family:var(--qp-font-secondary);color:var(--qp-gray);font-size:0.9rem;line-height:1.6;">Explore our curated collection. Filter by style, location, and specialty.</p>
     </div>
     <!-- Step 2 -->
-    <div style="background:white;border-radius:20px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+    <div style="background:white;border-radius:10px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
       {# <div style="width:52px;height:52px;background:#e6fbff;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
         <i class="fas fa-calendar-check" style="color:var(--qp-red);font-size:1.2rem;"></i>
       </div> #}
@@ -532,7 +511,7 @@
       <p style="font-family:var(--qp-font-secondary);color:var(--qp-gray);font-size:0.9rem;line-height:1.6;">Choose your date, share your vision, and book securely. Transparent pricing, always.</p>
     </div>
     <!-- Step 3 -->
-    <div style="background:white;border-radius:20px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+    <div style="background:white;border-radius:10px;padding:2rem;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
       {# <div style="width:52px;height:52px;background:#e6fbff;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
         <i class="fas fa-images" style="color:var(--qp-red);font-size:1.2rem;"></i>
       </div> #}
@@ -543,7 +522,7 @@
   </div>
 </section>
 
-<!-- SIGNUP CTA SECTION -->
+<!-- CTA SECTION -->
 <section class="qp-signup-section">
   <!-- Masonry background -->
   <div class="qp-signup-bg">
@@ -563,40 +542,18 @@
       <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=300&q=70" style="height:165px;" alt="">
     </div>
     <div class="qp-signup-bg-col">
-      <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=300&q=70" style="height:350px;" alt="">
-      <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&q=70" style="height:200px;" alt="">
-      <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=300&q=70" style="height:175px;" alt="">
+      <img src="https://images.unsplash.com/photo-1775664352285-321b99a86ab8?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+      <img src="https://plus.unsplash.com/premium_photo-1671244010956-c2c7cd3ed2ee?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="height:200px;" alt="">
+      <img src="https://images.unsplash.com/photo-1775498590769-7cdd402a7737?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
     </div>
   </div>
   <div class="qp-signup-overlay"></div>
-  <div class="qp-signup-inner">
-    <h2 class="qp-signup-headline">Sign up to book your perfect <span style="color:var(--qp-coral);">shoot</span></h2>
-    <div class="qp-signup-card">
-      <div class="qp-signup-card-title">Welcome to QwePic</div>
-      <div class="qp-signup-card-sub">Find photographers to work with</div>
-      <input class="qp-input" type="email" placeholder="Email">
-      <input class="qp-input" type="password" placeholder="Create a password">
-      <input class="qp-input" type="text" placeholder="Your name">
-      <button class="qp-signup-btn">Continue</button>
-      <div class="qp-divider-line qp-sans" style="font-family:var(--qp-font-secondary);color:#aaa;font-size:0.8rem;">OR</div>
-      <div class="social-login">
-               <div class="flex justify-center">
-                   <a href="{{ path('connect_google') }}" class="btn-google flex items-center justify-center p-3 border border-gray-300 rounded-lg text-sm text-space-cadet hover:bg-gray-100">
-                       <svg width="18" height="18" viewBox="0 0 18 18">
-                           <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-                           <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
-                           <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
-                           <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/>
-                       </svg>
-                       <span class="ml-2">Continue with Google</span>
-                   </a>
-               </div>
-           <div class="divider flex justify-center items-center my-4"><span>or</span></div>
-       </div>
-      {# <div class="qp-signup-legal">
-        By continuing, you agree to QwePic's <a href="#">Terms of Service</a>, <a href="#">Privacy Policy</a>, and <a href="#">Notice at collection</a>.
-      </div> #}
-      <a href="{{ path('app_login') }}" class="qp-signup-existing">Already a member? Log in</a>
+  <div class="qp-cta-inner">
+    <h2 class="qp-cta-headline">Your perfect shoot is <span style="color:var(--qp-coral);">one click away</span></h2>
+    <p class="qp-cta-sub">Browse hundreds of talented photographers, build a mood board, and book your session all in one place.</p>
+    <div class="qp-cta-actions">
+      <a href="{{ path('app_register') }}" class="qp-cta-btn-primary">Get started for free</a>
+      {# <a href="{{ path('app_photographer_index') }}" class="qp-cta-btn-ghost">Browse photographers</a> #}
     </div>
   </div>
 </section>
