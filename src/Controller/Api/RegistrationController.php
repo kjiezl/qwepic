@@ -34,6 +34,7 @@ class RegistrationController extends AbstractController
         $username = $data['username'] ?? null;
         $email = $data['email'] ?? null;
         $password = $data['password'] ?? null;
+        $accountType = $data['accountType'] ?? null;
 
         if (!$username || !$email || !$password) {
             return $this->json([
@@ -61,7 +62,8 @@ class RegistrationController extends AbstractController
         $user->setUsername($username);
         $user->setEmail($email);
         $user->setPassword($passwordHasher->hashPassword($user, $password));
-        $user->setRoles(['ROLE_USER']);
+        $roles = ($accountType === 'photographer') ? ['ROLE_PHOTOGRAPHER'] : ['ROLE_USER'];
+        $user->setRoles($roles);
         $user->setIsActive(true);
 
         $errors = $validator->validate($user);
