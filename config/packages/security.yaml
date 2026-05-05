@@ -43,12 +43,13 @@ security:
     access_control:
         - { path: ^/api/auth/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/auth/register, roles: PUBLIC_ACCESS }
-        - { path: ^/api/auth/me, roles: ROLE_USER }
-        - { path: ^/api/auth/profile, roles: ROLE_USER }
+        - { path: ^/api/auth/verify, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
 
-        - { path: ^/api, roles: PUBLIC_ACCESS, methods: [GET, OPTIONS] }
+        - { path: ^/api, roles: PUBLIC_ACCESS, methods: [OPTIONS] }
         - { path: ^/api, roles: ROLE_USER }
+
+        - { path: ^/verify/email,    roles: PUBLIC_ACCESS }
 
         - { path: ^/dashboard/photographer/bookings, roles: ROLE_PHOTOGRAPHER }
         - { path: ^/dashboard/bookings,             roles: ROLE_ADMIN }
@@ -60,9 +61,6 @@ security:
         - { path: ^/dashboard/photos,        roles: [ROLE_ADMIN, ROLE_PHOTOGRAPHER] }
 
         - { path: ^/dashboard,               roles: [ROLE_ADMIN, ROLE_PHOTOGRAPHER] }
-
-        - { path: ^/api/auth/verify, roles: PUBLIC_ACCESS }
-        - { path: ^/verify/email,    roles: PUBLIC_ACCESS }
 
 when@test:
     security:

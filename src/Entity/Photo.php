@@ -20,8 +20,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource(
     operations: [
-        new GetCollection(),
-        new Get(),
+        new GetCollection(security: "is_granted('ROLE_USER')"),
+        new Get(security: "is_granted('ROLE_USER')"),
         new Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_PHOTOGRAPHER')"),
         new Put(security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_PHOTOGRAPHER') and object.getAlbum() and object.getAlbum().getPhotographer() == user)"),
         new Patch(security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_PHOTOGRAPHER') and object.getAlbum() and object.getAlbum().getPhotographer() == user)"),
