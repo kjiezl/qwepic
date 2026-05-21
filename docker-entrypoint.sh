@@ -14,7 +14,7 @@ php -r "
     'JWT_PASSPHRASE' => getenv('JWT_PASSPHRASE') ?: '',
     'CORS_ALLOW_ORIGIN' => getenv('CORS_ALLOW_ORIGIN') ?: '^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$',
     'MESSENGER_TRANSPORT_DSN' => getenv('MESSENGER_TRANSPORT_DSN') ?: 'doctrine://default?auto_setup=0',
-    'MAILER_DSN' => getenv('MAILER_DSN') ?: 'null://null',
+    'MAILER_DSN' => getenv('MAILER_DSN') ?: '',
     'GOOGLE_CLIENT_ID' => getenv('GOOGLE_CLIENT_ID') ?: '',
     'GOOGLE_CLIENT_SECRET' => getenv('GOOGLE_CLIENT_SECRET') ?: '',
     'DEFAULT_URI' => getenv('DEFAULT_URI') ?: 'doctrine://default',
