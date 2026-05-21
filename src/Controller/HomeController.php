@@ -66,11 +66,11 @@ final class HomeController extends AbstractController
             return $this->json(['ok' => false, 'error' => 'Invalid email'], 400);
         }
 
-        $apiKey = $_SERVER['BREVO_API_KEY'] ?? $_ENV['BREVO_API_KEY'] ?? '';
-        $senderEmail = $_SERVER['BREVO_SENDER_EMAIL'] ?? $_ENV['BREVO_SENDER_EMAIL'] ?? '';
-        $senderName = $_SERVER['BREVO_SENDER_NAME'] ?? $_ENV['BREVO_SENDER_NAME'] ?? 'QwePic Contact Form';
-        $toEmail = $_SERVER['BREVO_TO_EMAIL'] ?? $_ENV['BREVO_TO_EMAIL'] ?? '';
-        $toName = $_SERVER['BREVO_TO_NAME'] ?? $_ENV['BREVO_TO_NAME'] ?? 'QwePic Team';
+        $apiKey = getenv('BREVO_API_KEY') ?: ($_SERVER['BREVO_API_KEY'] ?? $_ENV['BREVO_API_KEY'] ?? '');
+        $senderEmail = getenv('BREVO_SENDER_EMAIL') ?: ($_SERVER['BREVO_SENDER_EMAIL'] ?? $_ENV['BREVO_SENDER_EMAIL'] ?? '');
+        $senderName = getenv('BREVO_SENDER_NAME') ?: ($_SERVER['BREVO_SENDER_NAME'] ?? $_ENV['BREVO_SENDER_NAME'] ?? 'QwePic Contact Form');
+        $toEmail = getenv('BREVO_TO_EMAIL') ?: ($_SERVER['BREVO_TO_EMAIL'] ?? $_ENV['BREVO_TO_EMAIL'] ?? '');
+        $toName = getenv('BREVO_TO_NAME') ?: ($_SERVER['BREVO_TO_NAME'] ?? $_ENV['BREVO_TO_NAME'] ?? 'QwePic Team');
 
         if ($apiKey === '' || $senderEmail === '' || $toEmail === '') {
             return $this->json(['ok' => false, 'error' => 'Contact form not configured'], 500);
