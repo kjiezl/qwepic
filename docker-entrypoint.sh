@@ -1,10 +1,6 @@
 #!/bin/bash
 set -e
 
-# Fix permissions for var/ directory
-chown -R www-data:www-data /var/www/html/var || true
-chmod -R 775 /var/www/html/var || true
-
 # Generate JWT keys if they don't exist
 if [ ! -f config/jwt/private.pem ]; then
     echo "Generating JWT keys..."
@@ -19,5 +15,9 @@ php bin/console cache:warmup --env=prod --no-debug || true
 
 # Update database schema (migrations are MySQL-specific, this works for PostgreSQL)
 php bin/console doctrine:schema:update --force --no-interaction || true
+
+# Fix permissions AFTER cache rebuild so www-data can access everything
+chown -R www-data:www-data /var/www/html/var || true
+chmod -R 775 /var/www/html/var || true
 
 exec "$@"
