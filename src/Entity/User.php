@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -48,15 +49,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read', 'album:read', 'photo:read', 'booking:read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50, unique: true, nullable: true)] 
+    #[ORM\Column(length: 50, unique: true, nullable: true)]
+    #[Assert\NotBlank(message: 'Username is required')]
+    #[Assert\Length(min: 3, max: 50, minMessage: 'Username must be at least {{ limit }} characters', maxMessage: 'Username cannot exceed {{ limit }} characters')]
     #[Groups(['user:read', 'user:write', 'album:read', 'photo:read', 'booking:read'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: 'Email is required')]
+    #[Assert\Email(message: 'The email \"{{ value }}\" is not a valid email address')]
+    #[Assert\Length(max: 180, maxMessage: 'Email cannot exceed {{ limit }} characters')]
     #[Groups(['user:read', 'user:write'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Password is required')]
     private ?string $password = null;
 
     #[Groups(['user:write'])]

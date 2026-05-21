@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BookingAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -40,6 +41,7 @@ class BookingAttachment
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Booking is required')]
     #[Groups(['booking_attachment:read', 'booking_attachment:write'])]
     private ?Booking $booking = null;
 

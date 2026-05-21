@@ -282,6 +282,60 @@
   .qp-footer-links a:hover { color: white; }
   .qp-footer-bottom { padding-top: 1.5rem; font-family: var(--qp-font-secondary); font-size: 0.82rem; color: #555; text-align: center; }
 
+  /* Hamburger button */
+  .qp-hamburger {
+    display: none; background: none; border: none; cursor: pointer;
+    width: 40px; height: 40px; align-items: center; justify-content: center;
+    border-radius: 8px; transition: background 0.15s;
+  }
+  .qp-hamburger:hover { background: var(--qp-light-bg); }
+  .qp-hamburger span {
+    display: block; width: 22px; height: 2.5px; background: var(--qp-dark);
+    border-radius: 2px; position: relative; transition: transform 0.3s, opacity 0.3s;
+  }
+  .qp-hamburger span::before, .qp-hamburger span::after {
+    content: ''; position: absolute; left: 0; width: 100%; height: 2.5px;
+    background: var(--qp-dark); border-radius: 2px; transition: transform 0.3s, opacity 0.3s;
+  }
+  .qp-hamburger span::before { top: -7px; }
+  .qp-hamburger span::after { top: 7px; }
+  .qp-hamburger.active span { background: transparent; }
+  .qp-hamburger.active span::before { transform: translateY(7px) rotate(45deg); }
+  .qp-hamburger.active span::after { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Mobile menu overlay */
+  .qp-mobile-menu {
+    display: none; position: fixed; top: 60px; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.98); backdrop-filter: blur(12px);
+    z-index: 99; flex-direction: column; padding: 2rem 1.5rem;
+    opacity: 0; transform: translateY(-10px);
+    transition: opacity 0.25s, transform 0.25s;
+  }
+  .qp-mobile-menu.open { display: flex; opacity: 1; transform: translateY(0); }
+  .qp-mobile-menu a {
+    font-family: var(--qp-font-secondary); font-size: 1.1rem; font-weight: 600;
+    color: var(--qp-dark); text-decoration: none; padding: 0.9rem 0;
+    border-bottom: 1px solid var(--qp-border); transition: color 0.15s;
+  }
+  .qp-mobile-menu a:hover { color: var(--qp-coral); }
+  .qp-mobile-menu a:last-child { border-bottom: none; }
+  .qp-mobile-menu .qp-mobile-auth {
+    display: flex; gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--qp-border);
+  }
+  .qp-mobile-menu .qp-mobile-auth a {
+    flex: 1; text-align: center; padding: 0.75rem 1rem;
+    border-radius: 10px; font-size: 0.95rem; border-bottom: none;
+  }
+  .qp-mobile-menu .qp-mobile-auth .qp-mobile-login {
+    border: 2px solid var(--qp-coral); color: var(--qp-coral);
+  }
+  .qp-mobile-menu .qp-mobile-auth .qp-mobile-signup {
+    background: var(--qp-red); color: var(--qp-space-cadet); border: 2px solid var(--qp-red);
+  }
+
+  .qp-nav-auth { display: flex; align-items: center; gap: 0.6rem; }
+
   /* ── Responsive ── */
   @media (max-width: 768px) {
     .qp-mission { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.5rem; }
@@ -293,6 +347,8 @@
     .qp-footer-grid { grid-template-columns: 1fr; gap: 2rem; }
     .qp-footer { padding: 2.5rem 1rem 1.75rem; }
     .qp-nav-links { display: none; }
+    .qp-nav-auth { display: none; }
+    .qp-hamburger { display: flex; }
     .qp-about-hero-bg { grid-template-columns: repeat(3, 1fr); }
   }
 
@@ -308,16 +364,30 @@
     <img src="{{ asset('images/logo-plain.svg') }}" alt="QwePic" class="qp-nav-logo-img">
   </a>
   <div class="qp-nav-links qp-sans">
-    {# <a href="{{ path('app_photographer_index') }}" class="qp-nav-link">Photographers</a> #}
     <a href="{{ path('app_home') }}" class="qp-nav-link">Home</a>
     <a href="{{ path('app_about') }}" class="qp-nav-link active">About</a>
     <a href="{{ path('app_contact') }}" class="qp-nav-link">Contact</a>
   </div>
-  <div style="display:flex;align-items:center;gap:0.6rem;">
+  <div class="qp-nav-auth">
     <a href="{{ path('app_login') }}" class="qp-btn-outline">Log in</a>
     <a href="{{ path('app_register') }}" class="qp-btn-red">Sign up</a>
   </div>
+  <button class="qp-hamburger" onclick="toggleMobileNav()" aria-label="Toggle menu">
+    <span></span>
+  </button>
 </nav>
+
+<!-- Mobile Menu -->
+<div class="qp-mobile-menu" id="qp-mobile-menu">
+  <a href="{{ path('app_home') }}">Home</a>
+  <a href="{{ path('app_about') }}">About</a>
+  <a href="{{ path('app_contact') }}">Contact</a>
+  <a href="{{ path('app_photographer_index') }}">Photographers</a>
+  <div class="qp-mobile-auth">
+    <a href="{{ path('app_login') }}" class="qp-mobile-login">Log in</a>
+    <a href="{{ path('app_register') }}" class="qp-mobile-signup">Sign up</a>
+  </div>
+</div>
 
 <!-- ══ HERO ══ -->
 <section class="qp-about-hero">
@@ -577,5 +647,15 @@
     &copy; {{ 'now'|date('Y') }} QwePic
   </div>
 </footer>
+
+<script>
+function toggleMobileNav() {
+  const menu = document.getElementById('qp-mobile-menu');
+  const hamburger = document.querySelector('.qp-hamburger');
+  menu.classList.toggle('open');
+  hamburger.classList.toggle('active');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+</script>
 
 {% endblock %}

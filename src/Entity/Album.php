@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AlbumRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -51,10 +52,13 @@ class Album
     private ?User $photographer = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Album title is required')]
+    #[Assert\Length(min: 2, max: 255, minMessage: 'Title must be at least {{ limit }} characters', maxMessage: 'Title cannot exceed {{ limit }} characters')]
     #[Groups(['album:read', 'album:write', 'photo:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(max: 5000, maxMessage: 'Description cannot exceed {{ limit }} characters')]
     #[Groups(['album:read', 'album:write'])]
     private ?string $description = null;
 

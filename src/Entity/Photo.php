@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PhotoRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -51,18 +52,23 @@ class Photo
     private ?Album $album = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Storage path is required')]
     #[Groups(['photo:read', 'photo:write'])]
     private ?string $storage_path = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Thumbnail path is required')]
     #[Groups(['photo:read', 'photo:write'])]
     private ?string $thumbnail_path = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Photo title is required')]
+    #[Assert\Length(min: 2, max: 255, minMessage: 'Title must be at least {{ limit }} characters', maxMessage: 'Title cannot exceed {{ limit }} characters')]
     #[Groups(['photo:read', 'photo:write', 'booking:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Assert\Length(max: 2000, maxMessage: 'Caption cannot exceed {{ limit }} characters')]
     #[Groups(['photo:read', 'photo:write'])]
     private ?string $caption = null;
 

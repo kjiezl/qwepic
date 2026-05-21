@@ -17,6 +17,7 @@ security:
             pattern: ^/api
             stateless: true
             provider: app_user_provider
+            user_checker: App\Security\UserChecker
             jwt: ~
             json_login:
                 check_path: /api/auth/login
@@ -46,6 +47,7 @@ security:
         - { path: ^/api/auth/verify, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
 
+        - { path: ^/api/customer/photographers, roles: PUBLIC_ACCESS }
         - { path: ^/api/customer, roles: ROLE_USER }
         - { path: ^/api, roles: PUBLIC_ACCESS, methods: [OPTIONS] }
         - { path: ^/api, roles: ROLE_USER }
