@@ -46,6 +46,7 @@ security:
         - { path: ^/api/auth/verify, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
 
+        - { path: ^/api/customer, roles: ROLE_USER }
         - { path: ^/api, roles: PUBLIC_ACCESS, methods: [OPTIONS] }
         - { path: ^/api, roles: ROLE_USER }
 
