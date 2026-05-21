@@ -48,7 +48,8 @@ RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/Allo
 
 # Create var directory with proper permissions
 RUN mkdir -p var/cache var/log public/uploads \
-    && chown -R www-data:www-data var public/uploads
+    && chown -R www-data:www-data var public/uploads \
+    && chmod -R 775 var
 
 # PHP production config
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"

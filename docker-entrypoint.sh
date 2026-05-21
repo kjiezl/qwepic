@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# Fix permissions for var/ directory
+chown -R www-data:www-data /var/www/html/var || true
+chmod -R 775 /var/www/html/var || true
+
 # Generate JWT keys if they don't exist
 if [ ! -f config/jwt/private.pem ]; then
     echo "Generating JWT keys..."
@@ -13,7 +17,7 @@ fi
 php bin/console cache:clear --env=prod --no-debug || true
 php bin/console cache:warmup --env=prod --no-debug || true
 
-# Run database migrations
-php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration || true
+# Update database schema (migrations are MySQL-specific, this works for PostgreSQL)
+php bin/console doctrine:schema:update --force --no-interaction || true
 
 exec "$@"

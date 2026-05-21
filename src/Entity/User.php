@@ -39,6 +39,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiFilter(BooleanFilter::class, properties: ['is_active'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'username', 'email', 'created_at'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: '`user`')]
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
 #[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
