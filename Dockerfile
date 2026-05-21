@@ -14,6 +14,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 # Set app to production during build
 ENV APP_ENV=prod
+ENV APP_DEBUG=0
 
 # Set working directory
 WORKDIR /var/www/html
@@ -27,8 +28,12 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 # Copy application source
 COPY . .
 
-# Run post-install scripts
-RUN composer run-script post-install-cmd --no-interaction || true
+# Compile .env files for production (creates .env.local.php that locks APP_ENV=prod)
+RUN composer dump-env prod
+
+# Run post-install scripts (cache clear/warmup)
+RUN php bin/console cache:clear --env=prod --no-debug || true
+RUN php bin/console cache:warmup --env=prod --no-debug || true
 
 # Set Apache document root to Symfony public/
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
