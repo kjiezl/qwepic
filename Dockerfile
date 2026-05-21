@@ -34,6 +34,9 @@ RUN composer dump-env prod
 # Build Tailwind CSS
 RUN php bin/console tailwind:build --minify || true
 
+# Compile asset mapper (prevents runtime permission issues)
+RUN php bin/console asset-map:compile --env=prod --no-debug || true
+
 # Run post-install scripts (cache clear/warmup)
 RUN php bin/console cache:clear --env=prod --no-debug || true
 RUN php bin/console cache:warmup --env=prod --no-debug || true
@@ -47,8 +50,8 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
 # Create var directory with proper permissions
-RUN mkdir -p var/cache var/log public/uploads \
-    && chown -R www-data:www-data var public/uploads \
+RUN mkdir -p var/cache var/log public/uploads public/assets \
+    && chown -R www-data:www-data var public/uploads public/assets \
     && chmod -R 775 var
 
 # PHP production config
