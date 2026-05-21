@@ -17,7 +17,6 @@ php -r "
     'MAILER_DSN' => getenv('MAILER_DSN') ?: 'null://null',
     'GOOGLE_CLIENT_ID' => getenv('GOOGLE_CLIENT_ID') ?: '',
     'GOOGLE_CLIENT_SECRET' => getenv('GOOGLE_CLIENT_SECRET') ?: '',
-    'TRUSTED_PROXIES' => getenv('TRUSTED_PROXIES') ?: '0.0.0.0/0',
     'DEFAULT_URI' => getenv('DEFAULT_URI') ?: 'doctrine://default',
 ];
 // Remove empty values so Symfony doesn't set blank strings

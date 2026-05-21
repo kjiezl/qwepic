@@ -5,12 +5,14 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
-    # Trust Render's reverse proxy (forwards X-Forwarded-* headers)
-    trusted_proxies: '%env(default::TRUSTED_PROXIES)%'
-    trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port']
-
     #esi: true
     #fragments: true
+
+when@prod:
+    framework:
+        # Trust Render's reverse proxy (all traffic comes through their load balancer)
+        trusted_proxies: '127.0.0.1,REMOTE_ADDR'
+        trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port']
 
 when@test:
     framework:
