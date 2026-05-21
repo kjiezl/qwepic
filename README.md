@@ -519,6 +519,16 @@ The application is deployed at: `https://qwepic.onrender.com`
 | BREVO_API_KEY | Brevo API key for contact form |
 | BREVO_SENDER_EMAIL | Verified sender email |
 | BREVO_TO_EMAIL | Contact form recipient |
+| DATABASE_URL | Database connection string |
+| JWT_PASSPHRASE | Passphrase for JWT key encryption |
+| BREVO_API_KEY | Brevo API key for contact form |
+| BREVO_SENDER_EMAIL | Verified sender email |
+| BREVO_SENDER_NAME | Sender name for contact form |
+| BREVO_TO_EMAIL | Contact form recipient |
+| BREVO_TO_NAME | Recipient name for contact form |
+| GOOGLE_CLIENT_ID | Google OAuth client ID |
+| GOOGLE_CLIENT_SECRET | Google OAuth client secret |
+| MAILER_DSN | SMTP Brevo DSN for email sending |
 
 ### Deploy from Blueprint
 
