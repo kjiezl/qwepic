@@ -1,8 +1,29 @@
 #!/bin/bash
 set -e
 
-# Compile .env.local.php at runtime (captures all Render env vars)
-composer dump-env prod || true
+# Build .env.local.php from actual OS environment variables
+# (composer dump-env only reads .env files, not runtime env vars)
+php -r "
+\$vars = [
+    'APP_ENV' => getenv('APP_ENV') ?: 'prod',
+    'APP_SECRET' => getenv('APP_SECRET') ?: '',
+    'APP_DEBUG' => '0',
+    'DATABASE_URL' => getenv('DATABASE_URL') ?: '',
+    'JWT_SECRET_KEY' => getenv('JWT_SECRET_KEY') ?: '%kernel.project_dir%/config/jwt/private.pem',
+    'JWT_PUBLIC_KEY' => getenv('JWT_PUBLIC_KEY') ?: '%kernel.project_dir%/config/jwt/public.pem',
+    'JWT_PASSPHRASE' => getenv('JWT_PASSPHRASE') ?: '',
+    'CORS_ALLOW_ORIGIN' => getenv('CORS_ALLOW_ORIGIN') ?: '^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$',
+    'MESSENGER_TRANSPORT_DSN' => getenv('MESSENGER_TRANSPORT_DSN') ?: 'doctrine://default?auto_setup=0',
+    'MAILER_DSN' => getenv('MAILER_DSN') ?: 'null://null',
+    'GOOGLE_CLIENT_ID' => getenv('GOOGLE_CLIENT_ID') ?: '',
+    'GOOGLE_CLIENT_SECRET' => getenv('GOOGLE_CLIENT_SECRET') ?: '',
+    'TRUSTED_PROXIES' => getenv('TRUSTED_PROXIES') ?: '0.0.0.0/0',
+];
+// Remove empty values so Symfony doesn't set blank strings
+\$vars = array_filter(\$vars, fn(\$v) => \$v !== '');
+file_put_contents('/var/www/html/.env.local.php', '<?php return ' . var_export(\$vars, true) . ';' . PHP_EOL);
+echo \"Built .env.local.php with \" . count(\$vars) . \" variables\n\";
+"
 
 # Generate JWT keys if they don't exist
 if [ ! -f config/jwt/private.pem ]; then
