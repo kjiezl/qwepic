@@ -31,6 +31,9 @@ COPY . .
 # Compile .env files for production (creates .env.local.php that locks APP_ENV=prod)
 RUN composer dump-env prod
 
+# Build Tailwind CSS
+RUN php bin/console tailwind:build --minify || true
+
 # Run post-install scripts (cache clear/warmup)
 RUN php bin/console cache:clear --env=prod --no-debug || true
 RUN php bin/console cache:warmup --env=prod --no-debug || true
