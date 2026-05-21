@@ -28,9 +28,6 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 # Copy application source
 COPY . .
 
-# Compile .env files for production (creates .env.local.php that locks APP_ENV=prod)
-RUN composer dump-env prod
-
 # Build Tailwind CSS
 RUN php bin/console tailwind:build --minify || true
 

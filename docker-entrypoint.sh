@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Compile .env.local.php at runtime (captures all Render env vars)
+composer dump-env prod || true
+
 # Generate JWT keys if they don't exist
 if [ ! -f config/jwt/private.pem ]; then
     echo "Generating JWT keys..."
