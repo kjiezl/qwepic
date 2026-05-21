@@ -18,6 +18,7 @@ php -r "
     'GOOGLE_CLIENT_ID' => getenv('GOOGLE_CLIENT_ID') ?: '',
     'GOOGLE_CLIENT_SECRET' => getenv('GOOGLE_CLIENT_SECRET') ?: '',
     'TRUSTED_PROXIES' => getenv('TRUSTED_PROXIES') ?: '0.0.0.0/0',
+    'DEFAULT_URI' => getenv('DEFAULT_URI') ?: 'doctrine://default',
 ];
 // Remove empty values so Symfony doesn't set blank strings
 \$vars = array_filter(\$vars, fn(\$v) => \$v !== '');
