@@ -350,6 +350,12 @@
 
       {{ form_start(registrationForm) }}
 
+        {% if registrationForm.vars.errors|length > 0 %}
+          <div class="qp-alert qp-alert-error">
+            {{ form_errors(registrationForm) }}
+          </div>
+        {% endif %}
+
         <div class="qp-field">
           {{ form_label(registrationForm.username, null, {'label_attr': {'class': 'qp-label'}}) }}
           {{ form_widget(registrationForm.username, {'attr': {'class': 'qp-input', 'placeholder': 'Choose a username'}}) }}
