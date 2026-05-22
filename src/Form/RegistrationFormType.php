@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -39,20 +38,6 @@ class RegistrationFormType extends AbstractType
                     ]),
                     new Email([
                         'message' => 'Please enter a valid email address',
-                    ]),
-                ],
-            ])
-            ->add('accountType', ChoiceType::class, [
-                'mapped' => false,
-                'choices' => [
-                    'Client' => 'client',
-                    'Photographer' => 'photographer',
-                ],
-                'expanded' => true,
-                'multiple' => false,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please choose an account type',
                     ]),
                 ],
             ])

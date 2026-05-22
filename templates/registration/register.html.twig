@@ -374,21 +374,6 @@
           {% endif %}
         </div>
 
-        <div class="qp-field">
-          {{ form_label(registrationForm.accountType, null, {'label_attr': {'class': 'qp-label'}}) }}
-          <div class="qp-radio-group">
-            {% for choice in registrationForm.accountType %}
-              <div class="qp-radio-card">
-                {{ form_widget(choice) }}
-                <label for="{{ choice.vars.id }}">{{ choice.vars.label }}</label>
-              </div>
-            {% endfor %}
-          </div>
-          {% set fieldErrors = form_errors(registrationForm.accountType) %}
-          {% if fieldErrors is not empty %}
-            <div class="qp-field-error">{{ fieldErrors|striptags }}</div>
-          {% endif %}
-        </div>
 
         <div class="qp-field">
           {{ form_label(registrationForm.plainPassword, 'Password', {'label_attr': {'class': 'qp-label'}}) }}
@@ -443,7 +428,7 @@
 
 <script>
   function toggleRegPassword() {
-    const input = document.getElementById('inputRegPassword');
+    const input = document.getElementById('inputRegPassword') || document.getElementById('registration_form_plainPassword');
     const icon = document.getElementById('reg-eye-icon');
     const isPassword = input.type === 'password';
     input.type = isPassword ? 'text' : 'password';
