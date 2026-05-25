@@ -1,0 +1,4 @@
+mercure:
+    hubs:
+        default:
+            url: 'http://localhost:3001/.well-known/mercure'

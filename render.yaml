@@ -31,6 +31,30 @@ services:
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
+      - key: MERCURE_URL
+        value: https://qwepic-mercure.onrender.com/.well-known/mercure
+      - key: MERCURE_PUBLIC_URL
+        value: https://qwepic-mercure.onrender.com/.well-known/mercure
+      - key: MERCURE_JWT_SECRET
+        sync: false
+      - key: API_BASE_URL
+        sync: false
+
+  - type: web
+    name: qwepic-mercure
+    runtime: docker
+    dockerfilePath: ./mercure/Dockerfile
+    plan: free
+    envVars:
+      - key: SERVER_NAME
+        value: ':10000'
+      - key: MERCURE_PUBLISHER_JWT_KEY
+        sync: false
+      - key: MERCURE_SUBSCRIBER_JWT_KEY
+        sync: false
+      - key: MERCURE_CORS_ALLOWED_ORIGINS
+        sync: false
+    dockerCommand: /usr/bin/caddy run --config /etc/caddy/dev.Caddyfile
 
 databases:
   - name: qwepic-db
