@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Booking;
 use App\Entity\User;
 use App\Repository\BookingRepository;
+use App\Service\MercurePublisher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -80,6 +81,7 @@ class CustomerBookingController extends AbstractController
         Request $request,
         EntityManagerInterface $em,
         ValidatorInterface $validator,
+        MercurePublisher $mercurePublisher,
     ): JsonResponse {
         if (null === $user) {
             return $this->json(['message' => 'Not authenticated'], Response::HTTP_UNAUTHORIZED);
@@ -138,11 +140,22 @@ class CustomerBookingController extends AbstractController
             return $this->json([
                 'message' => 'Validation failed',
                 'errors' => $errorMessages,
+                'received' => [
+                    'start_at' => $startAt,
+                    'end_at' => $endAt,
+                    'start_at_parsed' => $startAtDate->format(\DateTimeInterface::ATOM),
+                    'end_at_parsed' => $endAtDate->format(\DateTimeInterface::ATOM),
+                    'server_now' => (new \DateTimeImmutable())->format(\DateTimeInterface::ATOM),
+                ],
             ], Response::HTTP_BAD_REQUEST);
         }
 
         $em->persist($booking);
         $em->flush();
+        try {
+            $mercurePublisher->publishBookingCreated($booking);
+        } catch (\Throwable) {
+        }
 
         return $this->json([
             'message' => 'Booking created successfully',
@@ -167,6 +180,7 @@ class CustomerBookingController extends AbstractController
         #[CurrentUser] ?User $user,
         Booking $booking,
         EntityManagerInterface $em,
+        MercurePublisher $mercurePublisher,
     ): JsonResponse {
         if (null === $user) {
             return $this->json(['message' => 'Not authenticated'], Response::HTTP_UNAUTHORIZED);
@@ -184,6 +198,10 @@ class CustomerBookingController extends AbstractController
 
         $booking->setStatus('cancelled');
         $em->flush();
+        try {
+            $mercurePublisher->publishBookingCancelled($booking);
+        } catch (\Throwable) {
+        }
 
         return $this->json([
             'message' => 'Booking cancelled successfully',

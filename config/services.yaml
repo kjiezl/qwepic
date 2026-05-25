@@ -10,6 +10,8 @@ parameters:
     photo_upload_dir: '%kernel.project_dir%/public/uploads/photos'
     photo_thumbnail_dir: '%kernel.project_dir%/public/uploads/thumbnails'
     album_cover_upload_dir: '%kernel.project_dir%/public/uploads/albums'
+    mercure_jwt_secret: '%env(MERCURE_JWT_SECRET)%'
+    api_base_url: '%env(API_BASE_URL)%'
 
 services:
     # default configuration for services in *this* file

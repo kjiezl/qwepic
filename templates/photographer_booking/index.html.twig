@@ -154,3 +154,20 @@
     </div>
 </div>
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    (function () {
+        const INTERVAL = 5000;
+        let lastActivity = Date.now();
+        document.addEventListener('mousemove', () => { lastActivity = Date.now(); });
+        document.addEventListener('keydown',    () => { lastActivity = Date.now(); });
+        setInterval(function () {
+            if (Date.now() - lastActivity < 60000) {
+                window.location.reload();
+            }
+        }, INTERVAL);
+    })();
+</script>
+{% endblock %}

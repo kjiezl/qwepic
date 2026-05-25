@@ -47,20 +47,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'album:read', 'photo:read', 'booking:read'])]
+    #[Groups(['user:read', 'album:read', 'photo:read', 'booking:read', 'photographer:read', 'profile:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50, unique: true, nullable: true)]
     #[Assert\NotBlank(message: 'Username is required')]
     #[Assert\Length(min: 3, max: 50, minMessage: 'Username must be at least {{ limit }} characters', maxMessage: 'Username cannot exceed {{ limit }} characters')]
-    #[Groups(['user:read', 'user:write', 'album:read', 'photo:read', 'booking:read'])]
+    #[Groups(['user:read', 'user:write', 'album:read', 'photo:read', 'booking:read', 'photographer:read', 'profile:read'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: 'Email is required')]
     #[Assert\Email(message: 'The email \"{{ value }}\" is not a valid email address')]
     #[Assert\Length(max: 180, maxMessage: 'Email cannot exceed {{ limit }} characters')]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'photographer:read', 'profile:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -75,15 +75,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column(options: ['default' => true])]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'photographer:read', 'profile:read'])]
     private ?bool $is_active = true;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'profile:read'])]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'profile:read'])]
     private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\Column(length: 255, nullable: true, unique: true)]

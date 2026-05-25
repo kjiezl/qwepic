@@ -19,6 +19,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 
 #[ApiResource(
     operations: [
@@ -68,11 +69,13 @@ class Booking
     #[ORM\Column]
     #[Assert\NotNull]
     #[Groups(['booking:read', 'booking:write'])]
+    #[SerializedName('start_at')]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
     #[Assert\NotNull]
     #[Groups(['booking:read', 'booking:write'])]
+    #[SerializedName('end_at')]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -88,14 +91,17 @@ class Booking
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(max: 1000)]
     #[Groups(['booking:read', 'booking:write'])]
+    #[SerializedName('rejection_reason')]
     private ?string $rejectionReason = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['booking:read'])]
+    #[SerializedName('created_at')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(['booking:read'])]
+    #[SerializedName('updated_at')]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
@@ -233,7 +239,7 @@ class Booking
             }
         }
 
-        if ($this->status === 'requested' && $this->startAt !== null) {
+        if ($this->id === null && $this->status === 'requested' && $this->startAt !== null) {
             $now = new \DateTimeImmutable();
             if ($this->startAt < $now) {
                 $context->buildViolation('Start date/time cannot be in the past.')

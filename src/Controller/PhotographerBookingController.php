@@ -11,6 +11,7 @@ use App\Repository\AlbumRepository;
 use App\Repository\BookingAttachmentRepository;
 use App\Repository\BookingRepository;
 use App\Repository\PhotoRepository;
+use App\Service\MercurePublisher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -74,7 +75,7 @@ final class PhotographerBookingController extends AbstractController
 
     #[Route('/dashboard/photographer/bookings/{id}/accept', name: 'app_photographer_booking_accept', methods: ['POST'])]
     #[IsGranted('ROLE_PHOTOGRAPHER')]
-    public function accept(Request $request, Booking $booking, EntityManagerInterface $entityManager): Response
+    public function accept(Request $request, Booking $booking, EntityManagerInterface $entityManager, MercurePublisher $mercurePublisher): Response
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -93,6 +94,10 @@ final class PhotographerBookingController extends AbstractController
             $booking->setStatus('accepted');
             $booking->setRejectionReason(null);
             $entityManager->flush();
+            try {
+                $mercurePublisher->publishBookingUpdated($booking);
+            } catch (\Throwable) {
+            }
         }
 
         return $this->redirectToRoute('app_photographer_booking_index');
@@ -100,7 +105,7 @@ final class PhotographerBookingController extends AbstractController
 
     #[Route('/dashboard/photographer/bookings/{id}/reject', name: 'app_photographer_booking_reject', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_PHOTOGRAPHER')]
-    public function reject(Request $request, Booking $booking, EntityManagerInterface $entityManager): Response
+    public function reject(Request $request, Booking $booking, EntityManagerInterface $entityManager, MercurePublisher $mercurePublisher): Response
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -124,6 +129,10 @@ final class PhotographerBookingController extends AbstractController
             } else {
                 $booking->setStatus('rejected');
                 $entityManager->flush();
+                try {
+                    $mercurePublisher->publishBookingUpdated($booking);
+                } catch (\Throwable) {
+                }
                 return $this->redirectToRoute('app_photographer_booking_index', [], Response::HTTP_SEE_OTHER);
             }
         }
@@ -143,6 +152,7 @@ final class PhotographerBookingController extends AbstractController
         PhotoRepository $photoRepository,
         BookingAttachmentRepository $bookingAttachmentRepository,
         EntityManagerInterface $entityManager,
+        MercurePublisher $mercurePublisher,
     ): Response {
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -197,6 +207,10 @@ final class PhotographerBookingController extends AbstractController
 
             $booking->setStatus('completed');
             $entityManager->flush();
+            try {
+                $mercurePublisher->publishBookingUpdated($booking);
+            } catch (\Throwable) {
+            }
 
             return $this->redirectToRoute('app_photographer_booking_index', [], Response::HTTP_SEE_OTHER);
         }

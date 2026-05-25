@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Service\ActivityLogger;
+use App\Service\MercurePublisher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MercurePublisher $mercurePublisher): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user, [
@@ -46,6 +47,13 @@ final class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
+            if (in_array('ROLE_PHOTOGRAPHER', $user->getRoles(), true)) {
+                try {
+                    $mercurePublisher->publishPhotographerCreated($user);
+                } catch (\Throwable) {
+                }
+            }
+
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -64,7 +72,7 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, MercurePublisher $mercurePublisher): Response
     {
         $form = $this->createForm(UserType::class, $user, [
             'is_edit' => true,
@@ -82,6 +90,13 @@ final class UserController extends AbstractController
 
             $entityManager->flush();
 
+            if (in_array('ROLE_PHOTOGRAPHER', $user->getRoles(), true)) {
+                try {
+                    $mercurePublisher->publishPhotographerUpdated($user);
+                } catch (\Throwable) {
+                }
+            }
+
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -93,11 +108,18 @@ final class UserController extends AbstractController
 
     #[Route('/{id}/disable', name: 'app_user_disable', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function disable(Request $request, User $user, EntityManagerInterface $entityManager, ActivityLogger $activityLogger): Response
+    public function disable(Request $request, User $user, EntityManagerInterface $entityManager, ActivityLogger $activityLogger, MercurePublisher $mercurePublisher): Response
     {
         if ($this->isCsrfTokenValid('disable'.$user->getId(), $request->getPayload()->getString('_token'))) {
             $user->setIsActive(false);
             $entityManager->flush();
+
+            if (in_array('ROLE_PHOTOGRAPHER', $user->getRoles(), true)) {
+                try {
+                    $mercurePublisher->publishPhotographerDeleted($user);
+                } catch (\Throwable) {
+                }
+            }
 
             $actor = $this->getUser();
             if ($actor instanceof User) {
@@ -118,11 +140,18 @@ final class UserController extends AbstractController
 
     #[Route('/{id}/enable', name: 'app_user_enable', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function enable(Request $request, User $user, EntityManagerInterface $entityManager, ActivityLogger $activityLogger): Response
+    public function enable(Request $request, User $user, EntityManagerInterface $entityManager, ActivityLogger $activityLogger, MercurePublisher $mercurePublisher): Response
     {
         if ($this->isCsrfTokenValid('enable'.$user->getId(), $request->getPayload()->getString('_token'))) {
             $user->setIsActive(true);
             $entityManager->flush();
+
+            if (in_array('ROLE_PHOTOGRAPHER', $user->getRoles(), true)) {
+                try {
+                    $mercurePublisher->publishPhotographerUpdated($user);
+                } catch (\Throwable) {
+                }
+            }
 
             $actor = $this->getUser();
             if ($actor instanceof User) {

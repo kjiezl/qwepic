@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
+use App\Service\MercurePublisher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,6 +43,7 @@ class CustomerProfileController extends AbstractController
         EntityManagerInterface $em,
         UserPasswordHasherInterface $passwordHasher,
         ValidatorInterface $validator,
+        MercurePublisher $mercurePublisher,
     ): JsonResponse {
         if (null === $user) {
             return $this->json(['message' => 'Not authenticated'], Response::HTTP_UNAUTHORIZED);
@@ -91,6 +93,10 @@ class CustomerProfileController extends AbstractController
         }
 
         $em->flush();
+        try {
+            $mercurePublisher->publishProfileUpdated($user);
+        } catch (\Throwable) {
+        }
 
         return $this->json([
             'message' => 'Profile updated successfully',
