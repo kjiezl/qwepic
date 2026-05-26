@@ -58,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank(message: 'Email is required')]
-    #[Assert\Email(message: 'The email \"{{ value }}\" is not a valid email address')]
+    #[Assert\Email(message: 'The email "{{ value }}" is not a valid email address')]
     #[Assert\Length(max: 180, maxMessage: 'Email cannot exceed {{ limit }} characters')]
     #[Groups(['user:read', 'user:write', 'photographer:read', 'profile:read'])]
     private ?string $email = null;
@@ -176,10 +176,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[\Deprecated(message: 'Since Symfony 7.3: Plain password is cleared in __serialize() method')]
     public function eraseCredentials(): void
     {
         $this->plainPassword = null;
     }
+
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
